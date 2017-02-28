@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            style="@style/my_toolbar"
+            android:background="@color/wx_primary"
+            android:elevation="0dp">
+
+            <ImageView
+                style="@style/my_toolbar_button"
+                android:contentDescription="@string/action_back"
+                android:onClick="onNavback"
+                android:src="@drawable/ic_back_wx"/>
+
+            <View
+                android:layout_width="@dimen/divider_size"
+                android:layout_height="24dp"
+                android:background="@color/wx_primaryDark"/>
+
+            <TextView
+                style="@style/my_toolbar_title"
+                android:layout_marginLeft="@dimen/gap_15"
+                android:gravity="start"
+                android:text="@string/activity_friends"
+                android:textColor="@android:color/white"/>
+
+
+            <ImageView
+                style="@style/my_toolbar_button"
+                android:src="@drawable/ic_camera"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+</layout>

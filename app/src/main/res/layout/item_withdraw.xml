@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:paddingBottom="@dimen/gap_12"
+        android:paddingLeft="@dimen/gap_15"
+        android:paddingRight="@dimen/gap_15"
+        android:paddingTop="@dimen/gap_12">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar"/>
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/gap_15"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@+id/avatar"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:maxWidth="100dp"
+            android:text="沙漠飞鼠"
+            android:textSize="@dimen/text_16"/>
+
+        <TextView
+            android:id="@+id/updatedAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/username"
+            android:layout_alignStart="@+id/username"
+            android:layout_below="@+id/username"
+            android:layout_marginTop="@dimen/gap_8"
+            android:text="09:29"
+            android:textColor="@color/text_color_grey"/>
+
+        <Button
+            style="@style/button_borderless.cyan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingBottom="@dimen/gap_8"
+            android:paddingLeft="@dimen/gap_10"
+            android:paddingRight="@dimen/gap_10"
+            android:paddingTop="@dimen/gap_8"
+            android:text="可提现66元"
+            android:textSize="@dimen/text_14"/>
+    </RelativeLayout>
+</layout>

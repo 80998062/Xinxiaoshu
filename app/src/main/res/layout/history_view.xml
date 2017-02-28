@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_15"
+            android:background="@android:color/white"
+            android:padding="@dimen/gap_15">
+
+
+            <TextView
+                android:id="@+id/item_history_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_history_customer"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="再有400人可奖励100元"
+                android:textColor="@color/text_color_grey"
+                android:textSize="@dimen/text_12"/>
+
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_history_customer"
+                android:layout_marginBottom="@dimen/gap_8"
+                android:layout_marginTop="@dimen/gap_15"
+                android:text="666"
+                android:textColor="@color/theme_cyan"
+                android:textSize="@dimen/text_30"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/count"
+                android:text="(本月客户666人)"
+                android:textColor="@color/text_color_grey"
+                android:textSize="@dimen/text_12"/>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/white"
+            android:paddingBottom="@dimen/gap_10"
+            android:paddingLeft="@dimen/gap_25"
+            android:paddingRight="@dimen/gap_25"
+            android:paddingTop="@dimen/gap_10">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_view_bg"
+                android:drawableLeft="@drawable/ic_search"
+                android:drawablePadding="@dimen/gap_8"
+                android:hint="@string/hint_search_history"
+                android:paddingBottom="@dimen/gap_8"
+                android:paddingLeft="@dimen/gap_15"
+                android:paddingRight="@dimen/gap_15"
+                android:paddingTop="@dimen/gap_8"
+                android:textColorHint="@color/text_color_grey"
+                android:textSize="@dimen/text_12"/>
+
+        </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_history"/>
+    </LinearLayout>
+</layout>

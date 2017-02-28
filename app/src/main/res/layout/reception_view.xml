@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_15"
+            android:background="@android:color/white"
+            android:paddingBottom="22dp"
+            android:paddingLeft="@dimen/gap_25"
+            android:paddingRight="@dimen/gap_25"
+            android:paddingTop="18dp">
+
+            <TextView
+                android:id="@+id/item_history_customer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item_history_customer"
+                android:textColor="@color/text_color_secondary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_history_customer"
+                android:layout_marginTop="@dimen/gap_15"
+                android:text="999"
+                android:textSize="@dimen/text_30"
+                android:textStyle="bold"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="@dimen/divider_size"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:background="@color/divider_color"/>
+
+
+            <TextView
+                android:id="@+id/item_withdraw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/gap_25"
+                android:layout_marginStart="@dimen/gap_25"
+                android:layout_toEndOf="@+id/divider"
+                android:layout_toRightOf="@+id/divider"
+                android:text="@string/item_withdraw"
+                android:textColor="@color/text_color_secondary"/>
+
+            <TextView
+                android:id="@+id/rmb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/item_withdraw"
+                android:layout_alignStart="@+id/item_withdraw"
+                android:layout_below="@+id/item_withdraw"
+                android:layout_marginTop="@dimen/gap_15"
+                android:text="¥"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/rmb"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@+id/rmb"
+                android:layout_below="@+id/item_withdraw"
+                android:layout_marginLeft="@dimen/gap_4"
+                android:layout_marginStart="@dimen/gap_4"
+                android:layout_marginTop="@dimen/gap_15"
+                android:text="666.00"
+                android:textSize="@dimen/text_30"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
+            android:text="@string/state_reception_off"
+            android:textColor="@color/text_color_grey"/>
+
+        <Button
+            style="@style/action_button"
+            android:layout_marginLeft="72dp"
+            android:layout_marginRight="72dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/btn_rounded_rect_cyan"
+            android:text="@string/action_turn_on_reception"/>
+
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/action_tutorial"
+            android:textColor="@color/text_color_grey"
+            android:textSize="@dimen/text_10"/>
+
+        <Button
+            style="@style/button_borderless.cyan"
+            android:enabled="false"
+            android:text="@string/action_reception_off"/>
+
+
+    </LinearLayout>
+</layout>

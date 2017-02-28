@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.xinshu.xinxiaoshu.widgets.RatioImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/photoCell"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:adjustViewBounds="true"
+    android:padding="1dp"
+    app:imageHOverW="1">
+</com.xinshu.xinxiaoshu.widgets.RatioImageView>
+
+

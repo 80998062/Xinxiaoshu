@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:clipToPadding="false"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <moe.codeest.enviews.ENLoadingView
+            android:id="@+id/loadingView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="100dp"/>
+
+        <TextView
+            android:id="@+id/hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:layout_marginTop="@dimen/gap_15"
+            android:text="@string/action_loading"
+            android:textColor="@color/text_color_lt"/>
+
+        <Button
+            android:id="@+id/enterBtn"
+            style="@style/action_button"
+            android:background="@drawable/btn_rounded_rect_red"
+            android:text="@string/action_launcher"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+</layout>

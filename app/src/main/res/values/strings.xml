@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Xinxiaoshu</string>
+    <string name="hint_device_not_rooted">设备未root</string>
+    <string name="action_back">后退</string>
+    <string name="action_login">登录</string>
+    <string name="hint_slogan">心书 · 小编</string>
+    <string name="login_announce">登录即代表您已阅读并同意</string>
+    <string name="login_contract">小编最终用户协议</string>
+    <string name="hint_input_phone">请输入申请时的手机号</string>
+    <string name="hint_input_authcode">请输入验证码</string>
+    <string name="action_get_authcode">获取验证码</string>
+    <string name="activity_reception">接单模式</string>
+    <string name="action_reception_on">接单中</string>
+    <string name="action_reception_off">休息中</string>
+    <string name="action_tutorial">阅读小编教程</string>
+    <string name="action_turn_on_reception">去接单</string>
+    <string name="state_reception_off">你目前是下线状态无法接单</string>
+    <string name="item_history_customer">历史客户（人）</string>
+    <string name="item_withdraw">已提现（元）</string>
+    <string name="hint_upload_data">选择要上传的数据</string>
+    <string name="action_clear_all">清除全部</string>
+    <string name="hint_search_history">搜索客户</string>
+    <string name="action_copylink">复制链接</string>
+    <string name="action_remind_to_order">提醒下单</string>
+    <string name="item_history_withdraw">累计提现（元）</string>
+    <string name="action_loading">正在努力初始化中…</string>
+    <string name="activity_friends">朋友圈</string>
+    <string name="hint_nomore">------ 已经没有了 ------</string>
+    <string name="action_launcher">进入</string>
+    <string name="hint_make_root_dir_failed">创建根目录失败</string>
+    <string name="hint_move_apk_failed">未找到或不能移动微信apk</string>
+    <string name="hint_ayscn_db_failed">同步微信数据库失败</string>
+    <string name="hint_init_succeed">初始化成功</string>
+    <string name="hint_nomore_friend">………………所有好友都在了………………</string>
+</resources>

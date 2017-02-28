@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#d5575b</color>
+
+    <color name="theme_red">#d5575b</color>
+    <color name="theme_cyan">#26a69a</color>
+    <color name="theme_black">#222222</color>
+    <color name="theme_grey_dk">#dddddd</color>
+    <color name="theme_grey500">#cccccc</color>
+    <color name="theme_grey_lt">#dddddd</color>
+    <color name="theme_blue">#2591e3</color>
+    <color name="theme_orange">#f18b3c</color>
+    <color name="theme_background">#f5f5f5</color>
+
+    <color name="colorDisable">#999999</color>
+
+    <color name="text_color_primary">#222222</color>
+
+    <color name="text_color_secondary">#444444</color>
+
+    <color name="text_color_grey">#888888</color>
+
+    <color name="text_color_lt">#cccccc</color>
+    <color name="divider_color">#eeeeee</color>
+    <color name="divider_color_tl">#d7d7d7</color>
+    <color name="wx_blue">#787f9e</color>
+    <color name="wx_primary">#2a2c32</color>
+    <color name="wx_primaryDark">#222527</color>
+    <color name="wx_window">#f6f6f6</color>
+    <color name="wx_text">#202020</color>
+</resources>

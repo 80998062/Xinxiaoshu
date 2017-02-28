@@ -1,0 +1,81 @@
+package com.xinshu.xinxiaoshu.viewmodels;
+
+import android.text.TextUtils;
+
+import com.xinshu.xinxiaoshu.models.SnsInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.functions.Function;
+
+/**
+ * Created by sinyuk on 2017/2/27.
+ */
+
+public class SnsInfoModel implements ViewModel<SnsInfo> {
+
+    public static final Function<List<SnsInfo>, List<SnsInfoModel>> func = infos -> {
+        final List<SnsInfoModel> models = new ArrayList<>();
+        for (int i = 0; i < infos.size(); i++) {
+            models.add(new SnsInfoModel(infos.get(i)));
+        }
+        return models;
+    };
+
+    private SnsInfo data;
+
+    public SnsInfoModel(SnsInfo data) {
+        this.data = data;
+    }
+
+    @Override
+    public SnsInfo getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(SnsInfo data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        data.print();
+        return super.toString();
+    }
+
+    public String getAuthorName() {
+        return data.authorName;
+    }
+
+    public String getContent() {
+        return data.content;
+    }
+
+    public boolean getIsImage() {
+        return data.mediaList != null && !data.mediaList.isEmpty();
+    }
+
+    public boolean getIsLink() {
+        return !getIsImage() && TextUtils.isEmpty(data.content);
+    }
+
+    public List<String> getImages() {
+        return data.mediaList;
+    }
+
+    public String getTimeStamp() {
+        return data.timestamp + "";
+    }
+
+    public String getType() {
+        if (getIsImage()) {
+            return "image";
+        } else if (getIsLink()) {
+            return "link";
+        }
+        return "text";
+    }
+
+}

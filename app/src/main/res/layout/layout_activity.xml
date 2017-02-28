@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="toolbarTitle"
+            type="String"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            style="@style/my_toolbar">
+
+            <ImageView
+                style="@style/my_toolbar_button"
+                android:contentDescription="@string/action_back"
+                android:onClick="onNavback"
+                android:src="@drawable/ic_back"/>
+
+
+            <TextView
+                style="@style/my_toolbar_title"
+                android:text="@{toolbarTitle}"
+                tools:text="登录"/>
+
+            <ImageView
+                android:id="@+id/actionBtn"
+                style="@style/my_toolbar_button"/>
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+</layout>

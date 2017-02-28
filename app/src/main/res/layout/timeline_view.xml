@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            app:elevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll">
+
+                <com.xinshu.xinxiaoshu.widgets.RatioImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@color/theme_blue"
+                    app:imageHOverW="0.64"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-52dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:paddingLeft="@dimen/gap_12"
+                        android:paddingRight="@dimen/gap_12"
+                        android:shadowColor="#ad1e1e1e"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:text="Sinyuk"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_16"
+                        android:textStyle="bold"/>
+
+                    <ImageView
+                        android:layout_width="86dp"
+                        android:layout_height="86dp"
+                        android:layout_gravity="end"
+                        android:layout_marginRight="@dimen/gap_12"
+                        android:src="@color/colorAccent"/>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <com.xinshu.xinxiaoshu.widgets.BetterViewAnimator
+            android:id="@+id/viewAnimator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:scrollbarStyle="outsideOverlay"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+
+            <android.support.v4.widget.Space
+                android:id="@+id/errorLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <android.support.v4.widget.Space
+                android:id="@+id/emptyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>

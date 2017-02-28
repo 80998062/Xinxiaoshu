@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="72dp"
+        android:paddingRight="72dp">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="@dimen/gap_8"
+            android:layout_marginTop="30dp"
+            android:background="@color/theme_red"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:text="@string/hint_slogan"/>
+
+        <EditText
+            android:id="@+id/phoneEt"
+            style="@style/form_input"
+            android:drawableLeft="@drawable/ic_phone"
+            android:hint="@string/hint_input_phone"
+            android:imeOptions="actionNext"
+            android:inputType="phone"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/authcodeEt"
+                style="@style/form_input"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_phone"
+                android:hint="@string/hint_input_authcode"
+                android:imeOptions="actionDone"
+                android:inputType="numberPassword"/>
+
+            <Button
+                android:id="@+id/authcodeBtn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_cyan"
+                android:enabled="false"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="@string/action_get_authcode"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/loginBtn"
+            style="@style/action_button"
+            android:background="@drawable/btn_rounded_rect_red"
+            android:text="@string/action_login"/>
+
+
+        <android.support.v4.widget.Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_announce"
+                android:textColor="@color/text_color_lt"
+                android:textSize="@dimen/text_10"/>
+
+            <TextView
+                android:id="@+id/contactTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_contract"
+                android:textColor="@color/theme_red"
+                android:textSize="@dimen/text_10"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

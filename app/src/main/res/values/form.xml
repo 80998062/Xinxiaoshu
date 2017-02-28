@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="action_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="form_input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <item name="android:drawablePadding">@dimen/gap_12</item>
+        <item name="android:paddingTop">@dimen/gap_15</item>
+        <item name="android:paddingBottom">@dimen/gap_15</item>
+        <item name="android:textColorHint">@color/text_color_lt</item>
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="android:paddingLeft">@dimen/gap_8</item>
+        <item name="android:paddingRight">@dimen/gap_8</item>
+    </style>
+
+
+    <style name="button_borderless" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <style name="button_borderless.cyan">
+        <item name="android:paddingBottom">@dimen/gap_15</item>
+        <item name="android:paddingTop">@dimen/gap_15</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/btn_cyan</item>
+    </style>
+</resources>
