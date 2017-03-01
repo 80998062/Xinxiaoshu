@@ -32,4 +32,5 @@
     <string name="hint_ayscn_db_failed">同步微信数据库失败</string>
     <string name="hint_init_succeed">初始化成功</string>
     <string name="hint_nomore_friend">………………所有好友都在了………………</string>
+    <string name="activity_login">登录</string>
 </resources>

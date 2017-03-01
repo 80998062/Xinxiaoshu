@@ -1,6 +1,8 @@
 package com.xinshu.xinxiaoshu.features.splash;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,10 @@ public class SplashView extends BaseActivity {
 
     private LayoutActivityBinding binding;
 
+    public static void start(Context context) {
+        Intent starter = new Intent(context, SplashView.class);
+        context.startActivity(starter);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -46,7 +46,7 @@ ext {
 
     rxAndroid= '2.0.1'
 
-    rxBindingVersion = '1.0.0'
+    rxBindingVersion = '1.0.1'
 
     daggerVersion = '2.9'
 
