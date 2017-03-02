@@ -1,9 +1,8 @@
 package com.xinshu.xinxiaoshu.injector.modules;
 
+import com.android.annotations.NonNull;
 import com.xinshu.xinxiaoshu.features.upload.UploadContract;
 import com.xinshu.xinxiaoshu.injector.scopes.FragmentScope;
-
-import org.greenrobot.greendao.annotation.NotNull;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,10 +12,10 @@ import dagger.Provides;
  */
 @Module
 public class UploadModule {
-    @NotNull
+    @NonNull
     private final UploadContract.View view;
 
-    public UploadModule(@NotNull UploadContract.View view) {
+    public UploadModule(@NonNull UploadContract.View view) {
         this.view = view;
     }
 

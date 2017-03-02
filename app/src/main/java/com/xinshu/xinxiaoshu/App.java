@@ -3,7 +3,6 @@ package com.xinshu.xinxiaoshu;
 import android.app.Application;
 import android.content.Context;
 
-import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 import com.xinshu.xinxiaoshu.injector.components.AppComponent;
 import com.xinshu.xinxiaoshu.injector.components.DaggerAppComponent;
 import com.xinshu.xinxiaoshu.injector.components.DatabaseComponent;
@@ -33,13 +32,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-
-        //Use it only in debug builds
-        if (BuildConfig.DEBUG) {
-            AndroidDevMetrics.initWith(this);
-        }
-
     }
 
     public Observable<AppComponent> appComponentOB() {

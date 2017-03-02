@@ -38,4 +38,6 @@
     <string name="action_upload_succeed">完成</string>
     <string name="action_upload_resume">继续</string>
     <string name="action_upload_ing">上传中</string>
+    <string name="hint_permissions_denied">申请系统权限被拒绝,请到应用信息中手动设置</string>
+    <string name="hint_app_init">初始化中…</string>
 </resources>

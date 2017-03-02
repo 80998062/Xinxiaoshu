@@ -23,4 +23,14 @@
         <item name="android:textColor">@color/wx_text</item>
         <item name="android:windowBackground">@color/wx_window</item>
     </style>
+
+
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/splash_backdrop</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@color/theme_red</item>
+    </style>
 </resources>

@@ -1,6 +1,6 @@
 package com.xinshu.xinxiaoshu.injector.components;
 
-import com.xinshu.xinxiaoshu.features.splash.InitView;
+import com.xinshu.xinxiaoshu.features.splash.SplashView;
 import com.xinshu.xinxiaoshu.injector.modules.AppModule;
 import com.xinshu.xinxiaoshu.injector.modules.DatabaseModule;
 
@@ -16,5 +16,5 @@ import dagger.Component;
 public interface AppComponent {
     DatabaseComponent plus(DatabaseModule module);
 
-    void inject(InitView initView);
+    void inject(SplashView splashView);
 }

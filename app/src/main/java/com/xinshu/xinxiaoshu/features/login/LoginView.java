@@ -12,7 +12,7 @@ import com.sinyuk.myutils.string.RegexUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
-import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
+import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
 
 
@@ -69,7 +69,7 @@ public class LoginView extends BaseFragment {
     }
 
     private void onLogin(View view) {
-        UploadActivity.start(view.getContext());
+        ReceptionActivity.start(view.getContext());
     }
 
     private Boolean isCodeInvalid(String code) {

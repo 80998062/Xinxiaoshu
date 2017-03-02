@@ -7,7 +7,6 @@ import android.util.Log;
 import com.android.annotations.NonNull;
 import com.xinshu.xinxiaoshu.models.SnsInfo;
 
-import org.greenrobot.greendao.annotation.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -97,13 +96,13 @@ public class SnsReader {
 //            ((stringSeq <= a) or (stringSeq>=b and stringSeq<=c) or (stringSeq>= d))
 
 
-    public Single<List<SnsInfo>> timelineByUsernameOB(@NotNull String userName) {
+    public Single<List<SnsInfo>> timelineByUsernameOB(@NonNull String userName) {
         return Single.fromCallable(() -> getTimelineByUsername(userName))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private List<SnsInfo> getTimelineByUsername(@NotNull String userName) throws Exception {
+    private List<SnsInfo> getTimelineByUsername(@NonNull String userName) throws Exception {
         List<SnsInfo> snsInfos = new ArrayList<>();
 
         final String query = String.format("select distinct from SnsInfo where userName = \'%s\'", userName);

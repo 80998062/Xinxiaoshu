@@ -19,7 +19,13 @@
         <activity
             android:name=".features.splash.SplashView"
             android:configChanges="layoutDirection|screenLayout"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <activity
@@ -35,15 +41,15 @@
             android:configChanges="layoutDirection|screenLayout"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateAlwaysVisible">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".features.upload.UploadActivity"
+            android:configChanges="layoutDirection|screenLayout"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".features.reception.ReceptionActivity"
             android:configChanges="layoutDirection|screenLayout"
             android:screenOrientation="portrait"/>
     </application>
