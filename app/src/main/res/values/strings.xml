@@ -34,4 +34,8 @@
     <string name="hint_nomore_friend">………………所有好友都在了………………</string>
     <string name="activity_login">登录</string>
     <string name="activity_upload">上传数据</string>
+    <string name="action_upload">上传</string>
+    <string name="action_upload_succeed">完成</string>
+    <string name="action_upload_resume">继续</string>
+    <string name="action_upload_ing">上传中</string>
 </resources>

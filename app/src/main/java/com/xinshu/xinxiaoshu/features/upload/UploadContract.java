@@ -1,5 +1,6 @@
 package com.xinshu.xinxiaoshu.features.upload;
 
+import com.xinshu.xinxiaoshu.models.SnsInfo;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.mvp.BaseView;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
@@ -16,10 +17,7 @@ public class UploadContract {
     public interface Presenter extends BasePresenter {
         void refresh();
 
-        void checkUpdated(@NotNull String uid);
-
-        void upload(@NotNull String uid);
-
+        void upload(@NotNull SnsInfo data, int position);
 
     }
 

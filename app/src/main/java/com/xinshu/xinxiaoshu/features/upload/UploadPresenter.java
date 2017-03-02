@@ -1,8 +1,10 @@
 package com.xinshu.xinxiaoshu.features.upload;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.xinshu.xinxiaoshu.core.SnsReader;
+import com.xinshu.xinxiaoshu.models.SnsInfo;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +45,7 @@ public class UploadPresenter implements UploadContract.Presenter {
     @Override
     public void refresh() {
         Disposable d = snsReader.copyAndOpenDB()
-                .flatMap(func)
+                .flatMap(getFriendsFunc)
                 .doOnSubscribe(dis -> view.startRefreshing())
                 .doAfterTerminate(view::stopRefreshing)
                 .doOnError(view::showError)
@@ -58,7 +60,7 @@ public class UploadPresenter implements UploadContract.Presenter {
         disposables.add(d);
     }
 
-    private final Function<SQLiteDatabase, SingleSource<List<SnsInfoModel>>> func = new Function<SQLiteDatabase, SingleSource<List<SnsInfoModel>>>() {
+    private final Function<SQLiteDatabase, SingleSource<List<SnsInfoModel>>> getFriendsFunc = new Function<SQLiteDatabase, SingleSource<List<SnsInfoModel>>>() {
         @Override
         public SingleSource<List<SnsInfoModel>> apply(@NonNull SQLiteDatabase db) throws Exception {
             return snsReader.distinctTimelineOB()
@@ -67,14 +69,37 @@ public class UploadPresenter implements UploadContract.Presenter {
     };
 
     @Override
-    public void checkUpdated(@NotNull String uid) {
+    public void upload(@NotNull SnsInfo data, int position) {
+        Disposable d = snsReader.copyAndOpenDB()
+                .flatMap(new Function<SQLiteDatabase, SingleSource<List<SnsInfo>>>() {
+                    @Override
+                    public SingleSource<List<SnsInfo>> apply(@NonNull SQLiteDatabase db) throws Exception {
+                        return snsReader.timelineByUsernameOB(data.authorId);
+                    }
+                })
+                .subscribe(f -> {
+                    if (f.isEmpty()) {
+                        // pass
+                    } else {
+                        Log.d(TAG, "upload: " + f.toString());
+                        upload2Server(f, position);
+                    }
+                });
 
+        disposables.add(d);
     }
 
-    @Override
-    public void upload(@NotNull String uid) {
+    private void upload2Server(List<SnsInfo> f, int position) {
 
+//        snsReader.convert2JSONOB(f)
+//                .flatMap(new Function<JSONArray, SingleSource<?>>() {
+//                    @Override
+//                    public SingleSource<?> apply(@NonNull JSONArray jsonArray) throws Exception {
+//                        return null;
+//                    }
+//                });
     }
+
 
     @Override
     public void subscribe() {

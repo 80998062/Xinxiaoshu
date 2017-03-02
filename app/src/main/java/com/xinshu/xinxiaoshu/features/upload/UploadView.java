@@ -43,6 +43,7 @@ public class UploadView extends BaseListView implements UploadContract.View {
         presenter.refresh();
     }
 
+
     private void initListView() {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setItemPrefetchEnabled(true);
@@ -60,7 +61,7 @@ public class UploadView extends BaseListView implements UploadContract.View {
     }
 
     private void initData() {
-        adapter = new FriendsAdapter(R.layout.item_data);
+        adapter = new FriendsAdapter(R.layout.item_data, presenter);
         adapter.setHasStableIds(true);
         binding.recyclerView.setAdapter(adapter);
     }

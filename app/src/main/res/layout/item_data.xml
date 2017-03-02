@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="adapter"
+            type="com.xinshu.xinxiaoshu.features.upload.FriendsAdapter"/>
+
+        <variable
             name="data"
             type="com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel"/>
     </data>
@@ -14,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:elevation="@dimen/list_item_elevation"
         android:paddingBottom="@dimen/gap_12"
         android:paddingLeft="@dimen/gap_15"
         android:paddingRight="@dimen/gap_15"
@@ -52,20 +55,14 @@
             android:textColor="@color/text_color_grey"
             app:createdAt="@{data.timeStamp}"
             tools:text="8:00"/>
+        <!--android:onClick="@{(view) -> presenter.onUpload(view, data)}"-->
 
-        <Button
-            android:id="@+id/uploadBtn"
-            style="@style/button_borderless.cyan.outline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.xinshu.xinxiaoshu.widgets.DownloadProgressButton
+            android:id="@+id/uploadButton"
+            android:layout_width="75dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingBottom="@dimen/gap_8"
-            android:paddingLeft="@dimen/gap_10"
-            android:paddingRight="@dimen/gap_10"
-            android:paddingTop="@dimen/gap_8"
-            android:text="上传"
-            android:textSize="@dimen/text_14"/>
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 </layout>

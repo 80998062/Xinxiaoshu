@@ -4,7 +4,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.android.annotations.NonNull;
 import com.xinshu.xinxiaoshu.models.SnsInfo;
+
+import org.greenrobot.greendao.annotation.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,44 +93,41 @@ public class SnsReader {
 //        Log.d("wechatmomentstat", "Current userID=" + this.currentUserId);
 //    }
 
-//    public ArrayList<SnsInfo> getTimelineByUid(@NotNull String userName) throws Exception {
-//        Log.d(TAG, "getTimelineByUid");
-//        long start = System.currentTimeMillis();
-//        Log.d(TAG, "getTimelineByUid start @ " + start);
-//        String dbPath = Config.EXT_DIR + "/SnsMicroMsg.db";
-//        if (!new File(dbPath).exists()) {
-//            Log.e("wechatmomentstat", "DB file not found");
-//            throw new Exception("DB file not found");
-//        }
-//        snsList.clear();
-//        SQLiteDatabase database = SQLiteDatabase.openDatabase(dbPath, null, 0);
-//        // do something
-//        final String query = String.format("select * from SnsInfo where userName in (\"%s\")", userName);
-//        Cursor cursor = database.rawQuery(query, null);
-//        while (cursor.moveToNext()) {
-//            try {
-//                addSnsInfoFromCursor(cursor);
-//            } catch (Throwable throwable) {
-//                throwable.printStackTrace();
-//                throw new Exception(throwable);
-//            }
-//        }
-//
-//        cursor.close();
-//        database.close();
-//        Log.d(TAG, "getTimelineByUid costs " + (System.currentTimeMillis() - start) / 1000 + "seconds");
-//
-//        return snsList;
-//    }
+//    selectrom SnsInfo where uid = 'bingwen391423' AND
+//            ((stringSeq <= a) or (stringSeq>=b and stringSeq<=c) or (stringSeq>= d))
+
+
+    public Single<List<SnsInfo>> timelineByUsernameOB(@NotNull String userName) {
+        return Single.fromCallable(() -> getTimelineByUsername(userName))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private List<SnsInfo> getTimelineByUsername(@NotNull String userName) throws Exception {
+        List<SnsInfo> snsInfos = new ArrayList<>();
+
+        final String query = String.format("select distinct from SnsInfo where userName = \'%s\'", userName);
+
+        Cursor cursor = database.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            try {
+                final SnsInfo item = getSnsInfo(cursor);
+                snsInfos.add(item);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
+
+        cursor.close();
+        return snsInfos;
+    }
 
     private SnsInfo getSnsInfo(Cursor cursor) throws Throwable {
         byte[] snsDetailBin = cursor.getBlob(cursor.getColumnIndex("content"));
         byte[] snsObjectBin = cursor.getBlob(cursor.getColumnIndex("attrBuf"));
         SnsInfo newSns = parser.parseSnsAllFromBin(snsDetailBin, snsObjectBin);
 
-        String stringSeq = cursor.getString(cursor.getColumnIndex("stringSeq"));
-
-        newSns.stringSeq = stringSeq;
+        newSns.stringSeq = cursor.getString(cursor.getColumnIndex("stringSeq"));
 
         for (int i = 0; i < newSns.comments.size(); i++) {
             if (newSns.comments.get(i).authorId.equals(this.currentUserId)) {
@@ -142,5 +144,94 @@ public class SnsReader {
         return newSns;
     }
 
+
+    public Single<JSONArray> convert2JSONOB(@NonNull final List<SnsInfo> snsList) {
+        return Single.fromCallable(() -> convertToJSON(snsList))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    /**
+     * <p>
+     * 保存为JSON文件<p/>
+     *
+     * @param snsList
+     * @return
+     * @throws Exception
+     */
+
+    private JSONArray convertToJSON(List<SnsInfo> snsList) throws Exception {
+
+        final JSONArray snsListJSON = new JSONArray();
+
+        for (int snsIndex = 0; snsIndex < snsList.size(); snsIndex++) {
+            SnsInfo currentSns = snsList.get(snsIndex);
+
+            if (!currentSns.ready) {
+                continue;
+            }
+
+
+            JSONObject snsJSON = new JSONObject();
+            JSONArray commentsJSON = new JSONArray();
+            JSONArray likesJSON = new JSONArray();
+            JSONArray mediaListJSON = new JSONArray();
+
+            snsJSON.put("isCurrentUser", currentSns.isCurrentUser);
+            snsJSON.put("snsId", currentSns.id);
+            snsJSON.put("authorName", currentSns.authorName);
+            snsJSON.put("authorId", currentSns.authorId);
+            snsJSON.put("content", currentSns.content);
+            snsJSON.put("stringSeq", currentSns.stringSeq);
+
+            for (int i = 0; i < currentSns.comments.size(); i++) {
+                JSONObject commentJSON = new JSONObject();
+                commentJSON.put("isCurrentUser", currentSns.comments.get(i).isCurrentUser);
+                commentJSON.put("authorName", currentSns.comments.get(i).authorName);
+                commentJSON.put("authorId", currentSns.comments.get(i).authorId);
+                commentJSON.put("content", currentSns.comments.get(i).content);
+                commentJSON.put("toUserName", currentSns.comments.get(i).toUser);
+                commentJSON.put("toUserId", currentSns.comments.get(i).toUserId);
+                commentsJSON.put(commentJSON);
+            }
+
+            snsJSON.put("comments", commentsJSON);
+
+            for (int i = 0; i < currentSns.likes.size(); i++) {
+                JSONObject likeJSON = new JSONObject();
+                likeJSON.put("isCurrentUser", currentSns.likes.get(i).isCurrentUser);
+                likeJSON.put("userName", currentSns.likes.get(i).userName);
+                likeJSON.put("userId", currentSns.likes.get(i).userId);
+                likesJSON.put(likeJSON);
+            }
+            snsJSON.put("likes", likesJSON);
+
+
+            for (int i = 0; i < currentSns.mediaList.size(); i++) {
+                mediaListJSON.put(currentSns.mediaList.get(i));
+            }
+            snsJSON.put("mediaList", mediaListJSON);
+            snsJSON.put("rawXML", currentSns.rawXML);
+            snsJSON.put("timestamp", currentSns.timestamp);
+
+            snsListJSON.put(snsJSON);
+        }
+
+//        File jsonFile = new File(fileName);
+//
+//        if (!jsonFile.exists()) {
+//            jsonFile.createNewFile();
+//        }
+//
+//
+//        FileWriter fw = new FileWriter(jsonFile.getAbsoluteFile());
+//        BufferedWriter bw = new BufferedWriter(fw);
+//        bw.write(snsListJSON.toString());
+//        bw.close();
+
+
+        return snsListJSON;
+    }
 
 }

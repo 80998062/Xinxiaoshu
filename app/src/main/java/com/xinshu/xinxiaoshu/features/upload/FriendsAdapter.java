@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import com.xinshu.xinxiaoshu.BR;
 import com.xinshu.xinxiaoshu.base.BaseSingleAdapter;
 import com.xinshu.xinxiaoshu.base.BindingViewHolder;
+import com.xinshu.xinxiaoshu.databinding.ItemDataBinding;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
+import com.xinshu.xinxiaoshu.widgets.DownloadProgressButton;
 
 import java.util.List;
 
@@ -14,9 +16,11 @@ import java.util.List;
  */
 
 public class FriendsAdapter extends BaseSingleAdapter<SnsInfoModel> {
+    private UploadContract.Presenter presenter;
 
-    public FriendsAdapter(int layoutId) {
+    public FriendsAdapter(int layoutId, UploadContract.Presenter presenter) {
         super(layoutId);
+        this.presenter = presenter;
     }
 
     @Override
@@ -35,5 +39,17 @@ public class FriendsAdapter extends BaseSingleAdapter<SnsInfoModel> {
     protected void onBindMyItemViewHolder(BindingViewHolder holder, int itemPositionInData) {
         final SnsInfoModel data = mDataSet.get(itemPositionInData);
         holder.getBinding().setVariable(BR.data, data);
+
+        ItemDataBinding binding = (ItemDataBinding) holder.getBinding();
+        binding.uploadButton.setOnDownLoadClickListener(new DownloadProgressButton.SimpleOnDownLoadClickListener() {
+            @Override
+            public void clickDownload() {
+                super.clickDownload();
+                binding.uploadButton.setProgress(100);
+                presenter.upload(data.getData(), itemPositionInData);
+            }
+        });
     }
+
+
 }
