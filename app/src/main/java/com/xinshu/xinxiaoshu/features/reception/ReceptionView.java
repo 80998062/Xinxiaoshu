@@ -39,5 +39,18 @@ public class ReceptionView extends BaseFragment {
 
     private void setupListener() {
 
+
+        binding.tutorial.setOnClickListener(this::onClickTutorial);
+    }
+
+    /**
+     * <p>
+     * 阅读小编教程
+     * </p>
+     *
+     * @param view
+     */
+    private void onClickTutorial(View view) {
+
     }
 }

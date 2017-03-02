@@ -15,3 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+
+# https://github.com/tajchert/WaitingDots
+
+-dontwarn pl.tajchert.waitingdots.**
+-keep public class pl.tajchert.waitingdots.** { public protected private *; }

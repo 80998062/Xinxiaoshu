@@ -94,9 +94,12 @@
                 <include layout="@layout/reception_offline"/>
 
                 <include layout="@layout/reception_online"/>
+
+                <include layout="@layout/reception_coming"/>
             </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
 
             <TextView
+                android:id="@+id/tutorial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
