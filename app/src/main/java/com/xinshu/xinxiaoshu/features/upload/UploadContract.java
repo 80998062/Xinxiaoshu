@@ -1,18 +1,26 @@
-package com.xinshu.xinxiaoshu.features.timeline;
+package com.xinshu.xinxiaoshu.features.upload;
 
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.mvp.BaseView;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
- * Created by sinyuk on 2017/2/27.
+ * Created by sinyuk on 2017/3/2.
  */
 
-public class FriendsViewContract {
+public class UploadContract {
     public interface Presenter extends BasePresenter {
         void refresh();
+
+        void checkUpdated(@NotNull String uid);
+
+        void upload(@NotNull String uid);
+
+
     }
 
     public interface View extends BaseView<Presenter> {

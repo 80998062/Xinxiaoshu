@@ -123,6 +123,10 @@ public class SnsReader {
         byte[] snsObjectBin = cursor.getBlob(cursor.getColumnIndex("attrBuf"));
         SnsInfo newSns = parser.parseSnsAllFromBin(snsDetailBin, snsObjectBin);
 
+        String stringSeq = cursor.getString(cursor.getColumnIndex("stringSeq"));
+
+        newSns.stringSeq = stringSeq;
+
         for (int i = 0; i < newSns.comments.size(); i++) {
             if (newSns.comments.get(i).authorId.equals(this.currentUserId)) {
                 newSns.comments.get(i).isCurrentUser = true;

@@ -1,6 +1,8 @@
 package com.xinshu.xinxiaoshu.viewmodels;
 
+import android.databinding.BindingAdapter;
 import android.text.TextUtils;
+import android.widget.TextView;
 
 import com.xinshu.xinxiaoshu.models.SnsInfo;
 
@@ -78,4 +80,12 @@ public class SnsInfoModel implements ViewModel<SnsInfo> {
         return "text";
     }
 
+
+    /**
+     *
+     */
+    @BindingAdapter("createdAt")
+    public static void setCreatedAt(TextView textView, String timestamp) {
+        textView.setText("8:00");
+    }
 }

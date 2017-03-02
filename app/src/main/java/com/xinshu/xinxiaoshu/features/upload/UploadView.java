@@ -1,4 +1,4 @@
-package com.xinshu.xinxiaoshu.features.timeline;
+package com.xinshu.xinxiaoshu.features.upload;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,25 +11,24 @@ import android.view.ViewGroup;
 
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseListView;
-import com.xinshu.xinxiaoshu.databinding.TimelineViewBinding;
+import com.xinshu.xinxiaoshu.databinding.LayoutListBinding;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
 
 import java.util.List;
 
 /**
- * Created by sinyuk on 2017/2/27.
+ * Created by sinyuk on 2017/3/2.
  */
 
-public class FriendsList extends BaseListView implements FriendsViewContract.View {
+public class UploadView extends BaseListView implements UploadContract.View {
 
-    private TimelineViewBinding binding;
-    private TimelineAdapter adapter;
-
+    private LayoutListBinding binding;
+    private FriendsAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.timeline_view, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.layout_list, container, false);
         return binding.getRoot();
     }
 
@@ -38,24 +37,20 @@ public class FriendsList extends BaseListView implements FriendsViewContract.Vie
         super.onViewCreated(view, savedInstanceState);
 
         initListView();
+
         initData();
 
-        if (presenter != null) {
-            presenter.refresh();
-        }
-    }
-
-    private void initData() {
-        adapter = new TimelineAdapter(R.layout.item_timeline);
-        adapter.setHasStableIds(true);
-        binding.recyclerView.setAdapter(adapter);
+        presenter.refresh();
     }
 
     private void initListView() {
         final LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setItemPrefetchEnabled(true);
-        manager.setInitialPrefetchItemCount(4);
+        manager.setInitialPrefetchItemCount(6);
         manager.setAutoMeasureEnabled(true);
+//        FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        lps.topMargin = ConvertUtils.dp2px(getContext(), 15);
+//        binding.recyclerView.setLayoutParams(lps);
         binding.recyclerView.setLayoutManager(manager);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setItemAnimator(null);
@@ -64,9 +59,10 @@ public class FriendsList extends BaseListView implements FriendsViewContract.Vie
         binding.recyclerView.addItemDecoration(decoration);
     }
 
-    @Override
-    protected boolean registerForEventBus() {
-        return false;
+    private void initData() {
+        adapter = new FriendsAdapter(R.layout.item_data);
+        adapter.setHasStableIds(true);
+        binding.recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -85,18 +81,23 @@ public class FriendsList extends BaseListView implements FriendsViewContract.Vie
     }
 
     @Override
-    public void setData(List<SnsInfoModel> friends, boolean clear) {
-        adapter.setData(friends, true);
+    protected boolean registerForEventBus() {
+        return false;
+    }
+
+    @Override
+    public void setData(List<SnsInfoModel> models, boolean clear) {
+        adapter.setData(models, clear);
     }
 
     @Override
     public void startRefreshing() {
-
+        binding.swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
     public void stopRefreshing() {
-
+        binding.swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class FriendsList extends BaseListView implements FriendsViewContract.Vie
 
     @Override
     public void showNoMore() {
-        toNomoreView(getString(R.string.hint_nomore_friend));
+
     }
 
     @Override
@@ -114,10 +115,26 @@ public class FriendsList extends BaseListView implements FriendsViewContract.Vie
 
     }
 
-    private FriendsViewContract.Presenter presenter;
+    private UploadContract.Presenter presenter;
 
     @Override
-    public void setPresenter(FriendsViewContract.Presenter presenter) {
+    public void setPresenter(UploadContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (presenter != null) {
+            presenter.subscribe();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.unsubscribe();
+        }
     }
 }

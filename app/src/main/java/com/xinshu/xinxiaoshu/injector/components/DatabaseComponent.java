@@ -2,6 +2,7 @@ package com.xinshu.xinxiaoshu.injector.components;
 
 import com.xinshu.xinxiaoshu.injector.modules.DatabaseModule;
 import com.xinshu.xinxiaoshu.injector.modules.FriendsViewModule;
+import com.xinshu.xinxiaoshu.injector.modules.UploadModule;
 import com.xinshu.xinxiaoshu.injector.scopes.ActivityScope;
 
 import dagger.Subcomponent;
@@ -13,4 +14,6 @@ import dagger.Subcomponent;
 @Subcomponent(modules = {DatabaseModule.class})
 public interface DatabaseComponent {
     FriendsViewComponent plus(FriendsViewModule module);
+
+    UploadComponent plus(UploadModule module);
 }

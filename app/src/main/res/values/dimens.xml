@@ -21,4 +21,5 @@
     <dimen name="gap_10">10dp</dimen>
     <dimen name="divider_size">0.5dp</dimen>
     <dimen name="action_bar_size">40dp</dimen>
+    <item name="list_item_elevation" type="dimen" format="float">0.5dp</item>
 </resources>

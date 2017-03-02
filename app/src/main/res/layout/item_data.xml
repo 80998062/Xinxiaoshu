@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="data"
+            type="com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel"/>
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
+        android:elevation="@dimen/list_item_elevation"
         android:paddingBottom="@dimen/gap_12"
         android:paddingLeft="@dimen/gap_15"
         android:paddingRight="@dimen/gap_15"
@@ -19,7 +25,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/avatar"/>
+            android:src="@color/wx_window"/>
 
         <TextView
             android:id="@+id/username"
@@ -31,8 +37,9 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:maxWidth="100dp"
-            android:text="沙漠飞鼠"
-            android:textSize="@dimen/text_16"/>
+            android:text="@{data.authorName}"
+            android:textSize="@dimen/text_16"
+            tools:text="沙漠飞鼠"/>
 
         <TextView
             android:id="@+id/updatedAt"
@@ -42,11 +49,13 @@
             android:layout_alignStart="@+id/username"
             android:layout_below="@+id/username"
             android:layout_marginTop="@dimen/gap_8"
-            android:text="09:29"
-            android:textColor="@color/text_color_grey"/>
+            android:textColor="@color/text_color_grey"
+            app:createdAt="@{data.timeStamp}"
+            tools:text="8:00"/>
 
         <Button
-            style="@style/button_borderless.cyan"
+            android:id="@+id/uploadBtn"
+            style="@style/button_borderless.cyan.outline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -56,7 +65,7 @@
             android:paddingLeft="@dimen/gap_10"
             android:paddingRight="@dimen/gap_10"
             android:paddingTop="@dimen/gap_8"
-            android:text="复制链接"
+            android:text="上传"
             android:textSize="@dimen/text_14"/>
     </RelativeLayout>
 </layout>

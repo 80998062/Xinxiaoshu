@@ -23,13 +23,15 @@ public class SnsInfo {
     public boolean ready = false;
     public boolean isCurrentUser = false;
     public boolean selected = true;
+    public String stringSeq;
 
     public void print() {
         Log.d(TAG, "================================");
         Log.d(TAG, "id: " + this.id);
         Log.d(TAG, "Author: " + this.authorName);
         Log.d(TAG, "Content: " + this.content);
-        Log.d(TAG, "Likes:");
+        Log.d(TAG, "Content: " + this.content);
+        Log.d(TAG, "StringSeq: " + this.stringSeq);
         for (int i = 0; i < likes.size(); i++) {
             Log.d(TAG, likes.get(i).userName);
         }
@@ -55,6 +57,7 @@ public class SnsInfo {
         newSns.mediaList = new ArrayList<>(this.mediaList);
         newSns.rawXML = this.rawXML;
         newSns.timestamp = this.timestamp;
+        newSns.stringSeq = this.stringSeq;
         return newSns;
     }
 
@@ -63,6 +66,7 @@ public class SnsInfo {
         authorName = "";
         content = "";
         authorId = "";
+        stringSeq = "";
         likes.clear();
         comments.clear();
         mediaList.clear();

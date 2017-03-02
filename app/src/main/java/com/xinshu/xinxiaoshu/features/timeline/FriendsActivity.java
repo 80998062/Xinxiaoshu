@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
@@ -57,13 +56,6 @@ public class FriendsActivity extends BaseActivity {
     }
 
     private void afterInjection() {
-        if (friendPresenter == null) {
-            Log.e(TAG, "friendPresenter: NULL");
-        }
-
-        if (snsReader == null) {
-            Log.e(TAG, "snsReader: NULL");
-        }
         addFragment(friendList, false);
     }
 
