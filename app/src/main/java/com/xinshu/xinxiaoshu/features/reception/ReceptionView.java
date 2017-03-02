@@ -15,17 +15,29 @@ import com.xinshu.xinxiaoshu.databinding.ReceptionViewBinding;
  * Created by sinyuk on 2017/3/2.
  */
 
-public class ReceptionView extends BaseFragment{
+public class ReceptionView extends BaseFragment {
     @Override
     protected boolean registerForEventBus() {
         return false;
     }
 
     private ReceptionViewBinding binding;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.reception_view,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.reception_view, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setupListener();
+    }
+
+    private void setupListener() {
+
     }
 }

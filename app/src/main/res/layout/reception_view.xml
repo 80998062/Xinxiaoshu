@@ -82,33 +82,30 @@
                 android:textStyle="bold"/>
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
-            android:text="@string/state_reception_off"
-            android:textColor="@color/text_color_grey"/>
-
-        <Button
-            style="@style/action_button"
-            android:layout_marginLeft="72dp"
-            android:layout_marginRight="72dp"
-            android:layout_marginTop="70dp"
-            android:background="@drawable/btn_rounded_rect_cyan"
-            android:text="@string/action_turn_on_reception"/>
-
-        <android.support.v4.widget.Space
-            android:layout_width="0dp"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/action_tutorial"
-            android:textColor="@color/text_color_grey"
-            android:textSize="@dimen/text_10"/>
+            <com.xinshu.xinxiaoshu.widgets.BetterViewAnimator
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include layout="@layout/reception_offline"/>
+
+                <include layout="@layout/reception_online"/>
+            </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="20dp"
+                android:text="@string/action_tutorial"
+                android:textColor="@color/text_color_grey"
+                android:textSize="@dimen/text_10"/>
+        </FrameLayout>
+
 
         <Button
             style="@style/button_borderless.cyan"
