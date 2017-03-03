@@ -27,7 +27,6 @@ public class UploadActivity extends BaseActivity {
     }
 
     private LayoutActivityBinding binding;
-
     public static void start(Context context) {
         Intent starter = new Intent(context, UploadActivity.class);
         context.startActivity(starter);

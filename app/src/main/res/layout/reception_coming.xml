@@ -4,12 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="35dp">
 
-    <android.support.design.widget.FloatingActionButton
+    <include layout="@layout/layout_reception_dialog"/>
+
+    <mbanje.kurt.fabbutton.FabButton
+        android:id="@+id/fab"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerInParent="true"
-        app:backgroundTint="@color/theme_red"
-        app:fabSize="mini"/>
+        android:color="@color/theme_red"
+        android:indeterminate="true"
+        android:max="100"
+        app:fbb_autoStart="false"
+        app:fbb_progressColor="@color/theme_cyan"
+        app:fbb_progressWidthRatio="0.1"
+        app:fbb_showEndBitmap="false"/>
 </RelativeLayout>

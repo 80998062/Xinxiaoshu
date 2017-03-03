@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.ReceptionViewBinding;
+import com.xinshu.xinxiaoshu.features.history.HistoryActivity;
+import com.xinshu.xinxiaoshu.features.widthdraw.WithdrawActivity;
 
 /**
  * Created by sinyuk on 2017/3/2.
@@ -41,6 +43,16 @@ public class ReceptionView extends BaseFragment {
 
 
         binding.tutorial.setOnClickListener(this::onClickTutorial);
+        binding.historyCount.setOnClickListener(this::gotoHistory);
+        binding.withdrawAmount.setOnClickListener(this::gotoWithdraw);
+    }
+
+    private void gotoWithdraw(View view) {
+        WithdrawActivity.start(view.getContext());
+    }
+
+    private void gotoHistory(View view) {
+        HistoryActivity.start(view.getContext());
     }
 
     /**

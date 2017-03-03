@@ -42,4 +42,6 @@
     <string name="hint_app_init">初始化中…</string>
     <string name="hint_online_extras">节假日前，下单客户更多哦</string>
     <string name="hint_online_waiting">等待派单</string>
+    <string name="activity_history">历史客户</string>
+    <string name="activity_withdraw">历史提现</string>
 </resources>

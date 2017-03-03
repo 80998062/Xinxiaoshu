@@ -52,6 +52,11 @@
             android:name=".features.reception.ReceptionActivity"
             android:configChanges="layoutDirection|screenLayout"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".features.history.HistoryActivity"
+            android:configChanges="layoutDirection|screenLayout"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
