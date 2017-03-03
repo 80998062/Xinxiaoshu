@@ -1,83 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@drawable/divider"
-        android:orientation="vertical"
-        android:showDividers="middle">
 
-        <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/gap_15"
-            android:background="@android:color/white"
-            android:padding="@dimen/gap_15">
+            android:background="@null"
+            android:divider="@drawable/divider"
+            android:orientation="vertical"
+            android:showDividers="middle">
 
 
-            <TextView
-                android:id="@+id/item_withdraw"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/item_history_withdraw"/>
-
-            <TextView
-                android:id="@+id/rmb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/item_withdraw"
-                android:layout_alignStart="@+id/item_withdraw"
-                android:layout_below="@+id/item_withdraw"
                 android:layout_marginTop="@dimen/gap_15"
-                android:text="¥"
-                android:textColor="@color/theme_red"
-                android:textStyle="bold"/>
+                android:background="@android:color/white"
+                android:padding="@dimen/gap_15"
+                app:layout_scrollFlags="scroll">
 
-            <TextView
-                android:id="@+id/amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/rmb"
-                android:layout_marginBottom="@dimen/gap_8"
-                android:layout_marginLeft="@dimen/gap_4"
-                android:layout_marginTop="-4dp"
-                android:layout_toRightOf="@+id/rmb"
-                android:text="666.00"
-                android:textColor="@color/theme_red"
-                android:textSize="@dimen/text_30"
-                android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/countAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="历史下单666人"
-                android:textColor="@color/text_color_grey"
-                android:textSize="@dimen/text_12"/>
+                <TextView
+                    android:id="@+id/item_withdraw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_history_withdraw"/>
 
-            <TextView
-                android:id="@+id/countMonth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/countAll"
-                android:layout_marginTop="@dimen/gap_8"
-                android:text="本月下单333人"
-                android:textColor="@color/text_color_grey"
-                android:textSize="@dimen/text_12"/>
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/rmb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/item_withdraw"
+                    android:layout_alignStart="@+id/item_withdraw"
+                    android:layout_below="@+id/item_withdraw"
+                    android:layout_marginTop="@dimen/gap_15"
+                    android:text="¥"
+                    android:textColor="@color/theme_red"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/rmb"
+                    android:layout_marginBottom="@dimen/gap_8"
+                    android:layout_marginLeft="@dimen/gap_4"
+                    android:layout_marginTop="-4dp"
+                    android:layout_toRightOf="@+id/rmb"
+                    android:text="666.00"
+                    android:textColor="@color/theme_red"
+                    android:textSize="@dimen/text_30"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/countAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="历史下单666人"
+                    android:textColor="@color/text_color_grey"
+                    android:textSize="@dimen/text_12"/>
+
+                <TextView
+                    android:id="@+id/countMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/countAll"
+                    android:layout_marginTop="@dimen/gap_8"
+                    android:text="本月下单333人"
+                    android:textColor="@color/text_color_grey"
+                    android:textSize="@dimen/text_12"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_scrollFlags="scroll"/>
+        </android.support.design.widget.AppBarLayout>
+
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:listitem="@layout/item_withdraw"/>
-    </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

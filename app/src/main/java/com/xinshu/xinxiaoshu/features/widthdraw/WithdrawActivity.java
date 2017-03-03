@@ -34,7 +34,7 @@ public class WithdrawActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.layout_activity);
-        
+
         binding.setToolbarTitle(getString(R.string.activity_withdraw));
 
         withdrawView = new WithdrawView();
