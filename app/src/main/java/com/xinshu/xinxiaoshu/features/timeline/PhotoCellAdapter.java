@@ -1,5 +1,6 @@
 package com.xinshu.xinxiaoshu.features.timeline;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +12,6 @@ import com.bumptech.glide.Glide;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.utils.Sizer;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class PhotoCellAdapter extends RecyclerView.Adapter<PhotoCellAdapter.Phot
     private final List<String> originalList;
     private final int size;
 
-    PhotoCellAdapter(@NotNull List<String> picList) {
+    PhotoCellAdapter(@NonNull List<String> picList) {
         originalList = picList;
         size = picList.size() == 1 ? 800 : 320;
 

@@ -3,16 +3,17 @@ package com.xinshu.xinxiaoshu.features.login;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.sinyuk.floating.FloatingWindowManager;
 import com.sinyuk.myutils.string.RegexUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
-import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
 
 
@@ -66,10 +67,14 @@ public class LoginView extends BaseFragment {
 
 
         binding.loginBtn.setOnClickListener(this::onLogin);
+
     }
 
     private void onLogin(View view) {
-        ReceptionActivity.start(view.getContext());
+//        ReceptionActivity.start(view.getContext());
+        Log.d("", "setupListeners: ");
+        FloatingWindowManager m = new FloatingWindowManager(getContext().getApplicationContext());
+        m.addView();
     }
 
     private Boolean isCodeInvalid(String code) {

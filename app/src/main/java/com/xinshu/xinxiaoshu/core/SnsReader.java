@@ -2,9 +2,9 @@ package com.xinshu.xinxiaoshu.core;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.android.annotations.NonNull;
 import com.xinshu.xinxiaoshu.models.SnsInfo;
 
 import org.json.JSONArray;

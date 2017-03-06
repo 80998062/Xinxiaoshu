@@ -1,6 +1,7 @@
 package com.xinshu.xinxiaoshu.injector.modules;
 
-import com.android.annotations.NonNull;
+import android.support.annotation.NonNull;
+
 import com.xinshu.xinxiaoshu.features.upload.UploadContract;
 import com.xinshu.xinxiaoshu.injector.scopes.FragmentScope;
 

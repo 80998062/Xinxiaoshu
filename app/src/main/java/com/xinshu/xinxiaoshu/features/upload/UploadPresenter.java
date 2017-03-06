@@ -1,20 +1,18 @@
 package com.xinshu.xinxiaoshu.features.upload;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.xinshu.xinxiaoshu.core.SnsReader;
 import com.xinshu.xinxiaoshu.models.SnsInfo;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.SingleSource;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -69,7 +67,7 @@ public class UploadPresenter implements UploadContract.Presenter {
     };
 
     @Override
-    public void upload(@NotNull SnsInfo data, int position) {
+    public void upload(@android.support.annotation.NonNull SnsInfo data, int position) {
         Disposable d = snsReader.copyAndOpenDB()
                 .flatMap(new Function<SQLiteDatabase, SingleSource<List<SnsInfo>>>() {
                     @Override

@@ -1,11 +1,11 @@
 package com.xinshu.xinxiaoshu.features.upload;
 
+import android.support.annotation.NonNull;
+
 import com.xinshu.xinxiaoshu.models.SnsInfo;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.mvp.BaseView;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class UploadContract {
     public interface Presenter extends BasePresenter {
         void refresh();
 
-        void upload(@NotNull SnsInfo data, int position);
+        void upload(@NonNull SnsInfo data, int position);
 
     }
 

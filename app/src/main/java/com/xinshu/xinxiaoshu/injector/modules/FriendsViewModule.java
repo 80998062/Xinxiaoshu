@@ -1,9 +1,9 @@
 package com.xinshu.xinxiaoshu.injector.modules;
 
+import android.support.annotation.NonNull;
+
 import com.xinshu.xinxiaoshu.features.timeline.FriendsViewContract;
 import com.xinshu.xinxiaoshu.injector.scopes.FragmentScope;
-
-import org.jetbrains.annotations.NotNull;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,10 +13,10 @@ import dagger.Provides;
  */
 @Module
 public class FriendsViewModule {
-    @NotNull
+    @NonNull
     private final FriendsViewContract.View view;
 
-    public FriendsViewModule(@NotNull FriendsViewContract.View view) {
+    public FriendsViewModule(@NonNull FriendsViewContract.View view) {
         this.view = view;
     }
 

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/data/data.iml" filepath="$PROJECT_DIR$/data/data.iml" />
       <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/enviews/enviews.iml" filepath="$PROJECT_DIR$/enviews/enviews.iml" />
+      <module fileurl="file://$PROJECT_DIR$/floating/floating.iml" filepath="$PROJECT_DIR$/floating/floating.iml" />
     </modules>
   </component>
 </project>

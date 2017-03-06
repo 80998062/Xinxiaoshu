@@ -44,6 +44,7 @@ public class SplashView extends BaseActivity {
         rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.MODIFY_PHONE_STATE,
+                Manifest.permission.SYSTEM_ALERT_WINDOW,
                 Manifest.permission.INTERNET)
                 .subscribe(granted -> {
                     if (granted) { // Always true pre-M
