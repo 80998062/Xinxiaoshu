@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="button">
+        <item name="android:layout_width">@dimen/button_radius</item>
+        <item name="android:layout_height">@dimen/button_radius</item>
+        <item name="android:elevation">@dimen/button_elevation</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:drawablePadding">6dp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+
+    <dimen name="button_radius">55dp</dimen>
+    <dimen name="button_elevation">4dp</dimen>
+
+</resources>

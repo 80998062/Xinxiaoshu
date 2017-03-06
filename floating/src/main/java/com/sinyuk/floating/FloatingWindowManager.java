@@ -113,9 +113,9 @@ public class FloatingWindowManager {
 
         mLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
-        mLayoutParams.gravity = Gravity.CENTER;
-        mLayoutParams.width = 100;
-        mLayoutParams.height = 100;
+        mLayoutParams.gravity = Gravity.TOP;
+        mLayoutParams.width = mScreenWidth;
+        mLayoutParams.height = dp2px(context, 50);
 //        mLayoutParams.x = mScreenWidth / 2;
 //        mLayoutParams.y = mScreenHeight / 2;
         mLayoutParams.x = 0;
@@ -166,4 +166,11 @@ public class FloatingWindowManager {
         Log.d(TAG, "isWindowShowing: ");
         return floatingMenu != null && floatingMenu.getVisibility() == View.VISIBLE;
     }
+
+
+    private int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
 }
