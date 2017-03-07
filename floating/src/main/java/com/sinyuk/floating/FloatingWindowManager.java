@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+import static android.view.WindowManager.LayoutParams.FLAG_DITHER;
+import static android.view.WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES;
 import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
@@ -27,6 +29,7 @@ public class FloatingWindowManager {
     private static FloatingWindowManager instance;
 
     private final Context context;
+    private final int width;
 
     private FloatingMenu floatingMenu;
 
@@ -37,11 +40,23 @@ public class FloatingWindowManager {
     private int mScreenWidth;
     private int mScreenHeight;
     private boolean hasAdded = false;
+    private int height;
 
-    public FloatingWindowManager(Context context) {
-        Log.d(TAG, "FloatingWindowManager: ");
+
+    private FloatingWindowManager(Context context) {
         this.context = context;
-        init();
+        WindowManager windowManager = getWindowManager();
+        mScreenWidth = windowManager.getDefaultDisplay().getWidth();
+        mScreenHeight = windowManager.getDefaultDisplay().getHeight();
+        height = context.getResources().getDimensionPixelOffset(R.dimen.button_radius) + dp2px(context, 16);
+        width = context.getResources().getDimensionPixelOffset(R.dimen.button_radius) + dp2px(context, 16);
+
+        Log.d(TAG, "FloatingWindowManager: ");
+
+        Log.d(TAG, "mScreenWidth: " + mScreenWidth);
+        Log.d(TAG, "mScreenHeight: " + mScreenHeight);
+        Log.d(TAG, "height: " + height);
+
     }
 
     public static FloatingWindowManager get(Context context) {
@@ -55,16 +70,8 @@ public class FloatingWindowManager {
         return instance;
     }
 
-    private void init() {
-
-        WindowManager windowManager = getWindowManager();
-
-        mScreenWidth = windowManager.getDefaultDisplay().getWidth();
-        mScreenHeight = windowManager.getDefaultDisplay().getHeight();
-        Log.d(TAG, "init: ");
-        Log.d(TAG, "mScreenWidth: " + mScreenWidth);
-        Log.d(TAG, "mScreenHeight: " + mScreenHeight);
-
+    public FloatingMenu getFloatingMenu() {
+        return floatingMenu;
     }
 
     private WindowManager getWindowManager() {
@@ -72,12 +79,6 @@ public class FloatingWindowManager {
             mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         }
         return mWindowManager;
-    }
-
-    private void inflateFloatingMenu() {
-        Log.d(TAG, "inflateFloatingMenu: ");
-        floatingMenu = new FloatingMenu(context);
-        floatingMenu.setLayoutParams(getDefaultLayoutParams());
     }
 
     /**
@@ -110,6 +111,8 @@ public class FloatingWindowManager {
         mLayoutParams.flags = FLAG_NOT_FOCUSABLE |
                 FLAG_NOT_TOUCH_MODAL |
                 FLAG_WATCH_OUTSIDE_TOUCH |
+                FLAG_DITHER |
+                FLAG_IGNORE_CHEEK_PRESSES |
                 //当此窗口为用户可见时，保持设备常开，并保持亮度不变。
                 FLAG_KEEP_SCREEN_ON |
                 FLAG_DIM_BEHIND;
@@ -120,11 +123,11 @@ public class FloatingWindowManager {
 
         mLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
-        mLayoutParams.gravity = Gravity.TOP | Gravity.END;
+        mLayoutParams.gravity = Gravity.TOP;
+
         mLayoutParams.width = mScreenWidth;
-        mLayoutParams.height = 200;
-//        mLayoutParams.x = mScreenWidth / 2;
-//        mLayoutParams.y = mScreenHeight / 2;
+        mLayoutParams.height = height;
+
         mLayoutParams.x = 0;
         mLayoutParams.y = 0;
 
@@ -135,13 +138,12 @@ public class FloatingWindowManager {
 
 
     public void addView() {
-        Log.d(TAG, "addView: ");
-
         if (hasAdded)
             return;
 
         if (floatingMenu == null) {
-            inflateFloatingMenu();
+            floatingMenu = new FloatingMenu(context);
+            floatingMenu.setLayoutParams(getDefaultLayoutParams());
         }
 
         mWindowManager.addView(floatingMenu, getDefaultLayoutParams());
@@ -151,11 +153,12 @@ public class FloatingWindowManager {
     public void removeView() {
         Log.d(TAG, "removeView: ");
         if (!hasAdded) return;
-        if (floatingMenu != null) {
-            WindowManager windowManager = getWindowManager();
-            windowManager.removeView(floatingMenu);
-            floatingMenu = null;
-        }
+
+        WindowManager windowManager = getWindowManager();
+
+        windowManager.removeView(floatingMenu);
+        floatingMenu = null;
+
         hasAdded = false;
     }
 
@@ -182,23 +185,37 @@ public class FloatingWindowManager {
 
     void toggle(boolean expanded) {
 
-        final WindowManager.LayoutParams lps = getDefaultLayoutParams();
+        if (floatingMenu == null) {
+            Log.e(TAG, "floatingMenu is NULL!");
+        }
 
+        WindowManager.LayoutParams lps = (WindowManager.LayoutParams) floatingMenu.getLayoutParams();
+
+        if (lps == null) {
+            lps = getDefaultLayoutParams();
+        }
         if (expanded) {
             lps.dimAmount = 0.45f;
-            lps.width = mScreenWidth;
-            lps.height = mScreenHeight;
         } else {
             lps.dimAmount = 0f;
-            lps.width = context.getResources().getDimensionPixelOffset(R.dimen.button_radius);
-            lps.height = context.getResources().getDimensionPixelOffset(R.dimen.button_radius);
         }
 
-
-        if (floatingMenu != null) {
-            mWindowManager.updateViewLayout(floatingMenu, lps);
-        }
+//        if (floatingMenu == null) {
+//            floatingMenu = new FloatingMenu(context);
+//            floatingMenu.setLayoutParams(lps);
+//            mWindowManager.addView(floatingMenu, lps);
+//        } else {
+        Log.d(TAG, "updateViewLayout: ");
+        mWindowManager.updateViewLayout(floatingMenu, lps);
 
     }
 
+    void updatePosition(int x, int y) {
+        final WindowManager.LayoutParams lps = (WindowManager.LayoutParams) floatingMenu.getLayoutParams();
+        lps.x = x;
+        lps.y = y;
+        Log.d(TAG, "updateViewLayout: ");
+        mWindowManager.updateViewLayout(floatingMenu, lps);
+
+    }
 }

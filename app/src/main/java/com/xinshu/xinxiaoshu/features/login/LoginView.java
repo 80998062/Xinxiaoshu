@@ -70,12 +70,20 @@ public class LoginView extends BaseFragment {
 
     }
 
+    FloatingWindowManager f;
+
     private void onLogin(View view) {
 //        ReceptionActivity.start(view.getContext());
 //        getActivity().finish();
         Log.d("", "setupListeners: ");
-        FloatingWindowManager m = new FloatingWindowManager(getContext().getApplicationContext());
-        m.addView();
+        if (f == null) {
+            f = FloatingWindowManager.get(getContext().getApplicationContext());
+            f.addView();
+        } else {
+            Log.d("FloatingWindowManager", "X: " + f.getFloatingMenu().getX());
+
+            Log.d("FloatingWindowManager", "Y: " + f.getFloatingMenu().getY());
+        }
     }
 
     private Boolean isCodeInvalid(String code) {

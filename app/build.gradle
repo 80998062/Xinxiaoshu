@@ -71,9 +71,6 @@ dependencies {
     compile project(':enviews')
     compile 'com.github.tajchert:WaitingDots:0.4.0'
 
-    // rebound
-    compile 'com.facebook.rebound:rebound:0.3.8'
-    compile 'com.tumblr:backboard:0.1.0'
 
     // dao
     compile project(':floating')
