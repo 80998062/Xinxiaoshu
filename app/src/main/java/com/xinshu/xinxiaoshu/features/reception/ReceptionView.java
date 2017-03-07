@@ -17,7 +17,7 @@ import com.xinshu.xinxiaoshu.features.widthdraw.WithdrawActivity;
  * Created by sinyuk on 2017/3/2.
  */
 
-public class ReceptionView extends BaseFragment {
+public class ReceptionView extends BaseFragment implements ReceptionContract.View{
     @Override
     protected boolean registerForEventBus() {
         return false;
@@ -45,6 +45,28 @@ public class ReceptionView extends BaseFragment {
         binding.tutorial.setOnClickListener(this::onClickTutorial);
         binding.historyCount.setOnClickListener(this::gotoHistory);
         binding.withdrawAmount.setOnClickListener(this::gotoWithdraw);
+
+        binding.offline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        binding.online.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        binding.comming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     private void gotoWithdraw(View view) {
@@ -63,6 +85,58 @@ public class ReceptionView extends BaseFragment {
      * @param view
      */
     private void onClickTutorial(View view) {
+
+    }
+
+    private ReceptionContract.Presenter presenter;
+    @Override
+    public void setPresenter(ReceptionContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (presenter != null) {
+            presenter.subscribe();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.unsubscribe();
+        }
+    }
+
+    @Override
+    public void bindPlayer(Object player) {
+
+    }
+
+    @Override
+    public void showOffline() {
+
+    }
+
+    @Override
+    public void showOnline() {
+
+    }
+
+    @Override
+    public void showGetReception(Object reception) {
+
+    }
+
+    @Override
+    public void waitOrderingResult() {
+
+    }
+
+    @Override
+    public void showOrderingResult() {
 
     }
 }

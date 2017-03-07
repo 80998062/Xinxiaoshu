@@ -44,4 +44,5 @@
     <string name="hint_online_waiting">等待派单</string>
     <string name="activity_history">历史客户</string>
     <string name="activity_withdraw">历史提现</string>
+    <string name="activity_tutorial">小编教程</string>
 </resources>

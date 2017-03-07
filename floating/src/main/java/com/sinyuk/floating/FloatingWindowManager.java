@@ -10,6 +10,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+import static android.view.WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+
 /**
  * Created by sinyuk on 2017/3/3.
  */
@@ -103,19 +109,22 @@ public class FloatingWindowManager {
         // 不设置这个flag的话，home页的划屏会有问题
 
 
-        mLayoutParams.flags =
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                        //当此窗口为用户可见时，保持设备常开，并保持亮度不变。
-                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                        WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+        mLayoutParams.flags = FLAG_NOT_FOCUSABLE |
+                FLAG_NOT_TOUCH_MODAL |
+                FLAG_WATCH_OUTSIDE_TOUCH |
+                //当此窗口为用户可见时，保持设备常开，并保持亮度不变。
+                FLAG_KEEP_SCREEN_ON |
+                FLAG_DIM_BEHIND;
 
+
+        //当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。
+        mLayoutParams.dimAmount = 0.45f;
 
         mLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
         mLayoutParams.gravity = Gravity.TOP;
         mLayoutParams.width = mScreenWidth;
-        mLayoutParams.height = dp2px(context, 50);
+        mLayoutParams.height = mScreenHeight;
 //        mLayoutParams.x = mScreenWidth / 2;
 //        mLayoutParams.y = mScreenHeight / 2;
         mLayoutParams.x = 0;
@@ -173,4 +182,18 @@ public class FloatingWindowManager {
         return (int) (dpValue * scale + 0.5f);
     }
 
+    void toggle(boolean expanded) {
+        if (floatingMenu == null) {
+            return;
+        }
+        dim(expanded);
+
+        floatingMenu.setLayoutParams(mLayoutParams);
+
+        floatingMenu.requestLayout();
+    }
+
+    private void dim(boolean expanded) {
+        mLayoutParams.dimAmount = expanded ? 0.45f : 0;
+    }
 }

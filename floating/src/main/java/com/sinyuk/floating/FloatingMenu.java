@@ -37,7 +37,16 @@ public class FloatingMenu extends FrameLayout {
             Log.d(TAG, "onClick: ");
             Toast.makeText(view.getContext(), "Click at: " + index, Toast.LENGTH_SHORT).show();
         }
+
+        @Override
+        public void onExpanded(boolean expanded) {
+            Log.d(TAG, "onExpanded");
+        }
     };
+
+    private FloatingWindowManager mFloatingWindowManager;
+
+    private boolean mExpanded = false;
 
 
     public FloatingMenu(@NonNull Context context) {
@@ -56,6 +65,8 @@ public class FloatingMenu extends FrameLayout {
         setupItemListeners();
 
         addView(mView, layoutParams);
+
+        mFloatingWindowManager = FloatingWindowManager.get(getContext().getApplicationContext());
     }
 
     private void setupItemListeners() {
@@ -67,7 +78,11 @@ public class FloatingMenu extends FrameLayout {
             @Override
             public void onClick(View view) {
                 internalItemListener.onClick(view, 0);
-                notifyListeners(view, 0);
+                notifyClick(view, 0);
+                mExpanded = !mExpanded;
+                mFloatingWindowManager.toggle(mExpanded);
+                internalItemListener.onExpanded(mExpanded);
+                notifyExpanded(mExpanded);
             }
         });
 
@@ -75,7 +90,7 @@ public class FloatingMenu extends FrameLayout {
             @Override
             public void onClick(View view) {
                 internalItemListener.onClick(view, 1);
-                notifyListeners(view, 1);
+                notifyClick(view, 1);
             }
         });
 
@@ -83,7 +98,7 @@ public class FloatingMenu extends FrameLayout {
             @Override
             public void onClick(View view) {
                 internalItemListener.onClick(view, 2);
-                notifyListeners(view, 2);
+                notifyClick(view, 2);
             }
         });
 
@@ -91,12 +106,20 @@ public class FloatingMenu extends FrameLayout {
             @Override
             public void onClick(View view) {
                 internalItemListener.onClick(view, 3);
-                notifyListeners(view, 3);
+                notifyClick(view, 3);
             }
         });
     }
 
-    private void notifyListeners(View view, int index) {
+    private void notifyExpanded(boolean expanded) {
+        for (int i = 0; i < itemListeners.size(); i++) {
+            if (itemListeners.get(i) == null) {
+                itemListeners.get(i).onExpanded(expanded);
+            }
+        }
+    }
+
+    private void notifyClick(View view, int index) {
         for (int i = 0; i < itemListeners.size(); i++) {
             if (itemListeners.get(i) == null) {
                 itemListeners.get(i).onClick(view, index);
@@ -108,8 +131,17 @@ public class FloatingMenu extends FrameLayout {
         itemListeners.clear();
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // 如果你设置了FLAG_NOT_TOUCH_MODAL，那么当触屏事件发生在窗口之外事，
+        // 可以通过设置此标志接收到一个MotionEvent.ACTION_OUTSIDE事件。
+        // 注意，你不会收到完整的down/move/up事件，
+        // 只有第一次down事件时可以收到ACTION_OUTSIDE。
+        if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+            Log.d(TAG, "MotionEvent.ACTION_OUTSIDE");
+            return true;
+        }
         return super.onTouchEvent(event);
     }
 
@@ -135,5 +167,7 @@ public class FloatingMenu extends FrameLayout {
 
     public interface ItemClickListener {
         void onClick(View view, int index);
+
+        void onExpanded(boolean expanded);
     }
 }

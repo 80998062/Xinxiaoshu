@@ -29,6 +29,7 @@
     <ImageView
         android:id="@+id/emulator"
         style="@style/button"
-        android:background="@drawable/btn_home"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/btn_home"/>
 
 </LinearLayout>

@@ -1,7 +1,7 @@
 package com.xinshu.xinxiaoshu.injector.modules;
 
 import com.xinshu.xinxiaoshu.features.reception.ReceptionContract;
-import com.xinshu.xinxiaoshu.injector.scopes.FragmentScope;
+import com.xinshu.xinxiaoshu.injector.scopes.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -17,7 +17,7 @@ public class ReceptionModule {
         this.view = view;
     }
 
-    @FragmentScope
+    @ActivityScope
     @Provides
     ReceptionContract.View view() {
         return view;

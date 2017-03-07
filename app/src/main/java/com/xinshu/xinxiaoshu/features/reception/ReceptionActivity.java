@@ -6,34 +6,41 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.databinding.ActivityReceptionBinding;
+import com.xinshu.xinxiaoshu.injector.modules.ReceptionModule;
+
+import javax.inject.Inject;
 
 /**
  * Created by sinyuk on 2017/3/2.
  */
 
 public class ReceptionActivity extends BaseActivity {
-    private ReceptionView receptionView;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, ReceptionActivity.class);
         context.startActivity(starter);
     }
+
     @Override
     protected boolean registerEventBus() {
         return false;
     }
 
-    private ActivityReceptionBinding binding;
+    @Inject
+    ReceptionPresenter receptionPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_reception);
+        ActivityReceptionBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_reception);
 
-        receptionView = new ReceptionView();
+        ReceptionView receptionView = new ReceptionView();
+
+        App.get(this).getAppComponent().plus(new ReceptionModule(receptionView)).inject(this);
 
         addFragment(receptionView, false);
     }
