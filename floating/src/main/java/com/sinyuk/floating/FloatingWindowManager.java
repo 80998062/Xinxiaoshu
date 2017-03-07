@@ -30,8 +30,6 @@ public class FloatingWindowManager {
 
     private FloatingMenu floatingMenu;
 
-    private WindowManager.LayoutParams mLayoutParams;
-
     private WindowManager mWindowManager;
 
     private ActivityManager mActivityManager;
@@ -67,7 +65,6 @@ public class FloatingWindowManager {
         Log.d(TAG, "mScreenWidth: " + mScreenWidth);
         Log.d(TAG, "mScreenHeight: " + mScreenHeight);
 
-        initFloatingLayoutParams();
     }
 
     private WindowManager getWindowManager() {
@@ -80,7 +77,7 @@ public class FloatingWindowManager {
     private void inflateFloatingMenu() {
         Log.d(TAG, "inflateFloatingMenu: ");
         floatingMenu = new FloatingMenu(context);
-        floatingMenu.setLayoutParams(mLayoutParams);
+        floatingMenu.setLayoutParams(getDefaultLayoutParams());
     }
 
     /**
@@ -96,9 +93,10 @@ public class FloatingWindowManager {
      * </p>
      */
 
-    private WindowManager.LayoutParams initFloatingLayoutParams() {
+    private WindowManager.LayoutParams getDefaultLayoutParams() {
 
-        mLayoutParams = new WindowManager.LayoutParams();
+        final WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams();
+
         mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
 
         // 不设置这个弹出框的透明遮罩显示为黑色
@@ -118,13 +116,13 @@ public class FloatingWindowManager {
 
 
         //当FLAG_DIM_BEHIND设置后生效。该变量指示后面的窗口变暗的程度。
-        mLayoutParams.dimAmount = 0.45f;
+        mLayoutParams.dimAmount = 0f;
 
         mLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
-        mLayoutParams.gravity = Gravity.TOP;
+        mLayoutParams.gravity = Gravity.TOP | Gravity.END;
         mLayoutParams.width = mScreenWidth;
-        mLayoutParams.height = mScreenHeight;
+        mLayoutParams.height = 200;
 //        mLayoutParams.x = mScreenWidth / 2;
 //        mLayoutParams.y = mScreenHeight / 2;
         mLayoutParams.x = 0;
@@ -146,7 +144,7 @@ public class FloatingWindowManager {
             inflateFloatingMenu();
         }
 
-        mWindowManager.addView(floatingMenu, mLayoutParams);
+        mWindowManager.addView(floatingMenu, getDefaultLayoutParams());
         hasAdded = true;
     }
 
@@ -183,17 +181,24 @@ public class FloatingWindowManager {
     }
 
     void toggle(boolean expanded) {
-        if (floatingMenu == null) {
-            return;
+
+        final WindowManager.LayoutParams lps = getDefaultLayoutParams();
+
+        if (expanded) {
+            lps.dimAmount = 0.45f;
+            lps.width = mScreenWidth;
+            lps.height = mScreenHeight;
+        } else {
+            lps.dimAmount = 0f;
+            lps.width = context.getResources().getDimensionPixelOffset(R.dimen.button_radius);
+            lps.height = context.getResources().getDimensionPixelOffset(R.dimen.button_radius);
         }
-        dim(expanded);
 
-        floatingMenu.setLayoutParams(mLayoutParams);
 
-        floatingMenu.requestLayout();
+        if (floatingMenu != null) {
+            mWindowManager.updateViewLayout(floatingMenu, lps);
+        }
+
     }
 
-    private void dim(boolean expanded) {
-        mLayoutParams.dimAmount = expanded ? 0.45f : 0;
-    }
 }
