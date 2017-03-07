@@ -1,5 +1,7 @@
 package com.xinshu.xinxiaoshu.features.extras;
 
+import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +21,12 @@ public class TutorialActivity extends BaseActivity {
     }
 
     private LayoutActivityBinding binding;
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, TutorialActivity.class);
+        starter.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

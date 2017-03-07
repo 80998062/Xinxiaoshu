@@ -32,6 +32,6 @@ public class ReceptionContract {
 
         void waitOrderingResult();
 
-        void showOrderingResult();
+        void showOrderingResult(boolean succeed);
     }
 }

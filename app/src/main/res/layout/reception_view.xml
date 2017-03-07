@@ -89,51 +89,74 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/offline"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="offline"/>
+                    android:orientation="horizontal">
 
-                <android.support.v4.widget.Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/offline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="offline"/>
 
-                <Button
-                    android:id="@+id/online"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="online"/>
 
-                <android.support.v4.widget.Space
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/online"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="online"/>
 
-                <Button
-                    android:id="@+id/comming"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="coming"/>
-            </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/comming"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="coming"/>
+
+
+                    <TextView
+                        android:id="@+id/succeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="succeed"/>
+
+
+                    <TextView
+                        android:id="@+id/failed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="failed"/>
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
 
             <com.xinshu.xinxiaoshu.widgets.BetterViewAnimator
+                android:id="@+id/viewAnimator"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inAnimation="@android:anim/slide_in_left"
-                android:outAnimation="@android:anim/slide_out_right">
+                android:inAnimation="@anim/slide_up_in"
+                android:outAnimation="@anim/slide_down_out">
 
-                <include layout="@layout/reception_offline"/>
+                <include
+                    android:id="@+id/reception_offline"
+                    layout="@layout/reception_offline"/>
 
-                <include layout="@layout/reception_online"/>
+                <include
+                    android:id="@+id/reception_online"
+                    layout="@layout/reception_online"/>
 
-                <include layout="@layout/reception_coming"/>
+                <include
+                    android:id="@+id/reception_coming"
+                    layout="@layout/reception_coming"/>
             </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
 
             <TextView
@@ -149,6 +172,7 @@
 
 
         <Button
+            android:id="@+id/footerBtn"
             style="@style/button_borderless.cyan"
             android:enabled="false"
             android:text="@string/action_reception_off"/>

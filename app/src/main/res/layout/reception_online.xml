@@ -1,29 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <pl.tajchert.waitingdots.DotsTextView
-        android:id="@+id/dotsView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/hint_online_waiting"
-        android:textSize="@dimen/text_16"
-        android:textStyle="bold"
-        app:autoplay="false"
-        app:period="1000"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dotsView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/gap_8"
-        android:text="@string/hint_online_extras"
-        android:textColor="@color/text_color_lt"
-        android:textSize="@dimen/text_12"/>
-</RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="@string/hint_online_waiting"
+                android:textSize="@dimen/text_16"/>
+
+            <pl.tajchert.waitingdots.DotsTextView
+                android:id="@+id/dotsView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_16"
+                android:textStyle="bold"
+                app:autoplay="true"
+                app:period="1000"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/gap_8"
+            android:text="@string/hint_online_extras"
+            android:textColor="@color/text_color_lt"
+            android:textSize="@dimen/text_12"/>
+    </RelativeLayout>
+
+</layout>

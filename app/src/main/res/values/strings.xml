@@ -45,4 +45,11 @@
     <string name="activity_history">历史客户</string>
     <string name="activity_withdraw">历史提现</string>
     <string name="activity_tutorial">小编教程</string>
+    <string name="hint_reception_succeed">等待客户添加</string>
+    <string name="hint_reception_failed">下次再抢快一点哦</string>
+    <string name="hint_reception_request">请求排版</string>
+    <string name="action_reception_turn_off">下线</string>
+    <string name="action_reception_get">抢单</string>
+    <string name="action_reception_succeed">成功</string>
+    <string name="action_reception_failed">已结束</string>
 </resources>
