@@ -90,7 +90,7 @@ public class SnsInfoModel implements ViewModel<SnsInfo> {
     @BindingAdapter("createdAt")
     public static void setCreatedAt(TextView textView, String timestamp) {
         long mills = Long.parseLong(timestamp) * 1000L;
-        
+
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.CHINA);
             Date netDate = (new Date(mills));

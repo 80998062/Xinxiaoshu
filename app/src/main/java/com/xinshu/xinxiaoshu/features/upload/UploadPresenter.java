@@ -2,6 +2,7 @@ package com.xinshu.xinxiaoshu.features.upload;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.xinshu.xinxiaoshu.core.SnsReader;
 import com.xinshu.xinxiaoshu.models.SnsInfo;
@@ -67,23 +68,23 @@ public class UploadPresenter implements UploadContract.Presenter {
 
     @Override
     public void upload(@NonNull SnsInfo data, int position) {
-//        Disposable d = snsReader.copyAndOpenDB()
-//                .flatMap(new Function<SQLiteDatabase, SingleSource<List<SnsInfo>>>() {
-//                    @Override
-//                    public SingleSource<List<SnsInfo>> apply(@NonNull SQLiteDatabase db) throws Exception {
-//                        return snsReader.timelineByUsernameOB(data.authorId);
-//                    }
-//                })
-//                .subscribe(f -> {
-//                    if (f.isEmpty()) {
-//                        // pass
-//                    } else {
-//                        Log.d(TAG, "upload: " + f.toString());
-//                        upload2Server(f, position);
-//                    }
-//                });
-//
-//        disposables.add(d);
+        Disposable d = snsReader.copyAndOpenDB()
+                .flatMap(new Function<SQLiteDatabase, SingleSource<List<SnsInfo>>>() {
+                    @Override
+                    public SingleSource<List<SnsInfo>> apply(@NonNull SQLiteDatabase db) throws Exception {
+                        return snsReader.timelineByUsernameOB(data.authorId);
+                    }
+                })
+                .subscribe(f -> {
+                    if (f.isEmpty()) {
+                        // pass
+                    } else {
+                        Log.d(TAG, "upload: " + f.toString());
+                        upload2Server(f, position);
+                    }
+                });
+
+        disposables.add(d);
     }
 
     private void upload2Server(List<SnsInfo> f, int position) {

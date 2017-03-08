@@ -66,7 +66,7 @@ public class SnsReader {
     private List<SnsInfo> distinctTimeline() {
         List<SnsInfo> snsInfos = new ArrayList<>();
 
-        Cursor cursor = database.rawQuery("select * from SnsInfo group by userName ORDER BY createTime", null);
+        Cursor cursor = database.rawQuery("select * from SnsInfo group by userName ORDER BY createTime desc", null);
 
         while (cursor.moveToNext()) {
             try {
@@ -104,8 +104,8 @@ public class SnsReader {
 
     private List<SnsInfo> getTimelineByUsername(@NonNull String userName) throws Exception {
         List<SnsInfo> snsInfos = new ArrayList<>();
-
-        final String query = String.format("select distinct from SnsInfo where userName = \'%s\'", userName);
+        final String query = String.format("SELECT * FROM SnsInfo WHERE userName = " +
+                "\'%s\' ORDER BY createTime desc LIMIT 10", userName);
 
         Cursor cursor = database.rawQuery(query, null);
         while (cursor.moveToNext()) {
