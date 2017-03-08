@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:layout_gravity="end"
     android:clipToPadding="false"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <android.support.v4.widget.Space
         android:layout_width="0dp"
@@ -18,27 +19,34 @@
         style="@style/button"
         android:background="@drawable/btn_play"
         android:src="@drawable/ic_play"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <ImageButton
         android:id="@+id/uploadBtn"
         style="@style/button"
-        android:background="@drawable/btn_oval_white"
+        android:background="@drawable/btn_toggle"
         android:src="@drawable/ic_upload"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <ImageButton
         android:id="@+id/homeBtn"
         style="@style/button"
-        android:background="@drawable/btn_oval_white"
+        android:background="@drawable/btn_toggle"
         android:src="@drawable/ic_home"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
 
     <ImageButton
         android:id="@+id/emulator"
         style="@style/button"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:background="@drawable/btn_oval_overlay"
+        android:padding="6dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/btn_home"/>
 
 </LinearLayout>

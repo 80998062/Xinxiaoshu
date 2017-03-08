@@ -30,11 +30,27 @@ public class FloatingMenu extends FrameLayout {
 
     private List<ItemClickListener> itemListeners = new ArrayList<>();
 
-    private final static ItemClickListener internalItemListener = new ItemClickListener() {
+    private final ItemClickListener internalItemListener = new ItemClickListener() {
         @Override
         public void onClick(View view, int index) {
             Log.d(TAG, "onClick: ");
             Toast.makeText(view.getContext(), "Click at: " + index, Toast.LENGTH_SHORT).show();
+            switch (index) {
+                case 0: {
+
+                    break;
+                }
+                case 1:
+                case 2: {
+
+                    break;
+                }
+                case 3: {
+                    togglePlayState(!view.isActivated());
+                    break;
+                }
+
+            }
         }
 
         @Override
@@ -42,6 +58,16 @@ public class FloatingMenu extends FrameLayout {
             Log.d(TAG, "onExpanded");
         }
     };
+
+    private void togglePlayState(boolean playing) {
+        Log.d(TAG, "togglePlayState: " + playing);
+        mView.findViewById(R.id.homeBtn).setEnabled(!playing);
+        mView.findViewById(R.id.uploadBtn).setEnabled(!playing);
+        mView.findViewById(R.id.homeBtn).setClickable(!playing);
+        mView.findViewById(R.id.uploadBtn).setClickable(!playing);
+
+        mView.findViewById(R.id.playBtn).setActivated(playing);
+    }
 
     private boolean expanded = false;
     private float xInView;
@@ -97,33 +123,6 @@ public class FloatingMenu extends FrameLayout {
 
             }
         });
-
-//        mView.findViewById(R.id.emulator).setOnTouchListener(new OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        emulatorX = event.getX();
-//                        emulatorY = event.getY();
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        if (Math.abs(event.getX() - emulatorX) < 10 && Math.abs(event.getY() - emulatorY) < 10) {
-//                            Log.d(TAG, "onTouch: Click");
-//                            internalItemListener.onClick(view, 0);
-//                            notifyClick(view, 0);
-//                            expanded = !expanded;
-//                            getWindowManager().toggle(expanded);
-//                            toggleItemVisibility(expanded);
-//                            internalItemListener.onExpanded(expanded);
-//                            notifyExpanded(expanded);
-//                        }
-//                    default:
-//                        break;
-//                }
-//                return FloatingMenu.this.onTouchEvent(event);
-//            }
-//        });
-
 
         mView.findViewById(R.id.emulator).setOnTouchListener(new OnTouchListener() {
             @Override
@@ -193,6 +192,8 @@ public class FloatingMenu extends FrameLayout {
                 notifyClick(view, 3);
             }
         });
+
+        togglePlayState(false);
     }
 
     private void toggleItemVisibility(boolean expanded) {
@@ -207,6 +208,18 @@ public class FloatingMenu extends FrameLayout {
         getWindowManager().updatePosition((int) ((xInScreen - xInView) * FACTOR), (int) ((yInScreen - yInView) * FACTOR));
     }
 
+
+    public void addItemListener(ItemClickListener listener) {
+        if (listener != null) {
+            Log.d(TAG, "addItemListener: " + listener.getClass().getSimpleName());
+            itemListeners.add(listener);
+        }
+    }
+
+    public void removeItemListener(ItemClickListener listener) {
+        itemListeners.remove(listener);
+    }
+
     private void notifyExpanded(boolean expanded) {
         for (int i = 0; i < itemListeners.size(); i++) {
             if (itemListeners.get(i) == null) {
@@ -218,9 +231,24 @@ public class FloatingMenu extends FrameLayout {
     private void notifyClick(View view, int index) {
         for (int i = 0; i < itemListeners.size(); i++) {
             if (itemListeners.get(i) == null) {
+                Log.d(TAG, "notifyClick: ");
                 itemListeners.get(i).onClick(view, index);
             }
         }
+    }
+
+    public boolean isRegistered(Object o) {
+        Log.d(TAG, "isRegistered: " + o.getClass().getSimpleName());
+        if (itemListeners == null || itemListeners.isEmpty()) return false;
+
+        if (o instanceof ItemClickListener) {
+            for (int i = 0; i < itemListeners.size(); i++) {
+                if (itemListeners.get(i).equals(o)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void removeAllListeners() {

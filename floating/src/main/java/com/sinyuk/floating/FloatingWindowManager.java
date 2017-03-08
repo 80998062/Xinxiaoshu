@@ -123,7 +123,7 @@ public class FloatingWindowManager {
 
         mLayoutParams.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
-        mLayoutParams.gravity = Gravity.TOP;
+        mLayoutParams.gravity = Gravity.TOP | Gravity.END;
 
         mLayoutParams.width = mScreenWidth;
         mLayoutParams.height = height;
