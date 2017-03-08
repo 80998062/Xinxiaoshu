@@ -14,6 +14,7 @@ import static android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND;
 import static android.view.WindowManager.LayoutParams.FLAG_DITHER;
 import static android.view.WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES;
 import static android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+import static android.view.WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
 import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 import static android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
 import static android.view.WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
@@ -113,6 +114,7 @@ public class FloatingWindowManager {
                 FLAG_WATCH_OUTSIDE_TOUCH |
                 FLAG_DITHER |
                 FLAG_IGNORE_CHEEK_PRESSES |
+                FLAG_LAYOUT_INSET_DECOR |
                 //当此窗口为用户可见时，保持设备常开，并保持亮度不变。
                 FLAG_KEEP_SCREEN_ON |
                 FLAG_DIM_BEHIND;
@@ -151,7 +153,9 @@ public class FloatingWindowManager {
     }
 
     public void removeView() {
-        Log.d(TAG, "removeView: ");
+
+        if (floatingMenu == null) return;
+
         if (!hasAdded) return;
 
         WindowManager windowManager = getWindowManager();

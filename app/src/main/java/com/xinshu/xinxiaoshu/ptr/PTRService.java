@@ -1,16 +1,23 @@
 package com.xinshu.xinxiaoshu.ptr;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
 import com.sinyuk.floating.FloatingMenu;
 import com.sinyuk.floating.FloatingWindowManager;
+import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 
@@ -22,7 +29,8 @@ import java.util.TimerTask;
  */
 
 public class PTRService extends IntentService implements FloatingMenu.ItemClickListener {
-    public static final String TAG = "PTRService";
+    public static final String TAG = "FloatingMenu";
+    private static final int ONGOING_NOTIFICATION_ID = 0x123;
     /**
      * 用于在线程中创建或移除悬浮窗。
      */
@@ -49,15 +57,59 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+
         floatingWindowManager = FloatingWindowManager.get(getApplicationContext());
 
         // If we get killed, after returning from here, restart
         // 开启定时器，每隔0.5秒刷新一次
-        if (timer == null) {
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new RefreshTask(), 0, 500);
+//        if (timer == null) {
+//            timer = new Timer();
+//            timer.scheduleAtFixedRate(new RefreshTask(), 0, 500);
+//        }
+        if (!floatingWindowManager.isWindowShowing()) {
+            floatingWindowManager.addView();
         }
-        return START_STICKY;
+
+        if (floatingWindowManager.isWindowShowing()) {
+            if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
+                floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
+            }
+        }
+
+        Notification.Builder builder = new Notification.Builder(getApplicationContext());
+        builder.setAutoCancel(false);
+        builder.setContentTitle(getString(R.string.notification_title));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            builder.setSmallIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_warning));
+            builder.setLargeIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_warning_red));
+        }
+
+        Intent notificationIntent = new Intent(getApplicationContext(), ReceptionActivity.class);
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+        builder.setContentIntent(pendingIntent);
+
+        builder.setWhen(SystemClock.currentThreadTimeMillis());
+        builder.setShowWhen(true);
+
+        builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.theme_red));
+
+        Notification notification = builder.build(); // 获取构建好的Notification
+        notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
+        notification.flags = Notification.FLAG_SHOW_LIGHTS;
+
+        startForeground(ONGOING_NOTIFICATION_ID, notification);
+
+
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
     }
 
     /**
@@ -80,10 +132,18 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         // Service被终止的同时也停止定时器继续运行
         timer.cancel();
         timer = null;
+
+        handler.removeCallbacksAndMessages(null);
+
+        stopForeground(true);
     }
+
+    // Calling startActivity() from outside of an Activity  context
+    // requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
 
     @Override
     public void onClick(View view, int index) {
@@ -96,14 +156,14 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
             case 1: {
                 Log.d(TAG, "onClick: home");
                 Intent intent = new Intent(getApplicationContext(), ReceptionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             }
             case 2: {
                 Log.d(TAG, "onClick: upload");
                 Intent intent = new Intent(getApplicationContext(), UploadActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             }
@@ -124,26 +184,34 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         @Override
         public void run() {
             if (isWechat()) {
-                if (!floatingWindowManager.isWindowShowing()) {
-                    handler.post(() -> floatingWindowManager.addView());
-
-                    if (floatingWindowManager.getFloatingMenu() != null) {
-                        if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
-                            floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
-                        }
-                    }
-                }
+                showAndRegister();
             } else {
-                handler.post(() -> floatingWindowManager.removeView());
-
-                if (floatingWindowManager.getFloatingMenu() != null) {
-                    if (floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
-                        floatingWindowManager.getFloatingMenu().removeItemListener(PTRService.this);
-                    }
-                }
+                removeAndUnregister();
             }
         }
 
+    }
+
+    private void removeAndUnregister() {
+        if (floatingWindowManager.isWindowShowing()) {
+            if (floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
+                floatingWindowManager.getFloatingMenu().removeItemListener(PTRService.this);
+            }
+
+            handler.post(() -> floatingWindowManager.removeView());
+        }
+    }
+
+    private void showAndRegister() {
+        if (!floatingWindowManager.isWindowShowing()) {
+            handler.post(() -> floatingWindowManager.addView());
+        }
+
+        if (floatingWindowManager.isWindowShowing()) {
+            if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
+                floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
+            }
+        }
     }
 
     private boolean isWechat() {

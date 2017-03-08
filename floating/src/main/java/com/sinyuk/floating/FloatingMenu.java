@@ -22,7 +22,8 @@ import java.util.List;
 
 public class FloatingMenu extends FrameLayout {
     public static final String TAG = "FloatingMenu";
-    private static final float FACTOR = 0.9f;
+
+    private static final float FACTOR = 0.88f;
 
     private int statusBarHeight;
 
@@ -42,7 +43,11 @@ public class FloatingMenu extends FrameLayout {
                 }
                 case 1:
                 case 2: {
-
+                    expanded = !expanded;
+                    getWindowManager().toggle(expanded);
+                    toggleItemVisibility(expanded);
+                    internalItemListener.onExpanded(expanded);
+                    notifyExpanded(expanded);
                     break;
                 }
                 case 3: {
@@ -70,6 +75,7 @@ public class FloatingMenu extends FrameLayout {
     }
 
     private boolean expanded = false;
+
     private float xInView;
     private float yInView;
     private float xDownInScreen;
@@ -98,7 +104,6 @@ public class FloatingMenu extends FrameLayout {
         setupSpring();
 
         addView(mView, layoutParams);
-
 
     }
 
@@ -222,7 +227,7 @@ public class FloatingMenu extends FrameLayout {
 
     private void notifyExpanded(boolean expanded) {
         for (int i = 0; i < itemListeners.size(); i++) {
-            if (itemListeners.get(i) == null) {
+            if (itemListeners.get(i) != null) {
                 itemListeners.get(i).onExpanded(expanded);
             }
         }
@@ -230,7 +235,7 @@ public class FloatingMenu extends FrameLayout {
 
     private void notifyClick(View view, int index) {
         for (int i = 0; i < itemListeners.size(); i++) {
-            if (itemListeners.get(i) == null) {
+            if (itemListeners.get(i) != null) {
                 Log.d(TAG, "notifyClick: ");
                 itemListeners.get(i).onClick(view, index);
             }
@@ -239,6 +244,7 @@ public class FloatingMenu extends FrameLayout {
 
     public boolean isRegistered(Object o) {
         Log.d(TAG, "isRegistered: " + o.getClass().getSimpleName());
+
         if (itemListeners == null || itemListeners.isEmpty()) return false;
 
         if (o instanceof ItemClickListener) {

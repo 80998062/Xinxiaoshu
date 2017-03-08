@@ -52,4 +52,5 @@
     <string name="action_reception_get">抢单</string>
     <string name="action_reception_succeed">成功</string>
     <string name="action_reception_failed">已结束</string>
+    <string name="notification_title">心书小编正在运行中</string>
 </resources>
