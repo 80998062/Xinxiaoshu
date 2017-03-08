@@ -16,6 +16,7 @@
             style="@style/my_toolbar">
 
             <ImageView
+                android:id="@+id/avatar"
                 style="@style/my_toolbar_button"
                 android:contentDescription="@string/action_back"
                 android:src="@color/colorAccent"/>
@@ -27,9 +28,10 @@
 
 
             <ImageView
-                android:id="@+id/actionBtn"
+                android:id="@+id/uploadBtn"
                 style="@style/my_toolbar_button"
-                android:src="@color/colorDisable"/>
+                android:contentDescription="@string/action_upload"
+                android:src="@drawable/ic_upload_dk"/>
         </LinearLayout>
 
         <FrameLayout

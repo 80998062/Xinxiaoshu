@@ -10,6 +10,7 @@ import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.databinding.ActivityReceptionBinding;
+import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 import com.xinshu.xinxiaoshu.injector.modules.ReceptionModule;
 
 import javax.inject.Inject;
@@ -43,6 +44,15 @@ public class ReceptionActivity extends BaseActivity {
         App.get(this).getAppComponent().plus(new ReceptionModule(receptionView)).inject(this);
 
         addFragment(receptionView, false);
+
+        setupListeners(binding);
+    }
+
+    private void setupListeners(ActivityReceptionBinding binding) {
+        binding.avatar.setOnClickListener(view -> {
+        });
+
+        binding.uploadBtn.setOnClickListener(view -> UploadActivity.start(view.getContext()));
     }
 
 

@@ -27,6 +27,7 @@ public class UploadActivity extends BaseActivity {
     }
 
     private LayoutActivityBinding binding;
+
     public static void start(Context context) {
         Intent starter = new Intent(context, UploadActivity.class);
         context.startActivity(starter);
@@ -41,9 +42,7 @@ public class UploadActivity extends BaseActivity {
 
         addDisposable(App.get(this).databaseComponentOB()
                 .doOnComplete(this::afterInjection)
-                .subscribe(c -> {
-                    c.plus(new UploadModule(uploadList)).inject(UploadActivity.this);
-                }));
+                .subscribe(c -> c.plus(new UploadModule(uploadList)).inject(UploadActivity.this)));
     }
 
     @Inject

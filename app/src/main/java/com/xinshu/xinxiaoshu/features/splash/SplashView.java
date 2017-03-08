@@ -25,9 +25,7 @@ public class SplashView extends BaseActivity {
 
         addDisposable(App.get(this).appComponentOB()
                 .doOnComplete(this::askForPermissions)
-                .subscribe(component -> {
-                    component.inject(SplashView.this);
-                }));
+                .subscribe(c -> c.inject(SplashView.this)));
 
     }
 
@@ -122,6 +120,7 @@ public class SplashView extends BaseActivity {
 
         if (succeed) {
             LoginActivity.start(this);
+            finish();
         } else {
             finish();
             System.exit(0);
