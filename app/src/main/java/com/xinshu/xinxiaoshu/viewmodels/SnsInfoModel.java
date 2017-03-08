@@ -6,8 +6,11 @@ import android.widget.TextView;
 
 import com.xinshu.xinxiaoshu.models.SnsInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.functions.Function;
 
@@ -86,6 +89,14 @@ public class SnsInfoModel implements ViewModel<SnsInfo> {
      */
     @BindingAdapter("createdAt")
     public static void setCreatedAt(TextView textView, String timestamp) {
-        textView.setText("8:00");
+        long mills = Long.parseLong(timestamp) * 1000L;
+        
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.CHINA);
+            Date netDate = (new Date(mills));
+            textView.setText(sdf.format(netDate));
+        } catch (Exception ex) {
+            textView.setText("很久很久以前");
+        }
     }
 }

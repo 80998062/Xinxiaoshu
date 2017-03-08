@@ -173,8 +173,8 @@ public class Task {
         outputStream.close();
 
         // sleep是为了避免稍后偶然性出现的读取数据库失败的情况（可能文件复制不完整或未被去锁？）。
-        Thread.sleep(3000);
-        
+        Thread.sleep(2000);
+
         return dbDir;
     }
 

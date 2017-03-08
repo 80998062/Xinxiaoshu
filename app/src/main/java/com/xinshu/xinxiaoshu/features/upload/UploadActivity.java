@@ -9,8 +9,9 @@ import android.support.annotation.Nullable;
 import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
-import com.xinshu.xinxiaoshu.databinding.LayoutActivityBinding;
+import com.xinshu.xinxiaoshu.databinding.ActivityUploadBinding;
 import com.xinshu.xinxiaoshu.injector.modules.UploadModule;
+import com.xinshu.xinxiaoshu.ptr.PTRService;
 
 import javax.inject.Inject;
 
@@ -26,8 +27,6 @@ public class UploadActivity extends BaseActivity {
         return false;
     }
 
-    private LayoutActivityBinding binding;
-
     public static void start(Context context) {
         Intent starter = new Intent(context, UploadActivity.class);
         context.startActivity(starter);
@@ -36,13 +35,16 @@ public class UploadActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.layout_activity);
-        binding.setToolbarTitle(getString(R.string.activity_upload));
+
+        final ActivityUploadBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_upload);
+
         uploadList = new UploadView();
 
         addDisposable(App.get(this).databaseComponentOB()
                 .doOnComplete(this::afterInjection)
                 .subscribe(c -> c.plus(new UploadModule(uploadList)).inject(UploadActivity.this)));
+
+        setupListeners(binding);
     }
 
     @Inject
@@ -50,5 +52,13 @@ public class UploadActivity extends BaseActivity {
 
     private void afterInjection() {
         addFragment(uploadList, false);
+    }
+
+    public void setupListeners(ActivityUploadBinding binding) {
+        binding.uploadBtn.setOnClickListener(view -> {
+            PTRService.start(view.getContext());
+            finish();
+            overridePendingTransition(0, 0);
+        });
     }
 }
