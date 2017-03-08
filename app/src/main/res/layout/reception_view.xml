@@ -89,14 +89,23 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <android.support.v4.widget.NestedScrollView
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:overScrollMode="always">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:padding="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DEBUG: "
+                        android:textStyle="bold"/>
 
                     <TextView
                         android:id="@+id/offline"
@@ -137,7 +146,7 @@
                         android:padding="8dp"
                         android:text="failed"/>
                 </LinearLayout>
-            </android.support.v4.widget.NestedScrollView>
+            </HorizontalScrollView>
 
             <com.xinshu.xinxiaoshu.widgets.BetterViewAnimator
                 android:id="@+id/viewAnimator"

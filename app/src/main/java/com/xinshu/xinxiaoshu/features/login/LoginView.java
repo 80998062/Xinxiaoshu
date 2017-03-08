@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.sinyuk.floating.FloatingWindowManager;
 import com.sinyuk.myutils.string.RegexUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
@@ -71,7 +70,6 @@ public class LoginView extends BaseFragment {
 
     }
 
-    FloatingWindowManager f;
 
     private void onLogin(View view) {
         ReceptionActivity.start(view.getContext());

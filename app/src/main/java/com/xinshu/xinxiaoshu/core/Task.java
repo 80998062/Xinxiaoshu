@@ -152,6 +152,12 @@ public class Task {
         String dataDir = Environment.getDataDirectory().getAbsolutePath();
         String destDir = Config.EXT_DIR;
 
+        final File dbDir = new File((destDir + "/SnsMicroMsg.db"));
+        if (dbDir.exists()) {
+            if (!dbDir.delete()) {
+                throw new IOException("删除旧db文件失败,请手动尝试");
+            }
+        }
 
         Process su = Runtime.getRuntime().exec("su");
         DataOutputStream outputStream = new DataOutputStream(su.getOutputStream());
@@ -167,9 +173,9 @@ public class Task {
         outputStream.close();
 
         // sleep是为了避免稍后偶然性出现的读取数据库失败的情况（可能文件复制不完整或未被去锁？）。
-        Thread.sleep(1000);
-
-        return new File((destDir + "/SnsMicroMsg.db"));
+        Thread.sleep(3000);
+        
+        return dbDir;
     }
 
     public Single<Boolean> testRoot() {
