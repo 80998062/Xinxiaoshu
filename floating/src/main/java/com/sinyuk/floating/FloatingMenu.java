@@ -50,9 +50,8 @@ public class FloatingMenu extends FrameLayout {
     private float yDownInScreen;
     private float xInScreen;
     private float yInScreen;
-    private float emulatorX = 0;
-    private float emulatorY = 0;
     private int mTouchSlop;
+    private boolean hasMoved;
 
 
     public FloatingMenu(@NonNull Context context) {
@@ -132,6 +131,7 @@ public class FloatingMenu extends FrameLayout {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // 手指按下时记录必要数据,纵坐标的值都需要减去状态栏高度
+                        hasMoved = false;
                         xInView = event.getX();
                         yInView = event.getY();
                         xDownInScreen = event.getRawX();
@@ -143,18 +143,17 @@ public class FloatingMenu extends FrameLayout {
                         xInScreen = event.getRawX();
                         yInScreen = event.getRawY() - getStatusBarHeight();
 
-                        if (Math.abs(xInScreen - xInView) > mTouchSlop ||
-                                Math.abs(yInScreen - yInView) > mTouchSlop) {
+                        if (Math.abs(xInScreen - xDownInScreen) > 2 * mTouchSlop ||
+                                Math.abs(yInScreen - yDownInScreen) > 2 * mTouchSlop) {
                             // 手指移动的时候更新小悬浮窗的位置
                             updateViewPosition();
+                            hasMoved = true;
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，
                         // 则视为触发了单击事件。
-                        if (Math.abs(xDownInScreen - xInScreen) <= mTouchSlop
-                                && Math.abs(yDownInScreen - yInScreen) <= mTouchSlop) {
-                            Log.d(TAG, "onTouch: Click");
+                        if (!hasMoved) {
                             internalItemListener.onClick(view, 0);
                             notifyClick(view, 0);
                             expanded = !expanded;

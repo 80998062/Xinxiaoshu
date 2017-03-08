@@ -68,9 +68,9 @@
             android:configChanges="layoutDirection|screenLayout"
             android:screenOrientation="portrait"/>
 
-        <!--<service-->
-        <!--android:name=".utils.FloatingService"-->
-        <!--android:exported="false"/>-->
+        <service
+            android:name=".ptr.PTRService"
+            android:exported="false"/>
     </application>
 
 </manifest>
