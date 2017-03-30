@@ -59,5 +59,7 @@
     <string name="hint_default_error_message">(ಥ_ಥ)出了点小问题,程序员正赶来抢救…</string>
     <string name="hint_loading_nomore">已经没有了</string>
     <string name="hint_loading_failed">加载失败</string>
+    <string name="hint_phone_not_registered">手机号未注册</string>
+    <string name="hint_phone_not_correct">手机号错误</string>
 
 </resources>

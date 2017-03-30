@@ -3,18 +3,24 @@ package com.xinshu.xinxiaoshu.features.login;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.sinyuk.myutils.string.RegexUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
-import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
+
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -23,9 +29,9 @@ import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
 
 public class LoginView extends BaseFragment implements LoginViewContract.View {
 
+    private static final int COOL_DOWN_DURATION = 60;
     private LoginViewBinding binding;
-    private boolean isPhoneValid = false;
-    private Boolean isCodeInvalid = false;
+
 
     @Nullable
     @Override
@@ -41,26 +47,38 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     }
 
     private void setupListeners() {
-        binding.phoneEt.addTextChangedListener(new TextWatcherAdapter() {
+        Disposable d1 = RxTextView.textChanges(binding.phoneEt)
+                .skip(11)
+                .map(CharSequence::toString)
+                .map(RegexUtils::isMobileSimple)
+                .subscribe(invalid -> {
+                    Log.d("onNext()", "isMobileSimple: " + invalid);
+                    if (invalid) {
+                        binding.phoneEt.setError(null);
+                        presenter.checkRegistered(binding.phoneEt.getText().toString());
+                    } else {
+                        binding.phoneEt.setError(getString(R.string.hint_phone_not_correct));
+                    }
+                });
 
-            @Override
-            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
-                isPhoneValid = RegexUtils.isMobileSimple(text.toString());
-                toggleButton(binding.authcodeBtn, isPhoneValid);
-            }
+        addDisposable(d1);
 
-        });
+//        binding.authcodeEt.addTextChangedListener(new TextWatcherAdapter() {
+//
+//            @Override
+//            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
+//                isCodeInvalid = isCodeInvalid(text.toString());
+//                toggleButton(binding.loginBtn, isCodeInvalid);
+//            }
+//
+//        });
 
+        Disposable d2 = RxView.clicks(binding.authcodeBtn)
+                .throttleFirst(COOL_DOWN_DURATION, TimeUnit.SECONDS)
+                .subscribe(o -> presenter.getCaptcha(
+                        binding.phoneEt.getText().toString(), COOL_DOWN_DURATION));
 
-        binding.authcodeEt.addTextChangedListener(new TextWatcherAdapter() {
-
-            @Override
-            public void onTextChanged(CharSequence text, int i, int i1, int i2) {
-                isCodeInvalid = isCodeInvalid(text.toString());
-                toggleButton(binding.loginBtn, isCodeInvalid);
-            }
-
-        });
+        addDisposable(d2);
 
         binding.loginBtn.setOnClickListener(this::onLogin);
     }
@@ -113,11 +131,32 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
     @Override
     public void registered() {
-
+        toggleButton(binding.authcodeBtn, true);
     }
 
     @Override
     public void notRegistered() {
+        toggleButton(binding.authcodeBtn, false);
+        binding.phoneEt.setError(getString(R.string.hint_phone_not_registered));
+    }
+
+    @Override
+    public void inCD(int countDown) {
+        binding.authcodeBtn.setText(String.format("重新获取%d", countDown));
+    }
+
+    @Override
+    public void cdRefresh() {
+        binding.authcodeBtn.setText("获取验证码");
+    }
+
+    @Override
+    public void showCaptcha(String captcha) {
+
+    }
+
+    @Override
+    public void getCaptchaFailed(Throwable e) {
 
     }
 }

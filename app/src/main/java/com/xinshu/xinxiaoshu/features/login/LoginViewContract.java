@@ -12,11 +12,21 @@ import com.xinshu.xinxiaoshu.mvp.BaseView;
 public interface LoginViewContract {
     public interface Presenter extends BasePresenter {
         void checkRegistered(@NonNull String phone);
+
+        void getCaptcha(String phone, int cd);
     }
 
     public interface View extends BaseView<Presenter> {
         void registered();
 
         void notRegistered();
+
+        void inCD(int countDown);
+
+        void cdRefresh();
+
+        void showCaptcha(String captcha);
+
+        void getCaptchaFailed(Throwable e);
     }
 }

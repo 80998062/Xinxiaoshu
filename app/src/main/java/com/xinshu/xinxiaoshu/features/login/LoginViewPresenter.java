@@ -1,14 +1,21 @@
 package com.xinshu.xinxiaoshu.features.login;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
 import com.xinshu.xinxiaoshu.rest.contract.LoginContract;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by sinyuk on 2017/3/29.
@@ -29,6 +36,11 @@ public class LoginViewPresenter implements LoginViewContract.Presenter {
         mCompositeDisposable = new CompositeDisposable();
     }
 
+    @Inject
+    void set() {
+        mView.setPresenter(this);
+    }
+
     @Override
     public void subscribe() {
 
@@ -39,8 +51,11 @@ public class LoginViewPresenter implements LoginViewContract.Presenter {
         mCompositeDisposable.dispose();
     }
 
+    public static final String TAG = "LoginViewPresenter";
+
     @Override
     public void checkRegistered(@NonNull String phone) {
+        Log.d(TAG, "checkRegistered: " + phone);
 
         DisposableObserver<Boolean> d = mLoginContract.checkRegisteration(phone)
                 .subscribeWith(new DisposableObserver<Boolean>() {
@@ -65,5 +80,39 @@ public class LoginViewPresenter implements LoginViewContract.Presenter {
                 });
 
         mCompositeDisposable.add(d);
+    }
+
+    @Override
+    public void getCaptcha(final String phone, final int cd) {
+        Disposable coolDownDisposable = Observable.interval(0, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(Long::intValue)
+                .map(duration -> cd - duration)
+                .take(cd + 1)
+                .doOnTerminate(mView::cdRefresh)
+                .doOnDispose(mView::cdRefresh)
+                .subscribe(mView::inCD);
+
+
+        mLoginContract.getCaptcha(phone)
+                .doOnTerminate(coolDownDisposable::dispose)
+                .subscribeWith(new DisposableObserver<String>() {
+
+                    @Override
+                    public void onNext(String s) {
+                        mView.showCaptcha(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.getCaptchaFailed(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }
