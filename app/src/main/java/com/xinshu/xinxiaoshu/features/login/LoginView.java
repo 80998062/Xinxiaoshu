@@ -20,7 +20,7 @@ import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
  * Created by sinyuk on 2017/3/1.
  */
 
-public class LoginView extends BaseFragment {
+public class LoginView extends BaseFragment implements LoginViewContract.View {
 
 
     private LoginViewBinding binding;
@@ -95,5 +95,24 @@ public class LoginView extends BaseFragment {
     @Override
     protected boolean registerForEventBus() {
         return false;
+    }
+
+
+    private LoginViewContract.Presenter presenter;
+
+    @Override
+    public void setPresenter(LoginViewContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+
+    @Override
+    public void registered() {
+
+    }
+
+    @Override
+    public void notRegistered() {
+
     }
 }

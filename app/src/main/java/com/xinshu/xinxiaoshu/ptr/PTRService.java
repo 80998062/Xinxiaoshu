@@ -21,6 +21,8 @@ import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -61,11 +63,7 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         floatingWindowManager = FloatingWindowManager.get(getApplicationContext());
 
         // If we get killed, after returning from here, restart
-        // 开启定时器，每隔0.5秒刷新一次
-//        if (timer == null) {
-//            timer = new Timer();
-//            timer.scheduleAtFixedRate(new RefreshTask(), 0, 500);
-//        }
+
         if (!floatingWindowManager.isWindowShowing()) {
             floatingWindowManager.addView();
         }
@@ -74,6 +72,10 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
             if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
                 floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
             }
+        }
+
+        if (timer == null) {
+            timer = new Timer();
         }
 
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
@@ -129,6 +131,24 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         return super.onBind(intent);
     }
 
+
+    public void pauseTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+
+    public void resumeTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+
+        timer = new Timer();
+        timer.schedule(new RefreshTask(), 0, 1000);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -168,7 +188,13 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
                 break;
             }
             case 3: {
-                Log.d(TAG, "onClick: play");
+                // 开启定时器，每隔0.5秒刷新一次
+                if (view.isActivated()) {
+                    resumeTimer();
+                } else {
+                    pauseTimer();
+                }
+
                 break;
             }
 
@@ -180,22 +206,52 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         Log.d(TAG, "onExpanded: ");
     }
 
+    private boolean isRoot;
+
+
     private class RefreshTask extends TimerTask {
         @Override
         public void run() {
+
             if (isWechat()) {
-                showAndRegister();
-            } else {
-                removeAndUnregister();
+                try {
+
+                    executeCommand();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    timer.cancel();
+                    timer = null;
+                }
             }
         }
+
+    }
+    private OutputStream os;
+
+    private void executeCommand() throws IOException {
+
+
+        String cmd = "input swipe 45 1000 45 255";
+        Log.d(TAG, "executeCommand: " + cmd);
+//        Process process = Runtime.getRuntime().exec(cmd);
+//        BufferedReader bufferedReader = new BufferedReader(new
+//                InputStreamReader(process.getInputStream()));
+
+        if (os == null) {
+            os = Runtime.getRuntime().exec("su").getOutputStream();
+        }
+        os.write(cmd.getBytes());
+        os.flush();
 
     }
 
     private void removeAndUnregister() {
         if (floatingWindowManager.isWindowShowing()) {
-            if (floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
-                floatingWindowManager.getFloatingMenu().removeItemListener(PTRService.this);
+            if (floatingWindowManager.getFloatingMenu()
+                    .isRegistered(PTRService.this)) {
+                floatingWindowManager.getFloatingMenu()
+                        .removeItemListener(PTRService.this);
             }
 
             handler.post(() -> floatingWindowManager.removeView());

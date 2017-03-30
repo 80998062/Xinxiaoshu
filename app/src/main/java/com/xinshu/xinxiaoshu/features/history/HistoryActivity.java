@@ -15,9 +15,16 @@ import com.xinshu.xinxiaoshu.databinding.LayoutActivityBinding;
  */
 
 public class HistoryActivity extends BaseActivity {
+    /**
+     *
+     */
     private HistoryView historyView;
 
-    public static void start(Context context) {
+    /**
+     * 启动这个Activity
+     * @param context
+     */
+    public static void start(final Context context) {
         Intent starter = new Intent(context, HistoryActivity.class);
         context.startActivity(starter);
     }
@@ -30,7 +37,7 @@ public class HistoryActivity extends BaseActivity {
     private LayoutActivityBinding binding;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.layout_activity);
         binding.setToolbarTitle(getString(R.string.activity_history));

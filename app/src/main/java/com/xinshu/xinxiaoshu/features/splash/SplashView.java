@@ -39,21 +39,21 @@ public class SplashView extends BaseActivity {
     private void askForPermissions() {
         RxPermissions rxPermissions = new RxPermissions(this);
         // Must be done during an initialization phase like onCreate
+//
+
         rxPermissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.MODIFY_PHONE_STATE,
                 Manifest.permission.SYSTEM_ALERT_WINDOW,
                 Manifest.permission.INTERNET)
+                .doOnTerminate(this::testRoot)
                 .subscribe(granted -> {
                     if (granted) { // Always true pre-M
                         Log.d(TAG, "permissions granted");
-                        testRoot();
                     } else {
                         // Opps permission denied
                         Log.d(TAG, "permissions denied");
                         toastUtils.toastLong(R.string.hint_permissions_denied);
-                        finish();
-                        System.exit(0);
                     }
                 });
     }
@@ -122,8 +122,7 @@ public class SplashView extends BaseActivity {
             LoginActivity.start(this);
             finish();
         } else {
-            finish();
-            System.exit(0);
+            toastUtils.toastLong(throwable.getMessage());
         }
     }
 
