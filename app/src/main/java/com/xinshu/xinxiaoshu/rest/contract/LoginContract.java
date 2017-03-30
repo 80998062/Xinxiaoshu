@@ -10,7 +10,7 @@ import io.reactivex.annotations.NonNull;
 public interface LoginContract {
     Observable<Boolean> checkRegisteration(@NonNull String phone);
 
-    Observable<String> getCaptcha(@NonNull String phone);
+    Observable getCaptcha(@NonNull String phone);
 
 
 }

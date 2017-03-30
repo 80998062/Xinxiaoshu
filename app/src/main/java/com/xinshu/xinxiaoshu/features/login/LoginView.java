@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -26,7 +27,6 @@ import io.reactivex.disposables.Disposable;
 /**
  * Created by sinyuk on 2017/3/1.
  */
-
 public class LoginView extends BaseFragment implements LoginViewContract.View {
 
     private static final int COOL_DOWN_DURATION = 60;
@@ -75,10 +75,24 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
         Disposable d2 = RxView.clicks(binding.authcodeBtn)
                 .throttleFirst(COOL_DOWN_DURATION, TimeUnit.SECONDS)
+                .doOnSubscribe(d -> toggleButton(binding.authcodeBtn, false))
                 .subscribe(o -> presenter.getCaptcha(
                         binding.phoneEt.getText().toString(), COOL_DOWN_DURATION));
 
         addDisposable(d2);
+
+        Disposable d3 = RxTextView.textChanges(binding.phoneEt)
+                .skip(6)
+                .map(CharSequence::toString)
+                .map(this::isCodeInvalid)
+                .subscribe(invalid -> toggleButton(binding.loginBtn, invalid));
+
+        addDisposable(d3);
+
+        toggleButton(binding.loginBtn, false);
+        toggleButton(binding.authcodeBtn, false);
+
+        toggleEditText(binding.authcodeEt, false);
 
         binding.loginBtn.setOnClickListener(this::onLogin);
     }
@@ -95,11 +109,23 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     }
 
 
+    /**
+     * Toggle button.
+     *
+     * @param button the button
+     * @param enable the enable
+     */
     public void toggleButton(View button, boolean enable) {
         button.setEnabled(enable);
         button.setClickable(enable);
     }
 
+    /**
+     * Toggle edit text.
+     *
+     * @param editText the edit text
+     * @param enable   the enable
+     */
     public void toggleEditText(EditText editText, boolean enable) {
         editText.setCursorVisible(enable);
         editText.setFocusableInTouchMode(enable);
@@ -151,12 +177,17 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     }
 
     @Override
-    public void showCaptcha(String captcha) {
-
+    public void getCaptchaSucceed() {
+        toggleEditText(binding.authcodeEt, true);
+        toggleButton(binding.authcodeBtn, false);
+        Toast.makeText(getContext(), "已发送", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void getCaptchaFailed(Throwable e) {
-
+        toggleEditText(binding.authcodeEt, false);
+        toggleButton(binding.authcodeBtn, true);
+        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
     }
 }

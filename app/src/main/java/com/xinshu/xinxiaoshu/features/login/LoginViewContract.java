@@ -25,7 +25,7 @@ public interface LoginViewContract {
 
         void cdRefresh();
 
-        void showCaptcha(String captcha);
+        void getCaptchaSucceed();
 
         void getCaptchaFailed(Throwable e);
     }

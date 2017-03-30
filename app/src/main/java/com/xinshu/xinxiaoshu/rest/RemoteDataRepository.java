@@ -38,7 +38,10 @@ public class RemoteDataRepository implements RemoteDataStore {
 
 
     @Override
-    public Observable<String> getCaptcha(@NonNull String phone) {
-        return null;
+    public Observable<Boolean> getCaptcha(@NonNull String phone) {
+        return xinshuService.captcha(phone)
+                .compose(new ErrorTransformer<>())
+                .map(r -> r.succeed())
+                .compose(schedulerTransformer);
     }
 }

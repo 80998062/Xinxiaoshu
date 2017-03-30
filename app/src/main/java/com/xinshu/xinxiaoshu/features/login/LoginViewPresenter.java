@@ -97,15 +97,18 @@ public class LoginViewPresenter implements LoginViewContract.Presenter {
 
         mLoginContract.getCaptcha(phone)
                 .doOnTerminate(coolDownDisposable::dispose)
-                .subscribeWith(new DisposableObserver<String>() {
+                .subscribeWith(new DisposableObserver<Boolean>() {
 
                     @Override
-                    public void onNext(String s) {
-                        mView.showCaptcha(s);
+                    public void onNext(Boolean s) {
+                        if (s) {
+                            mView.getCaptchaSucceed();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                         mView.getCaptchaFailed(e);
                     }
 
