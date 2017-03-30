@@ -6,21 +6,16 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.databinding.ActivityUploadBinding;
-import com.xinshu.xinxiaoshu.injector.modules.UploadModule;
 import com.xinshu.xinxiaoshu.ptr.PTRService;
-
-import javax.inject.Inject;
 
 /**
  * Created by sinyuk on 2017/3/1.
  */
 
 public class UploadActivity extends BaseActivity {
-    private UploadView uploadList;
 
     @Override
     protected boolean registerEventBus() {
@@ -38,23 +33,17 @@ public class UploadActivity extends BaseActivity {
 
         final ActivityUploadBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_upload);
 
-        uploadList = new UploadView();
+        final UploadView uploadList = new UploadView();
 
-        addDisposable(App.get(this).databaseComponentOB()
-                .doOnComplete(this::afterInjection)
-                .subscribe(c -> c.plus(new UploadModule(uploadList)).inject(UploadActivity.this)));
+        addFragment(uploadList, false);
+
+        uploadList.setUserVisibleHint(true);
 
         setupListeners(binding);
     }
 
-    @Inject
-    UploadPresenter uploadPresenter;
 
-    private void afterInjection() {
-        addFragment(uploadList, false);
-    }
-
-    public void setupListeners(ActivityUploadBinding binding) {
+    public void setupListeners(final ActivityUploadBinding binding) {
         binding.uploadBtn.setOnClickListener(view -> {
             PTRService.start(view.getContext());
             finish();

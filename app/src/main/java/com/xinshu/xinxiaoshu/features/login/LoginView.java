@@ -13,6 +13,7 @@ import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
+import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
 
 
@@ -22,11 +23,9 @@ import com.xinshu.xinxiaoshu.utils.TextWatcherAdapter;
 
 public class LoginView extends BaseFragment implements LoginViewContract.View {
 
-
     private LoginViewBinding binding;
     private boolean isPhoneValid = false;
     private Boolean isCodeInvalid = false;
-
 
     @Nullable
     @Override
@@ -38,9 +37,7 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setupListeners();
-
     }
 
     private void setupListeners() {
@@ -65,9 +62,7 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
         });
 
-
         binding.loginBtn.setOnClickListener(this::onLogin);
-
     }
 
 
@@ -95,6 +90,16 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     @Override
     protected boolean registerForEventBus() {
         return false;
+    }
+
+    @Override
+    protected void doInjection() {
+
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return presenter;
     }
 
 

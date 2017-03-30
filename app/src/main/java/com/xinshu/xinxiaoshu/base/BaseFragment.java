@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import com.xinshu.xinxiaoshu.mvp.BasePresenter;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -43,6 +45,10 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract boolean registerForEventBus();
 
+    protected abstract void doInjection();
+
+    protected abstract BasePresenter getPresenter();
+
     /**
      * 保存Fragment的Hidden状态
      * 避免内存重启导致的Fragment重叠
@@ -76,6 +82,10 @@ public abstract class BaseFragment extends Fragment {
         if (!mCompositeDisposable.isDisposed()) {
             mCompositeDisposable.dispose();
         }
+
+        if (getPresenter() != null) {
+            getPresenter().unsubscribe();
+        }
     }
 
     @Subscribe()
@@ -83,5 +93,11 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getPresenter() != null) {
+            getPresenter().subscribe();
+        }
+    }
 }

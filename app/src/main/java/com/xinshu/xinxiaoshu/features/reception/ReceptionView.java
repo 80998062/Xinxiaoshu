@@ -16,6 +16,7 @@ import com.xinshu.xinxiaoshu.databinding.ReceptionViewBinding;
 import com.xinshu.xinxiaoshu.features.extras.TutorialActivity;
 import com.xinshu.xinxiaoshu.features.history.HistoryActivity;
 import com.xinshu.xinxiaoshu.features.widthdraw.WithdrawActivity;
+import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 
 /**
  * Created by sinyuk on 2017/3/2.
@@ -32,6 +33,16 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     @Override
     protected boolean registerForEventBus() {
         return false;
+    }
+
+    @Override
+    protected void doInjection() {
+
+    }
+
+    @Override
+    protected BasePresenter getPresenter() {
+        return presenter;
     }
 
     private ReceptionViewBinding binding;
@@ -125,22 +136,6 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     @Override
     public void setPresenter(ReceptionContract.Presenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (presenter != null) {
-            presenter.subscribe();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (presenter != null) {
-            presenter.unsubscribe();
-        }
     }
 
     @Override

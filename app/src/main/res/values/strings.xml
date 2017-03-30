@@ -53,4 +53,11 @@
     <string name="action_reception_succeed">成功</string>
     <string name="action_reception_failed">已结束</string>
     <string name="notification_title">心书小编正在运行中</string>
+
+
+    <string name="hint_default_empty_list">这里好像什么都没有</string>
+    <string name="hint_default_error_message">(ಥ_ಥ)出了点小问题,程序员正赶来抢救…</string>
+    <string name="hint_loading_nomore">已经没有了</string>
+    <string name="hint_loading_failed">加载失败</string>
+
 </resources>

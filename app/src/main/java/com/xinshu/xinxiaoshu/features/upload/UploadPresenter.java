@@ -16,6 +16,7 @@ import io.reactivex.SingleSource;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableSingleObserver;
 
 /**
  * Created by sinyuk on 2017/3/2.
@@ -44,14 +45,20 @@ public class UploadPresenter implements UploadContract.Presenter {
     public void refresh() {
         Disposable d = snsReader.copyAndOpenDB()
                 .flatMap(getFriendsFunc)
-                .doOnSubscribe(dis -> view.startRefreshing())
-                .doAfterTerminate(view::stopRefreshing)
-                .doOnError(view::showError)
-                .subscribe(f -> {
-                    if (f.isEmpty()) {
-                        view.showEmpty();
-                    } else {
-                        view.setData(f, true);
+                .subscribeWith(new DisposableSingleObserver<List<SnsInfoModel>>() {
+                    @Override
+                    public void onSuccess(final List<SnsInfoModel> f) {
+                        if (f.isEmpty()) {
+                            view.refreshFailed();
+                        } else {
+                            view.setData(f, true);
+                            view.refreshCompleted();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.error(e);
                     }
                 });
 

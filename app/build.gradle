@@ -67,7 +67,8 @@ dependencies {
     releaseCompile rootProject.ext.dependencies["leakcanary-no-op"]
     testCompile rootProject.ext.dependencies["leakcanary-no-op"]
     compile 'com.github.tajchert:WaitingDots:0.4.0'
-
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.8.7'
+    compile 'com.facebook.stetho:stetho:1.4.2'
     // dao
     compile project(':floating')
 }

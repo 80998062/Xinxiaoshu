@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="adapter"
-            type="com.xinshu.xinxiaoshu.features.upload.FriendsAdapter"/>
-
-        <variable
             name="data"
             type="com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel"/>
     </data>
