@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                 android:drawableLeft="@drawable/ic_phone"
                 android:hint="@string/hint_input_authcode"
                 android:imeOptions="actionDone"
-                android:inputType="numberPassword"/>
+                android:inputType="numberSigned"/>
 
             <Button
                 android:id="@+id/authcodeBtn"
@@ -56,8 +56,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/btn_cyan_fill"
                 android:enabled="false"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
+                android:gravity="center"
+                android:minWidth="130dp"
                 android:text="@string/action_get_authcode"
                 android:textColor="@android:color/white"/>
         </LinearLayout>

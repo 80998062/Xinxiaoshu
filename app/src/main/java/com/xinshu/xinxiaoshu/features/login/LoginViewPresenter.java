@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
 import com.xinshu.xinxiaoshu.rest.contract.LoginContract;
+import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -94,9 +95,9 @@ public class LoginViewPresenter implements LoginViewContract.Presenter {
                 .doOnDispose(mView::cdRefresh)
                 .subscribe(mView::inCD);
 
+        mCompositeDisposable.add(coolDownDisposable);
 
-        mLoginContract.getCaptcha(phone)
-                .doOnTerminate(coolDownDisposable::dispose)
+        DisposableObserver<Boolean> d = mLoginContract.getCaptcha(phone)
                 .subscribeWith(new DisposableObserver<Boolean>() {
 
                     @Override
@@ -117,5 +118,30 @@ public class LoginViewPresenter implements LoginViewContract.Presenter {
 
                     }
                 });
+
+        mCompositeDisposable.add(d);
+    }
+
+    @Override
+    public void login(String phone, String captcha) {
+        DisposableObserver<UserEntity> d = mLoginContract.login(phone, captcha)
+                .subscribeWith(new DisposableObserver<UserEntity>() {
+                    @Override
+                    public void onNext(UserEntity userEntity) {
+                        mView.loginSucceed(userEntity);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.loginFailed(e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+        mCompositeDisposable.add(d);
     }
 }

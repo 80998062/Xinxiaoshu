@@ -16,8 +16,8 @@ import com.sinyuk.myutils.string.RegexUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
-import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
+import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -75,14 +75,16 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
         Disposable d2 = RxView.clicks(binding.authcodeBtn)
                 .throttleFirst(COOL_DOWN_DURATION, TimeUnit.SECONDS)
-                .doOnSubscribe(d -> toggleButton(binding.authcodeBtn, false))
-                .subscribe(o -> presenter.getCaptcha(
-                        binding.phoneEt.getText().toString(), COOL_DOWN_DURATION));
+                .subscribe(o -> {
+                    presenter.getCaptcha(
+                            binding.phoneEt.getText().toString(), COOL_DOWN_DURATION);
+                    toggleButton(binding.authcodeBtn, false);
+                });
 
         addDisposable(d2);
 
-        Disposable d3 = RxTextView.textChanges(binding.phoneEt)
-                .skip(6)
+        Disposable d3 = RxTextView.textChanges(binding.authcodeEt)
+                .skip(4)
                 .map(CharSequence::toString)
                 .map(this::isCodeInvalid)
                 .subscribe(invalid -> toggleButton(binding.loginBtn, invalid));
@@ -91,21 +93,20 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
         toggleButton(binding.loginBtn, false);
         toggleButton(binding.authcodeBtn, false);
-
         toggleEditText(binding.authcodeEt, false);
 
         binding.loginBtn.setOnClickListener(this::onLogin);
     }
 
 
-    private void onLogin(View view) {
-        ReceptionActivity.start(view.getContext());
-        getActivity().finish();
-//        PTRService.start(view.getContext());
+    private void onLogin(final View view) {
+        presenter.login(
+                binding.phoneEt.getText().toString(),
+                binding.authcodeEt.getText().toString());
     }
 
     private Boolean isCodeInvalid(String code) {
-        return code.matches("^[0-9]{6}$");
+        return code.matches("^[0-9]{4}$");
     }
 
 
@@ -168,12 +169,13 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
     @Override
     public void inCD(int countDown) {
-        binding.authcodeBtn.setText(String.format("重新获取%d", countDown));
+        binding.authcodeBtn.setText(String.format("冷却中%ds", countDown));
     }
 
     @Override
     public void cdRefresh() {
-        binding.authcodeBtn.setText("获取验证码");
+        toggleButton(binding.authcodeBtn, true);
+        binding.authcodeBtn.setText(R.string.action_get_authcode);
     }
 
     @Override
@@ -187,7 +189,16 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     @Override
     public void getCaptchaFailed(Throwable e) {
         toggleEditText(binding.authcodeEt, false);
-        toggleButton(binding.authcodeBtn, true);
+        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void loginSucceed(UserEntity userEntity) {
+        System.out.println(userEntity.toString());
+    }
+
+    @Override
+    public void loginFailed(Throwable e) {
         Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
     }
 }
