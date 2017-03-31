@@ -1,15 +1,13 @@
 package com.xinshu.xinxiaoshu.rest.entity;
 
 import com.google.gson.annotations.SerializedName;
-import com.xinshu.xinxiaoshu.rest.BaseResponse;
 
 import java.io.Serializable;
 
 /**
  * Created by sinyuk on 2017/3/30.
  */
-public class UserEntity extends BaseResponse implements Serializable {
-
+public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = -9181072754961674630L;
     /**

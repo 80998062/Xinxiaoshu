@@ -18,4 +18,21 @@ public class Registeration extends BaseResponse{
     public String phone;
     @SerializedName("registered")
     public boolean registered;
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
 }

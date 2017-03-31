@@ -7,12 +7,9 @@ import com.xinshu.xinxiaoshu.rest.BaseResponse;
  * Created by sinyuk on 2017/3/30.
  */
 
-public class LoginResponse extends BaseResponse{
-
+public class LoginResponse extends BaseResponse<UserEntity> {
     @SerializedName("auth_token")
     public String authToken;
-    @SerializedName("data")
-    public UserEntity user;
 
     public String getAuthToken() {
         return authToken;
@@ -20,13 +17,5 @@ public class LoginResponse extends BaseResponse{
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
     }
 }

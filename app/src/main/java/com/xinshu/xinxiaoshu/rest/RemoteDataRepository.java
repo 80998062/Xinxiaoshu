@@ -77,7 +77,7 @@ public class RemoteDataRepository implements RemoteDataStore {
         return xinshuService.login(params)
                 .compose(new ErrorTransformer<>())
                 .doOnNext(r -> saveToken(r.getAuthToken()))
-                .map(LoginResponse::getUser)
+                .map(LoginResponse::getData)
                 .compose(schedulerTransformer);
     }
 
