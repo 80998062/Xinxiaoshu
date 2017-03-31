@@ -1,13 +1,15 @@
 package com.xinshu.xinxiaoshu.rest;
 
+import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.google.gson.Gson;
+import com.xinshu.xinxiaoshu.config.Prefs;
 import com.xinshu.xinxiaoshu.rest.contract.RemoteDataStore;
 import com.xinshu.xinxiaoshu.rest.entity.LoginResponse;
+import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
-import org.json.JSONObject;
-
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -19,7 +21,6 @@ import io.reactivex.annotations.NonNull;
 /**
  * Created by sinyuk on 2017/3/28.
  */
-
 public class RemoteDataRepository implements RemoteDataStore {
 
     private final XinshuService xinshuService;
@@ -27,6 +28,16 @@ public class RemoteDataRepository implements RemoteDataStore {
     private final RxSharedPreferences preferences;
     private final Gson mGson;
 
+    private final Preference<String> token;
+
+    /**
+     * Instantiates a new Remote data repository.
+     *
+     * @param gson                 the gson
+     * @param xinshuService        the xinshu service
+     * @param schedulerTransformer the scheduler transformer
+     * @param preferences          the preferences
+     */
     @Inject
     public RemoteDataRepository(
             final Gson gson,
@@ -37,6 +48,8 @@ public class RemoteDataRepository implements RemoteDataStore {
         this.xinshuService = xinshuService;
         this.schedulerTransformer = schedulerTransformer;
         this.preferences = preferences;
+
+        token = preferences.getString(Prefs.ACCESS_TOKEN, "");
     }
 
     @Override
@@ -61,7 +74,6 @@ public class RemoteDataRepository implements RemoteDataStore {
         SortedMap<String, String> params = new TreeMap<>();
         params.put("phone", phone);
         params.put("captcha", captcha);
-        JSONObject jsonObject = new JSONObject(params);
         return xinshuService.login(params)
                 .compose(new ErrorTransformer<>())
                 .doOnNext(r -> saveToken(r.getAuthToken()))
@@ -71,5 +83,35 @@ public class RemoteDataRepository implements RemoteDataStore {
 
     private void saveToken(final String authToken) {
         System.out.println("Token: " + authToken);
+        if (token.isSet()) {
+            token.delete();
+        }
+        token.set(authToken);
+    }
+
+    /**
+     * Gets token.
+     *
+     * @return the token
+     */
+    public Preference<String> getToken() {
+        return token;
+    }
+
+    @Override
+    public Observable<UserEntity> userInfo() {
+        return xinshuService.user_info()
+                .compose(new ErrorTransformer<>())
+                .compose(schedulerTransformer);
+    }
+
+    @Override
+    public Observable<Boolean> online() {
+        return null;
+    }
+
+    @Override
+    public Observable<List<OrderEntity>> requestOrder() {
+        return null;
     }
 }

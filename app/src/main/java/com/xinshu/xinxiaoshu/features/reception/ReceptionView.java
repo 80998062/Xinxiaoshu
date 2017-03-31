@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sinyuk.myutils.ConvertUtils;
 import com.xinshu.xinxiaoshu.R;
@@ -15,8 +16,11 @@ import com.xinshu.xinxiaoshu.databinding.ReceptionComingBinding;
 import com.xinshu.xinxiaoshu.databinding.ReceptionViewBinding;
 import com.xinshu.xinxiaoshu.features.extras.TutorialActivity;
 import com.xinshu.xinxiaoshu.features.history.HistoryActivity;
+import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 import com.xinshu.xinxiaoshu.features.widthdraw.WithdrawActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
+import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
+import com.xinshu.xinxiaoshu.viewmodels.UserModel;
 
 /**
  * Created by sinyuk on 2017/3/2.
@@ -58,56 +62,42 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setupListener();
+        binding.swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.progress_colors));
+
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> presenter.fetchPlayerInfo());
+
+
+        if (getArguments() != null
+                && getArguments().getSerializable("user") != null) {
+            bindPlayer((UserEntity) getArguments().getSerializable("user"));
+        } else {
+            presenter.fetchPlayerInfo();
+        }
+
     }
 
     private void setupListener() {
-
-
         binding.tutorial.setOnClickListener(this::onClickTutorial);
         binding.historyCount.setOnClickListener(this::gotoHistory);
         binding.withdrawAmount.setOnClickListener(this::gotoWithdraw);
-        binding.footerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: 下线或者上线
-            }
+        binding.footerBtn.setOnClickListener(view -> {
+            // TODO: 下线或者上线
         });
 
-        binding.offline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOffline();
-            }
+        binding.offline.setOnClickListener(view -> showOffline());
+
+        binding.online.setOnClickListener(view -> showOnline());
+
+        binding.comming.setOnClickListener(view -> showGetReception(null));
+
+        binding.failed.setOnClickListener(view -> showOrderingResult(false));
+
+        binding.succeed.setOnClickListener(view -> showOrderingResult(true));
+
+        binding.avatar.setOnClickListener(view -> {
         });
 
-        binding.online.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOnline();
-            }
-        });
-
-        binding.comming.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showGetReception(null);
-            }
-        });
-
-        binding.failed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOrderingResult(false);
-            }
-        });
-
-        binding.succeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showOrderingResult(true);
-            }
-        });
+        binding.uploadBtn.setOnClickListener(view -> UploadActivity.start(view.getContext()));
 
     }
 
@@ -139,8 +129,9 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     }
 
     @Override
-    public void bindPlayer(Object player) {
-
+    public void bindPlayer(UserEntity entity) {
+        setupListener();
+        binding.setData(new UserModel(entity));
     }
 
     @Override
@@ -171,11 +162,8 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     @Override
     public void showGetReception(Object reception) {
         final ReceptionComingBinding comingBinding = binding.receptionComing;
-        comingBinding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: 发起抢单请求
-            }
+        comingBinding.fab.setOnClickListener(view -> {
+            // TODO: 发起抢单请求
         });
         comingBinding.icon.setImageResource(R.drawable.ic_warning);
         comingBinding.fab.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_oval_red));
@@ -230,6 +218,22 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
         comingBinding.fab.setOnClickListener(view -> showOnline());
 
+    }
+
+    @Override
+    public void startRefreshing() {
+        binding.swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void refreshFailed(Throwable e) {
+        binding.swipeRefreshLayout.setRefreshing(false);
+        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void refreshCompleted() {
+        binding.swipeRefreshLayout.setRefreshing(false);
     }
 
 

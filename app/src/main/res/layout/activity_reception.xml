@@ -1,44 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+    >
 
-    <data>
-
-    </data>
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/toolbar"
-            style="@style/my_toolbar">
-
-            <ImageView
-                android:id="@+id/avatar"
-                style="@style/my_toolbar_button"
-                android:contentDescription="@string/action_back"
-                android:src="@color/colorAccent"/>
-
-
-            <TextView
-                style="@style/my_toolbar_title"
-                android:text="@string/activity_reception"/>
-
-
-            <ImageView
-                android:id="@+id/uploadBtn"
-                style="@style/my_toolbar_button"
-                android:contentDescription="@string/action_upload"
-                android:src="@drawable/ic_upload_dk"/>
-        </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
-    </LinearLayout>
+        />
 </layout>

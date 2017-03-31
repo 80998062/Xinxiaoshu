@@ -9,18 +9,37 @@ import android.support.annotation.Nullable;
 import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
-import com.xinshu.xinxiaoshu.databinding.ActivityReceptionBinding;
-import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 import com.xinshu.xinxiaoshu.injector.modules.ReceptionModule;
+import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by sinyuk on 2017/3/2.
  */
-
 public class ReceptionActivity extends BaseActivity {
 
+    /**
+     * Start.
+     *
+     * @param context the context
+     * @param entity  the entity
+     */
+    public static void start(final Context context, final UserEntity entity) {
+        Intent starter = new Intent(context, ReceptionActivity.class);
+        Bundle extras = new Bundle();
+        extras.putSerializable("user", entity);
+        starter.putExtras(extras);
+        context.startActivity(starter);
+    }
+
+    /**
+     * Start.
+     *
+     * @param context the context
+     */
     public static void start(Context context) {
         Intent starter = new Intent(context, ReceptionActivity.class);
         context.startActivity(starter);
@@ -31,29 +50,33 @@ public class ReceptionActivity extends BaseActivity {
         return false;
     }
 
+    /**
+     * The Reception presenter.
+     */
     @Inject
     ReceptionPresenter receptionPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityReceptionBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_reception);
-
+        DataBindingUtil.setContentView(this, R.layout.activity_reception);
         ReceptionView receptionView = new ReceptionView();
 
-        App.get(this).getAppComponent().plus(new ReceptionModule(receptionView)).inject(this);
+        if (getIntent().getExtras() != null
+                && getIntent().getExtras().getSerializable("user") != null) {
+            UserEntity entity = (UserEntity) getIntent().getExtras().getSerializable("user");
+            receptionView.getArguments().putSerializable("user", entity);
+        }
 
-        addFragment(receptionView, false);
+        Disposable d =
+                App.get(this).appComponentOB().subscribe(c -> {
 
-        setupListeners(binding);
+                    c.plus(new ReceptionModule(receptionView)).inject(ReceptionActivity.this);
+                    addFragment(receptionView, false);
+                });
+
+        addDisposable(d);
+
     }
-
-    private void setupListeners(ActivityReceptionBinding binding) {
-        binding.avatar.setOnClickListener(view -> {
-        });
-
-        binding.uploadBtn.setOnClickListener(view -> UploadActivity.start(view.getContext()));
-    }
-
 
 }

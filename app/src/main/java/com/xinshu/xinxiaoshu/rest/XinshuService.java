@@ -1,8 +1,9 @@
 package com.xinshu.xinxiaoshu.rest;
 
-import com.xinshu.xinxiaoshu.rest.entity.CaptchaResponse;
 import com.xinshu.xinxiaoshu.rest.entity.LoginResponse;
 import com.xinshu.xinxiaoshu.rest.entity.Registeration;
+import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
+import com.xinshu.xinxiaoshu.rest.entity.VoidResponse;
 
 import java.util.SortedMap;
 
@@ -34,7 +35,7 @@ public interface XinshuService {
      * @return the observable
      */
     @POST("xiaobians/human/phones/{phone}/captcha")
-    Observable<Response<CaptchaResponse>> captcha(@Path("phone") String phone);
+    Observable<Response<VoidResponse>> captcha(@Path("phone") String phone);
 
     /**
      * Login observable.
@@ -46,5 +47,11 @@ public interface XinshuService {
     Observable<Response<LoginResponse>> login(
             @Body SortedMap<String, String> params);
 
-
+    /**
+     * User info observable.
+     *
+     * @return the observable
+     */
+    @GET("xiaobians/human/info")
+    Observable<Response<UserEntity>> user_info();
 }

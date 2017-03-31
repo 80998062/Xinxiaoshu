@@ -16,6 +16,7 @@ import com.sinyuk.myutils.string.RegexUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
+import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
@@ -195,6 +196,7 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     @Override
     public void loginSucceed(UserEntity userEntity) {
         System.out.println(userEntity.toString());
+        ReceptionActivity.start(getContext(), userEntity);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.xinshu.xinxiaoshu.features.splash;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.sinyuk.myutils.system.ToastUtils;
@@ -11,22 +12,30 @@ import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.core.Task;
 import com.xinshu.xinxiaoshu.features.login.LoginActivity;
+import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
+import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
 
 public class SplashView extends BaseActivity {
 
 
     public static final String TAG = "SplashView";
 
+    @Inject
+    RemoteDataRepository mRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addDisposable(App.get(this).appComponentOB()
+        Disposable d = App.get(this).appComponentOB()
                 .doOnComplete(this::askForPermissions)
-                .subscribe(c -> c.inject(SplashView.this)));
+                .subscribe(c -> c.inject(SplashView.this));
 
+        addDisposable(d);
     }
 
     @Inject
@@ -119,8 +128,16 @@ public class SplashView extends BaseActivity {
         toastUtils.toastLong(hint);
 
         if (succeed) {
-            LoginActivity.start(this);
-            finish();
+            Disposable d = mRepository.getToken().asObservable()
+                    .doOnTerminate(this::finish)
+                    .subscribe(s -> {
+                        if (TextUtils.isEmpty(s)) {
+                            LoginActivity.start(SplashView.this);
+                        } else {
+                            ReceptionActivity.start(SplashView.this);
+                        }
+                    });
+            addDisposable(d);
         } else {
             toastUtils.toastLong(throwable.getMessage());
         }

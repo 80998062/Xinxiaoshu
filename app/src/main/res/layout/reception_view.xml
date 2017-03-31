@@ -1,191 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.xinshu.xinxiaoshu.viewmodels.UserModel"/>
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/toolbar"
+            style="@style/my_toolbar">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/gap_15"
-            android:background="@android:color/white"
-            android:paddingBottom="22dp"
-            android:paddingLeft="@dimen/gap_25"
-            android:paddingRight="@dimen/gap_25"
-            android:paddingTop="18dp">
-
-            <TextView
-                android:id="@+id/item_history_customer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/item_history_customer"
-                android:textColor="@color/text_color_secondary"/>
-
-            <TextView
-                android:id="@+id/historyCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_history_customer"
-                android:layout_marginTop="@dimen/gap_15"
-                android:text="999"
-                android:textSize="@dimen/text_30"
-                android:textStyle="bold"/>
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="@dimen/divider_size"
-                android:layout_height="60dp"
-                android:layout_centerInParent="true"
-                android:background="@color/divider_color"/>
+            <ImageView
+                android:id="@+id/avatar"
+                style="@style/my_toolbar_button"
+                android:contentDescription="@string/action_back"
+                app:toolbar_avatar="@{data.avatar}"/>
 
 
             <TextView
-                android:id="@+id/item_withdraw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/gap_25"
-                android:layout_marginStart="@dimen/gap_25"
-                android:layout_toEndOf="@+id/divider"
-                android:layout_toRightOf="@+id/divider"
-                android:text="@string/item_withdraw"
-                android:textColor="@color/text_color_secondary"/>
+                style="@style/my_toolbar_title"
+                android:text="@string/activity_reception"/>
 
-            <TextView
-                android:id="@+id/rmb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/item_withdraw"
-                android:layout_alignStart="@+id/item_withdraw"
-                android:layout_below="@+id/item_withdraw"
-                android:layout_marginTop="@dimen/gap_15"
-                android:text="¥"
-                android:textSize="@dimen/text_14"
-                android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/withdrawAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/rmb"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignStart="@+id/rmb"
-                android:layout_below="@+id/item_withdraw"
-                android:layout_marginLeft="@dimen/gap_4"
-                android:layout_marginStart="@dimen/gap_4"
-                android:layout_marginTop="@dimen/gap_15"
-                android:text="666.00"
-                android:textSize="@dimen/text_30"
-                android:textStyle="bold"/>
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/uploadBtn"
+                style="@style/my_toolbar_button"
+                android:contentDescription="@string/action_upload"
+                android:src="@drawable/ic_upload_dk"/>
+        </LinearLayout>
 
-        <FrameLayout
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:overScrollMode="never">
 
-            <HorizontalScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="always">
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:padding="4dp">
+                    android:layout_marginTop="@dimen/gap_15"
+                    android:background="@android:color/white"
+                    android:paddingBottom="22dp"
+                    android:paddingLeft="@dimen/gap_25"
+                    android:paddingRight="@dimen/gap_25"
+                    android:paddingTop="18dp">
 
                     <TextView
+                        android:id="@+id/item_history_customer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DEBUG: "
+                        android:text="@string/item_history_customer"
+                        android:textColor="@color/text_color_secondary"/>
+
+                    <TextView
+                        android:id="@+id/historyCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/item_history_customer"
+                        android:layout_marginTop="@dimen/gap_15"
+                        android:text="@{data.orderCount}"
+                        android:textSize="@dimen/text_30"
+                        android:textStyle="bold"/>
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="@dimen/divider_size"
+                        android:layout_height="60dp"
+                        android:layout_centerInParent="true"
+                        android:background="@color/divider_color"/>
+
+
+                    <TextView
+                        android:id="@+id/item_withdraw"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/gap_25"
+                        android:layout_marginStart="@dimen/gap_25"
+                        android:layout_toEndOf="@+id/divider"
+                        android:layout_toRightOf="@+id/divider"
+                        android:text="@string/item_withdraw"
+                        android:textColor="@color/text_color_secondary"/>
+
+                    <TextView
+                        android:id="@+id/rmb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/item_withdraw"
+                        android:layout_alignStart="@+id/item_withdraw"
+                        android:layout_below="@+id/item_withdraw"
+                        android:layout_marginTop="@dimen/gap_15"
+                        android:text="¥"
+                        android:textSize="@dimen/text_14"
                         android:textStyle="bold"/>
 
                     <TextView
-                        android:id="@+id/offline"
+                        android:id="@+id/withdrawAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="offline"/>
+                        android:layout_alignLeft="@+id/rmb"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignStart="@+id/rmb"
+                        android:layout_below="@+id/item_withdraw"
+                        android:layout_marginLeft="@dimen/gap_4"
+                        android:layout_marginStart="@dimen/gap_4"
+                        android:layout_marginTop="@dimen/gap_15"
+                        android:text="@{data.orderMoney}"
+                        android:textSize="@dimen/text_30"
+                        android:textStyle="bold"/>
+                </RelativeLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="always">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:orientation="horizontal"
+                            android:padding="4dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="DEBUG: "
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/offline"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="8dp"
+                                android:text="offline"/>
+
+
+                            <TextView
+                                android:id="@+id/online"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="8dp"
+                                android:text="online"/>
+
+
+                            <TextView
+                                android:id="@+id/comming"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="8dp"
+                                android:text="coming"/>
+
+
+                            <TextView
+                                android:id="@+id/succeed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="8dp"
+                                android:text="succeed"/>
+
+
+                            <TextView
+                                android:id="@+id/failed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="8dp"
+                                android:text="failed"/>
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <com.xinshu.xinxiaoshu.widgets.BetterViewAnimator
+                        android:id="@+id/viewAnimator"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inAnimation="@anim/slide_up_in"
+                        android:outAnimation="@anim/slide_down_out">
+
+                        <include
+                            android:id="@+id/reception_offline"
+                            layout="@layout/reception_offline"/>
+
+                        <include
+                            android:id="@+id/reception_online"
+                            layout="@layout/reception_online"/>
+
+                        <include
+                            android:id="@+id/reception_coming"
+                            layout="@layout/reception_coming"/>
+                    </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
 
                     <TextView
-                        android:id="@+id/online"
+                        android:id="@+id/tutorial"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="online"/>
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:layout_marginBottom="20dp"
+                        android:text="@string/action_tutorial"
+                        android:textColor="@color/text_color_grey"
+                        android:textSize="@dimen/text_10"/>
+                </FrameLayout>
 
-
-                    <TextView
-                        android:id="@+id/comming"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="coming"/>
-
-
-                    <TextView
-                        android:id="@+id/succeed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="succeed"/>
-
-
-                    <TextView
-                        android:id="@+id/failed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:text="failed"/>
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <com.xinshu.xinxiaoshu.widgets.BetterViewAnimator
-                android:id="@+id/viewAnimator"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inAnimation="@anim/slide_up_in"
-                android:outAnimation="@anim/slide_down_out">
-
-                <include
-                    android:id="@+id/reception_offline"
-                    layout="@layout/reception_offline"/>
-
-                <include
-                    android:id="@+id/reception_online"
-                    layout="@layout/reception_online"/>
-
-                <include
-                    android:id="@+id/reception_coming"
-                    layout="@layout/reception_coming"/>
-            </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
-
-            <TextView
-                android:id="@+id/tutorial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="20dp"
-                android:text="@string/action_tutorial"
-                android:textColor="@color/text_color_grey"
-                android:textSize="@dimen/text_10"/>
-        </FrameLayout>
-
+            </LinearLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <Button
             android:id="@+id/footerBtn"
             style="@style/button_borderless.cyan"
             android:enabled="false"
             android:text="@string/action_reception_off"/>
-
-
     </LinearLayout>
+
 </layout>
