@@ -2,7 +2,10 @@ package com.xinshu.xinxiaoshu.features.reception;
 
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.mvp.BaseView;
+import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
+
+import java.util.List;
 
 /**
  * Created by sinyuk on 2017/3/2.
@@ -50,19 +53,33 @@ public class ReceptionContract {
         /**
          * Show offline.
          */
-        void showOffline();
+        void offlineSucceed();
+
+        /**
+         * Offline failed.
+         *
+         * @param e the e
+         */
+        void offlineFailed(Throwable e);
 
         /**
          * Show online.
          */
-        void showOnline();
+        void onlineSucceed();
+
+        /**
+         * Online failed.
+         *
+         * @param e the e
+         */
+        void onlineFailed(Throwable e);
 
         /**
          * Show get reception.
          *
          * @param reception the reception
          */
-        void showGetReception(Object reception);
+        void showGetReception(List<OrderEntity> reception);
 
         /**
          * Wait ordering result.
@@ -92,5 +109,7 @@ public class ReceptionContract {
          * Refresh completed.
          */
         void refreshCompleted();
+
+
     }
 }

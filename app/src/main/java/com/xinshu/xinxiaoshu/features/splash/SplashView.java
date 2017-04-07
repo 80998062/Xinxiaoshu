@@ -2,7 +2,6 @@ package com.xinshu.xinxiaoshu.features.splash;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.sinyuk.myutils.system.ToastUtils;
@@ -111,9 +110,7 @@ public class SplashView extends BaseActivity {
                 .doOnError(Throwable::printStackTrace)
                 .doOnError(this::initTerminate)
                 .subscribe(file -> {
-                    Log.d(TAG, "copySnsDb");
                     if (file.exists()) {
-                        Log.d(TAG, "copySnsDb: SUCCEED");
                         initTerminate(null);
                     } else {
                         toastUtils.toastShort(R.string.hint_ayscn_db_failed);
@@ -128,19 +125,32 @@ public class SplashView extends BaseActivity {
         toastUtils.toastLong(hint);
 
         if (succeed) {
-            Disposable d = mRepository.getToken().asObservable()
-                    .doOnTerminate(this::finish)
-                    .subscribe(s -> {
-                        if (TextUtils.isEmpty(s)) {
-                            LoginActivity.start(SplashView.this);
-                        } else {
-                            ReceptionActivity.start(SplashView.this);
-                        }
-                    });
-            addDisposable(d);
+            if (mRepository.getToken().get() != null) {
+                checkCredit();
+            } else {
+                LoginActivity.start(SplashView.this);
+                overridePendingTransition(0, 0);
+            }
         } else {
             toastUtils.toastLong(throwable.getMessage());
         }
+
+        finish();
+    }
+
+    private void checkCredit() {
+        Disposable d = mRepository.userInfo()
+                .doOnError(e -> LoginActivity.start(SplashView.this))
+                .subscribe(entity -> {
+                    if (entity != null) {
+                        ReceptionActivity.start(SplashView.this, entity);
+                        overridePendingTransition(0, 0);
+                    } else {
+                        LoginActivity.start(SplashView.this);
+                        overridePendingTransition(0, 0);
+                    }
+                });
+        addDisposable(d);
     }
 
     private String println(Throwable throwable) {

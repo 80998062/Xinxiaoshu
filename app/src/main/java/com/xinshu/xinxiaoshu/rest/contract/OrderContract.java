@@ -1,9 +1,5 @@
 package com.xinshu.xinxiaoshu.rest.contract;
 
-import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
-
-import java.util.List;
-
 import io.reactivex.Observable;
 
 /**
@@ -12,6 +8,4 @@ import io.reactivex.Observable;
 
 public interface OrderContract {
     Observable<Boolean> online();
-
-    Observable<List<OrderEntity>> requestOrder();
 }

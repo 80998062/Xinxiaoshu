@@ -1,4 +1,4 @@
-package com.xinshu.xinxiaoshu.ptr;
+package com.xinshu.xinxiaoshu.services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -21,8 +21,8 @@ import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +33,7 @@ import java.util.TimerTask;
 public class PTRService extends IntentService implements FloatingMenu.ItemClickListener {
     public static final String TAG = "FloatingMenu";
     private static final int ONGOING_NOTIFICATION_ID = 0x123;
+    private static final long SWIPE_INTERVAL = 400;
     /**
      * 用于在线程中创建或移除悬浮窗。
      */
@@ -79,15 +80,15 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         }
 
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
-        builder.setAutoCancel(false);
-        builder.setContentTitle(getString(R.string.notification_title));
+        builder.setAutoCancel(true);
+        builder.setContentTitle(getString(R.string.fetch_data_title));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             builder.setSmallIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_warning));
             builder.setLargeIcon(Icon.createWithResource(getApplicationContext(), R.drawable.ic_warning_red));
         }
 
-        Intent notificationIntent = new Intent(getApplicationContext(), ReceptionActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), UploadActivity.class);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -146,7 +147,7 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         }
 
         timer = new Timer();
-        timer.schedule(new RefreshTask(), 0, 1000);
+        timer.schedule(new RefreshTask(), 0, SWIPE_INTERVAL);
     }
 
     @Override
@@ -215,10 +216,8 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
 
             if (isWechat()) {
                 try {
-
                     executeCommand();
-
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                     timer.cancel();
                     timer = null;
@@ -227,23 +226,18 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         }
 
     }
-    private OutputStream os;
 
-    private void executeCommand() throws IOException {
+    private void executeCommand() throws IOException, InterruptedException {
+        Process process = Runtime.getRuntime().exec("su");
+        DataOutputStream dos = new DataOutputStream(
+                process.getOutputStream());
 
-
-        String cmd = "input swipe 45 1000 45 255";
-        Log.d(TAG, "executeCommand: " + cmd);
-//        Process process = Runtime.getRuntime().exec(cmd);
-//        BufferedReader bufferedReader = new BufferedReader(new
-//                InputStreamReader(process.getInputStream()));
-
-        if (os == null) {
-            os = Runtime.getRuntime().exec("su").getOutputStream();
-        }
-        os.write(cmd.getBytes());
-        os.flush();
-
+        String cmd = "input swipe 45 1000 45 255\n";
+        dos.writeBytes(cmd);
+        //dos.writeBytes("input keyevent 93\n");
+        dos.writeBytes("exit\n");
+        dos.flush();
+        process.waitFor();
     }
 
     private void removeAndUnregister() {

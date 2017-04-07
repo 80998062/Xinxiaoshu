@@ -61,5 +61,6 @@
     <string name="hint_loading_failed">加载失败</string>
     <string name="hint_phone_not_registered">手机号未注册</string>
     <string name="hint_phone_not_correct">手机号错误</string>
+    <string name="fetch_data_title">正在拉取朋友圈…</string>
 
 </resources>

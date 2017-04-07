@@ -70,8 +70,13 @@
             android:screenOrientation="portrait"/>
 
         <service
-            android:name=".ptr.PTRService"
+            android:name=".services.PTRService"
             android:exported="false"/>
+
+        <service
+            android:name=".services.PollingService"
+            android:exported="false"/>
+        />
     </application>
 
 </manifest>

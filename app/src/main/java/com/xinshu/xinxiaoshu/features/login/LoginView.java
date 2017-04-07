@@ -195,7 +195,6 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
 
     @Override
     public void loginSucceed(UserEntity userEntity) {
-        System.out.println(userEntity.toString());
         ReceptionActivity.start(getContext(), userEntity);
     }
 

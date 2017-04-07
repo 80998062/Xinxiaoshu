@@ -29,6 +29,7 @@ public class ReceptionActivity extends BaseActivity {
      */
     public static void start(final Context context, final UserEntity entity) {
         Intent starter = new Intent(context, ReceptionActivity.class);
+        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         Bundle extras = new Bundle();
         extras.putSerializable("user", entity);
         starter.putExtras(extras);
@@ -62,10 +63,18 @@ public class ReceptionActivity extends BaseActivity {
         DataBindingUtil.setContentView(this, R.layout.activity_reception);
         ReceptionView receptionView = new ReceptionView();
 
-        if (getIntent().getExtras() != null
-                && getIntent().getExtras().getSerializable("user") != null) {
+        if (getIntent().getExtras() != null) {
             UserEntity entity = (UserEntity) getIntent().getExtras().getSerializable("user");
-            receptionView.getArguments().putSerializable("user", entity);
+            if (entity != null) {
+                if (receptionView.getArguments() == null) {
+                    Bundle extras = new Bundle();
+                    extras.putSerializable("user", entity);
+                    receptionView.setArguments(extras);
+                } else {
+                    receptionView.getArguments().putSerializable("user", entity);
+                }
+            }
+
         }
 
         Disposable d =

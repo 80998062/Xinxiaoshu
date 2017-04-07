@@ -5,6 +5,7 @@ import com.xinshu.xinxiaoshu.injector.modules.AppModule;
 import com.xinshu.xinxiaoshu.injector.modules.DatabaseModule;
 import com.xinshu.xinxiaoshu.injector.modules.LoginViewModule;
 import com.xinshu.xinxiaoshu.injector.modules.ReceptionModule;
+import com.xinshu.xinxiaoshu.services.PollingService;
 
 import javax.inject.Singleton;
 
@@ -23,4 +24,6 @@ public interface AppComponent {
     LoginViewComponent plus(LoginViewModule module);
 
     void inject(SplashView splashView);
+
+    void inject(PollingService pollingService);
 }

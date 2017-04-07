@@ -25,6 +25,7 @@ public class LoginActivity extends BaseActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, LoginActivity.class);
+        starter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(starter);
     }
 
@@ -40,10 +41,7 @@ public class LoginActivity extends BaseActivity {
 
         LoginView loginView = new LoginView();
         App.get(this).appComponentOB().subscribe(c ->
-        {
-            c.plus(new LoginViewModule(loginView)).inject(LoginActivity.this);
-
-        });
+                c.plus(new LoginViewModule(loginView)).inject(LoginActivity.this));
 
         addFragment(loginView, false);
 

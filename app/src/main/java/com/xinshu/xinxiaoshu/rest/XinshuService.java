@@ -1,6 +1,7 @@
 package com.xinshu.xinxiaoshu.rest;
 
 import com.xinshu.xinxiaoshu.rest.entity.LoginResponse;
+import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.Registeration;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
@@ -61,7 +62,7 @@ public interface XinshuService {
      * @return the observable
      */
     @GET("xiaobians/human/typeset_requests")
-    Observable<Response<BaseResponse<List<UserEntity>>>> typeset_requests();
+    Observable<Response<BaseResponse<List<OrderEntity>>>> typeset_requests();
 
 
     /**
@@ -69,7 +70,7 @@ public interface XinshuService {
      *
      * @return the observable
      */
-    @GET("xiaobians/human/online")
+    @POST("xiaobians/human/online")
     Observable<Response<BaseResponse>> online();
 
 }

@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.databinding.ActivityUploadBinding;
-import com.xinshu.xinxiaoshu.ptr.PTRService;
+import com.xinshu.xinxiaoshu.services.PTRService;
 
 /**
  * Created by sinyuk on 2017/3/1.

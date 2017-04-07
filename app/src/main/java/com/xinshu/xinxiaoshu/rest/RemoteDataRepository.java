@@ -55,18 +55,16 @@ public class RemoteDataRepository implements RemoteDataStore {
     @Override
     public Observable<Boolean> checkRegisteration(@NonNull String phone) {
         return xinshuService.checkRegistration(phone)
-                .compose(new ErrorTransformer<>())
-                .map(r -> r.registered)
-                .compose(schedulerTransformer);
+                .compose(new DefaultTransformer<>(schedulerTransformer))
+                .map(r -> r.registered);
     }
 
 
     @Override
     public Observable<Boolean> getCaptcha(@NonNull String phone) {
         return xinshuService.captcha(phone)
-                .compose(new ErrorTransformer<>())
-                .map(r -> r.succeed())
-                .compose(schedulerTransformer);
+                .compose(new DefaultTransformer<>(schedulerTransformer))
+                .map(BaseResponse::succeed);
     }
 
     @Override
@@ -75,10 +73,9 @@ public class RemoteDataRepository implements RemoteDataStore {
         params.put("phone", phone);
         params.put("captcha", captcha);
         return xinshuService.login(params)
-                .compose(new ErrorTransformer<>())
+                .compose(new DefaultTransformer<>(schedulerTransformer))
                 .doOnNext(r -> saveToken(r.getAuthToken()))
-                .map(LoginResponse::getData)
-                .compose(schedulerTransformer);
+                .map(LoginResponse::getData);
     }
 
     private void saveToken(final String authToken) {
@@ -101,17 +98,21 @@ public class RemoteDataRepository implements RemoteDataStore {
     @Override
     public Observable<UserEntity> userInfo() {
         return xinshuService.user_info()
-                .compose(new ErrorTransformer<>())
-                .compose(schedulerTransformer);
+                .compose(new DefaultTransformer<>(schedulerTransformer))
+                .flatMap(new ResponseFunc<>());
     }
 
     @Override
     public Observable<Boolean> online() {
-        return null;
+        return xinshuService.online()
+                .compose(new DefaultTransformer<>(schedulerTransformer))
+                .map(BaseResponse::succeed);
     }
 
     @Override
     public Observable<List<OrderEntity>> requestOrder() {
-        return null;
+        return xinshuService.typeset_requests()
+                .compose(new DefaultTransformer<>(schedulerTransformer))
+                .flatMap(new ResponseFunc<>());
     }
 }
