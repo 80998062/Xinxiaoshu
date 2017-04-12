@@ -21,3 +21,6 @@
 
 -dontwarn pl.tajchert.waitingdots.**
 -keep public class pl.tajchert.waitingdots.** { public protected private *; }
+
+-keep class com.lsjwzh.widget.recyclerviewpager.**
+-dontwarn com.lsjwzh.widget.recyclerviewpager.**

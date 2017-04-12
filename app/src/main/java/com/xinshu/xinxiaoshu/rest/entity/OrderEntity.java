@@ -17,4 +17,9 @@ public class OrderEntity {
     public String nickname;
     @SerializedName("headimgurl")
     public String headimgurl;
+
+    @Override
+    public String toString() {
+        return nickname;
+    }
 }

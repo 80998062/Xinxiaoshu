@@ -3,14 +3,14 @@ package com.xinshu.xinxiaoshu.features.reception;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.sinyuk.myutils.ConvertUtils;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.databinding.ReceptionComingBinding;
@@ -25,6 +25,8 @@ import com.xinshu.xinxiaoshu.features.widthdraw.WithdrawActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
+import com.xinshu.xinxiaoshu.utils.rx.OrderDecoration;
+import com.xinshu.xinxiaoshu.utils.rx.QuickAdapter;
 import com.xinshu.xinxiaoshu.viewmodels.UserModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -58,6 +60,7 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
      * The constant STATE_FAILED.
      */
     public static final int STATE_FAILED = 4;
+    private List<OrderEntity> mReceptions = null;
 
     @Override
     protected boolean registerForEventBus() {
@@ -132,6 +135,8 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
         });
 
         binding.uploadBtn.setOnClickListener(this::onUpload);
+
+        binding.swipeRefreshLayout.setEnabled(false);
 
     }
 
@@ -216,15 +221,28 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
     @Override
     public void showGetReception(final List<OrderEntity> reception) {
-        final ReceptionComingBinding comingBinding = binding.receptionComing;
-        comingBinding.fab.setOnClickListener(view -> {
-            // TODO: 发起抢单请求
-        });
-        comingBinding.icon.setImageResource(R.drawable.ic_warning);
-        comingBinding.fab.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_oval_red));
-        comingBinding.title.setText(R.string.hint_reception_request);
-        comingBinding.fab.setText(R.string.action_reception_get);
         switchViewAnimator(STATE_COME_IN);
+        final ReceptionComingBinding comingBinding = binding.receptionComing;
+
+        if (comingBinding.orderStacks.getAdapter() == null) {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            layoutManager.setAutoMeasureEnabled(true);
+            comingBinding.orderStacks.setLayoutManager(layoutManager);
+            comingBinding.orderStacks.addItemDecoration(new OrderDecoration(getContext()));
+            comingBinding.orderStacks.setHasFixedSize(true);
+            comingBinding.orderStacks.setAdapter(
+                    new OrderAdapter(R.layout.item_order, reception, null));
+        }
+
+        if (!reception.equals(mReceptions)) {
+            mReceptions = reception;
+            ((QuickAdapter) comingBinding.orderStacks.getAdapter()).setData(reception, true);
+            comingBinding.fab.show();
+            comingBinding.fab.setOnClickListener(view -> {
+                // TODO: 发起抢单请求
+            });
+        }
+
     }
 
 
@@ -254,18 +272,8 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
         final ReceptionComingBinding comingBinding = binding.receptionComing;
 
         if (succeed) {
-            comingBinding.icon.setImageResource(R.drawable.ic_tick_cyan);
-            comingBinding.title.setText(R.string.hint_reception_succeed);
-            comingBinding.fab.setText(R.string.action_reception_succeed);
-            comingBinding.fab.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_oval_cyan));
-            comingBinding.fab.setElevation(ConvertUtils.dp2px(getContext(), 4));
             switchViewAnimator(STATE_SUCCEED);
         } else {
-            comingBinding.title.setText(R.string.hint_reception_failed);
-            comingBinding.icon.setImageResource(R.drawable.ic_warning_red);
-            comingBinding.fab.setText(R.string.action_reception_failed);
-            comingBinding.fab.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.btn_oval_grey));
-            comingBinding.fab.setElevation(0f);
             switchViewAnimator(STATE_FAILED);
         }
 
@@ -324,7 +332,7 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     public void onOrderComing(final OrderComingEvent event) {
         if (!event.getOrderEntities().isEmpty()) {
             Log.d(getTag(), "onOrderComing: " + event.getOrderEntities().toString());
-
+            showGetReception(event.getOrderEntities());
         }
     }
 }

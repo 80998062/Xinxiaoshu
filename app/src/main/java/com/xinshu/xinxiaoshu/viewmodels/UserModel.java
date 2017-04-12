@@ -4,6 +4,7 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
 /**
@@ -39,15 +40,18 @@ public class UserModel implements ViewModel<UserEntity> {
     public static void setAvatar(final ImageView view, final String url) {
         Glide.with(view.getContext())
                 .load(url)
+                .crossFade()
+                .placeholder(R.color.placeholder_color)
+                .error(R.color.placeholder_color)
                 .into(view);
     }
 
-    public String getOrderCount(){
+    public String getOrderCount() {
         return String.valueOf(data.getOrderCount());
     }
 
 
-    public String getOrderMoney(){
+    public String getOrderMoney() {
         return String.valueOf(data.getOrderMoney());
     }
 }

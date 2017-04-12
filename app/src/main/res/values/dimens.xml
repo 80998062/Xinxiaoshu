@@ -22,4 +22,5 @@
     <dimen name="divider_size">0.5dp</dimen>
     <dimen name="action_bar_size">40dp</dimen>
     <dimen name="list_item_elevation">0.5dp</dimen>
+    <dimen name="fab_size">96dp</dimen>
 </resources>

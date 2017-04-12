@@ -30,4 +30,5 @@
     <color name="wx_primaryDark">#222527</color>
     <color name="wx_window">#f6f6f6</color>
     <color name="wx_text">#202020</color>
+    <color name="placeholder_color">#e2e2e2</color>
 </resources>
