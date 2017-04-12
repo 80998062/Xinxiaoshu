@@ -159,8 +159,10 @@ public class PollingService extends IntentService {
      * Stop interval.
      */
     public void stopInterval() {
+        Log.d(TAG, "stopInterval: ");
         if (!mCompositeDisposable.isDisposed()) {
             mCompositeDisposable.dispose();
+            mIntervalDisposable = null;
         }
     }
 
@@ -168,8 +170,12 @@ public class PollingService extends IntentService {
      * Start interval.
      */
     public void startInterval() {
-        mIntervalDisposable = mIntervalObservable.subscribe(this::request);
-        mCompositeDisposable.add(mIntervalDisposable);
+        Log.d(TAG, "startInterval: ");
+        if (mIntervalDisposable == null || mIntervalDisposable.isDisposed()) {
+            mIntervalDisposable = mIntervalObservable.subscribe(this::request);
+            mCompositeDisposable.add(mIntervalDisposable);
+        }
+
     }
 
 
@@ -185,7 +191,6 @@ public class PollingService extends IntentService {
                 .doOnError(Throwable::printStackTrace)
                 .onErrorReturnItem(new ArrayList<>())
                 .subscribe(orders -> {
-                    Log.d(TAG, "request: " + orders.toString());
                     OrderComingEvent event = new OrderComingEvent(orders);
                     event.setExecutionScope(PollingService.class);
                     EventBus.getDefault().post(event);

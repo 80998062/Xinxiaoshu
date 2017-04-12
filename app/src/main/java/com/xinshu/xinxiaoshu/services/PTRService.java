@@ -21,6 +21,8 @@ import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Timer;
@@ -61,19 +63,13 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
+        EventBus.getDefault().register(this);
+
         floatingWindowManager = FloatingWindowManager.get(getApplicationContext());
 
         // If we get killed, after returning from here, restart
 
-        if (!floatingWindowManager.isWindowShowing()) {
-            floatingWindowManager.addView();
-        }
-
-        if (floatingWindowManager.isWindowShowing()) {
-            if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
-                floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
-            }
-        }
+        showAndRegister();
 
         if (timer == null) {
             timer = new Timer();
@@ -96,7 +92,7 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         builder.setContentIntent(pendingIntent);
 
         builder.setWhen(SystemClock.currentThreadTimeMillis());
-        builder.setShowWhen(true);
+        builder.setShowWhen(false);
 
         builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.theme_red));
 
@@ -154,6 +150,11 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     public void onDestroy() {
         super.onDestroy();
 
+        removeAndUnregister();
+
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
         // Service被终止的同时也停止定时器继续运行
         timer.cancel();
         timer = null;
@@ -206,8 +207,6 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     public void onExpanded(boolean expanded) {
         Log.d(TAG, "onExpanded: ");
     }
-
-    private boolean isRoot;
 
 
     private class RefreshTask extends TimerTask {
@@ -266,7 +265,8 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
 
     private boolean isWechat() {
         // TODO: 判断当前界面是微信 就显示悬浮窗
-
         return true;
     }
+
+
 }

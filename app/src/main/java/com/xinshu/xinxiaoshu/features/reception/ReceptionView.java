@@ -131,8 +131,12 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
         binding.avatar.setOnClickListener(view -> {
         });
 
-        binding.uploadBtn.setOnClickListener(view -> UploadActivity.start(view.getContext()));
+        binding.uploadBtn.setOnClickListener(this::onUpload);
 
+    }
+
+    public void onUpload(View v) {
+        UploadActivity.start(v.getContext());
     }
 
     /**
@@ -186,13 +190,6 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     @Override
     public void onlineSucceed() {
         switchViewAnimator(STATE_ONLINE);
-        startRequestService();
-    }
-
-    /**
-     * 开始轮询
-     */
-    public void startRequestService() {
         StartPollingEvent event = new StartPollingEvent();
         event.setExecutionScope(ReceptionView.class);
         EventBus.getDefault().post(event);

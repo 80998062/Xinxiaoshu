@@ -13,6 +13,7 @@ import com.xinshu.xinxiaoshu.core.Task;
 import com.xinshu.xinxiaoshu.features.login.LoginActivity;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
+import com.xinshu.xinxiaoshu.services.PollingService;
 
 import javax.inject.Inject;
 
@@ -144,6 +145,7 @@ public class SplashView extends BaseActivity {
                 .subscribe(entity -> {
                     if (entity != null) {
                         ReceptionActivity.start(SplashView.this, entity);
+                        PollingService.start(this);
                         overridePendingTransition(0, 0);
                     } else {
                         LoginActivity.start(SplashView.this);
