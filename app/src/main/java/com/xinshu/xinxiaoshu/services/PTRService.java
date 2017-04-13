@@ -18,10 +18,14 @@ import android.view.View;
 import com.sinyuk.floating.FloatingMenu;
 import com.sinyuk.floating.FloatingWindowManager;
 import com.xinshu.xinxiaoshu.R;
+import com.xinshu.xinxiaoshu.events.HideFloatingEvent;
+import com.xinshu.xinxiaoshu.events.ShowFloatingEvent;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -31,8 +35,10 @@ import java.util.TimerTask;
 /**
  * Created by sinyuk on 2017/3/6.
  */
-
 public class PTRService extends IntentService implements FloatingMenu.ItemClickListener {
+    /**
+     * The constant TAG.
+     */
     public static final String TAG = "FloatingMenu";
     private static final int ONGOING_NOTIFICATION_ID = 0x123;
     private static final long SWIPE_INTERVAL = 400;
@@ -47,14 +53,27 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     private Timer timer;
     private FloatingWindowManager floatingWindowManager;
 
+    /**
+     * Instantiates a new Ptr service.
+     */
     public PTRService() {
         this("PTRService");
     }
 
+    /**
+     * Instantiates a new Ptr service.
+     *
+     * @param name the name
+     */
     public PTRService(String name) {
         super(name);
     }
 
+    /**
+     * Start.
+     *
+     * @param context the context
+     */
     public static void start(Context context) {
         Intent starter = new Intent(context, PTRService.class);
         context.startService(starter);
@@ -63,17 +82,19 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
         floatingWindowManager = FloatingWindowManager.get(getApplicationContext());
 
         // If we get killed, after returning from here, restart
 
-        showAndRegister();
-
         if (timer == null) {
             timer = new Timer();
         }
+
+
+        showAndRegister();
+
 
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
         builder.setAutoCancel(true);
@@ -106,11 +127,6 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         return START_NOT_STICKY;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-
     /**
      * The IntentService calls this method from the default worker thread with
      * the intent that started the service. When this method returns, IntentService
@@ -129,6 +145,9 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     }
 
 
+    /**
+     * Pause timer.
+     */
     public void pauseTimer() {
         if (timer != null) {
             timer.cancel();
@@ -136,6 +155,9 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     }
 
 
+    /**
+     * Resume timer.
+     */
     public void resumeTimer() {
         if (timer != null) {
             timer.cancel();
@@ -171,19 +193,15 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     public void onClick(View view, int index) {
         switch (index) {
             case 0: {
-                Log.d(TAG, "onClick: ");
-
                 break;
             }
             case 1: {
-                Log.d(TAG, "onClick: home");
                 Intent intent = new Intent(getApplicationContext(), ReceptionActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 break;
             }
             case 2: {
-                Log.d(TAG, "onClick: upload");
                 Intent intent = new Intent(getApplicationContext(), UploadActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -237,6 +255,26 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         dos.writeBytes("exit\n");
         dos.flush();
         process.waitFor();
+    }
+
+    /**
+     * On hide.
+     *
+     * @param event the event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHide(final HideFloatingEvent event) {
+        removeAndUnregister();
+    }
+
+    /**
+     * On show.
+     *
+     * @param event the event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onShow(final ShowFloatingEvent event) {
+        showAndRegister();
     }
 
     private void removeAndUnregister() {

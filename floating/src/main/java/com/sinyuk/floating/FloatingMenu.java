@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -34,8 +33,6 @@ public class FloatingMenu extends FrameLayout {
     private final ItemClickListener internalItemListener = new ItemClickListener() {
         @Override
         public void onClick(View view, int index) {
-            Log.d(TAG, "onClick: ");
-            Toast.makeText(view.getContext(), "Click at: " + index, Toast.LENGTH_SHORT).show();
             switch (index) {
                 case 0: {
 

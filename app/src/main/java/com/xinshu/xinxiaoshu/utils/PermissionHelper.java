@@ -23,7 +23,7 @@ public class PermissionHelper {
                             c.startActivity(i);
                             d.dismiss();
                         })
-                .setNegativeButton("算了", (d, which) -> d.cancel())
+                .setNegativeButton("已经设置", (d, which) -> d.cancel())
                 .show();
     }
 }

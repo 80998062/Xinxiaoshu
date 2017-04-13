@@ -119,26 +119,28 @@ public class ReceptionPresenter implements ReceptionContract.Presenter {
 
     @Override
     public void assignments() {
-        mOrderContract.assignments().subscribeWith(new DisposableObserver<OrderEntity>() {
-            @Override
-            public void onNext(final OrderEntity entity) {
-                if (entity != null) {
-                    mView.assignmentSucceed(entity);
-                } else {
-                    mView.assignmentFailed();
-                }
-            }
+        mOrderContract.assignments()
+                .doOnTerminate(this::fetchPlayerInfo)
+                .subscribeWith(new DisposableObserver<OrderEntity>() {
+                    @Override
+                    public void onNext(final OrderEntity entity) {
+                        if (entity != null) {
+                            mView.assignmentSucceed(entity);
+                        } else {
+                            mView.assignmentFailed();
+                        }
+                    }
 
-            @Override
-            public void onError(final Throwable e) {
-                e.printStackTrace();
-                mView.assignmentError(e);
-            }
+                    @Override
+                    public void onError(final Throwable e) {
+                        e.printStackTrace();
+                        mView.assignmentError(e);
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
     }
 }

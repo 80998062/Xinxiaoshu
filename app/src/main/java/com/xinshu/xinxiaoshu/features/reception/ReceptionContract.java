@@ -82,23 +82,6 @@ public class ReceptionContract {
         void showGetReception(List<OrderEntity> reception);
 
         /**
-         * Wait ordering result.
-         */
-        void waitOrderingResult();
-
-        /**
-         * Show ordering result.
-         *
-         * @param succeed the succeed
-         */
-        void showOrderingResult(boolean succeed);
-
-        /**
-         * Start refreshing.
-         */
-        void startRefreshing();
-
-        /**
          * Refresh failed.
          *
          * @param e the e

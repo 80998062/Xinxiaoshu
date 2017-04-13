@@ -118,16 +118,6 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
         binding.receptionOffline.onlineBtn.setOnClickListener(view -> presenter.online());
 
-        binding.offline.setOnClickListener(view -> offlineSucceed());
-
-        binding.online.setOnClickListener(view -> onlineSucceed());
-
-        binding.comming.setOnClickListener(view -> showGetReception(null));
-
-        binding.failed.setOnClickListener(view -> showOrderingResult(false));
-
-        binding.succeed.setOnClickListener(view -> showOrderingResult(true));
-
         binding.avatar.setOnClickListener(view -> {
         });
 
@@ -240,26 +230,14 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
             mReceptions = reception;
             ((QuickAdapter) comingBinding.orderStacks.getAdapter()).setData(reception, true);
             comingBinding.fab.show();
-            comingBinding.fab.setOnClickListener(view -> {
-                // TODO: 发起抢单请求
-            });
         }
 
-    }
-
-
-    @Override
-    public void waitOrderingResult() {
-        showAndStartProgress();
-    }
-
-    /**
-     * 显示进度条
-     */
-    private void showAndStartProgress() {
+        comingBinding.fab.setOnClickListener(view -> {
+            // TODO: 发起抢单请求
+            presenter.assignments();
+        });
 
     }
-
 
     private void toggleDotsView(boolean enable) {
         if (enable) {
@@ -269,23 +247,18 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
         }
     }
 
-    @Override
-    public void showOrderingResult(boolean succeed) {
-        final ReceptionComingBinding comingBinding = binding.receptionComing;
-
-        if (succeed) {
-            switchViewAnimator(STATE_SUCCEED);
-        } else {
-            switchViewAnimator(STATE_FAILED);
-        }
-
-        comingBinding.fab.setOnClickListener(view -> onlineSucceed());
-    }
-
-    @Override
-    public void startRefreshing() {
-        binding.swipeRefreshLayout.setRefreshing(true);
-    }
+//
+//    public void showOrderingResult(boolean succeed) {
+//        final ReceptionComingBinding comingBinding = binding.receptionComing;
+//
+//        if (succeed) {
+//            switchViewAnimator(STATE_SUCCEED);
+//        } else {
+//            switchViewAnimator(STATE_FAILED);
+//        }
+//
+//        comingBinding.fab.setOnClickListener(view -> onlineSucceed());
+//    }
 
     @Override
     public void refreshFailed(Throwable e) {
