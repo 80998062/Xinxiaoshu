@@ -33,6 +33,7 @@ public class FloatingMenu extends FrameLayout {
     private final ItemClickListener internalItemListener = new ItemClickListener() {
         @Override
         public void onClick(View view, int index) {
+            Log.d(TAG, "onClick: "+ index);
             switch (index) {
                 case 0: {
 
@@ -57,12 +58,12 @@ public class FloatingMenu extends FrameLayout {
 
         @Override
         public void onExpanded(boolean expanded) {
-            Log.d(TAG, "onExpanded");
+
         }
     };
 
     private void togglePlayState(boolean playing) {
-        Log.d(TAG, "togglePlayState: " + playing);
+
         mView.findViewById(R.id.homeBtn).setEnabled(!playing);
         mView.findViewById(R.id.uploadBtn).setEnabled(!playing);
         mView.findViewById(R.id.homeBtn).setClickable(!playing);

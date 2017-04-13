@@ -41,7 +41,7 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
      */
     public static final String TAG = "FloatingMenu";
     private static final int ONGOING_NOTIFICATION_ID = 0x123;
-    private static final long SWIPE_INTERVAL = 400;
+    private static final long SWIPE_INTERVAL = 100;
     /**
      * 用于在线程中创建或移除悬浮窗。
      */
@@ -82,19 +82,15 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
-        EventBus.getDefault().register(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
 
         floatingWindowManager = FloatingWindowManager.get(getApplicationContext());
 
         // If we get killed, after returning from here, restart
 
-        if (timer == null) {
-            timer = new Timer();
-        }
-
-
         showAndRegister();
-
 
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
         builder.setAutoCancel(true);
@@ -150,7 +146,9 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
      */
     public void pauseTimer() {
         if (timer != null) {
+            Log.d(TAG, "pause Timer: ");
             timer.cancel();
+            timer = null;
         }
     }
 
@@ -160,10 +158,10 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
      */
     public void resumeTimer() {
         if (timer != null) {
+            Log.d(TAG, "cancel old Timer: ");
             timer.cancel();
-            timer = null;
         }
-
+        Log.d(TAG, "start Timer: ");
         timer = new Timer();
         timer.schedule(new RefreshTask(), 0, SWIPE_INTERVAL);
     }
@@ -249,7 +247,7 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
         DataOutputStream dos = new DataOutputStream(
                 process.getOutputStream());
 
-        String cmd = "input swipe 45 1000 45 255\n";
+        String cmd = "input swipe 45 1200 45 200\n";
         dos.writeBytes(cmd);
         //dos.writeBytes("input keyevent 93\n");
         dos.writeBytes("exit\n");
@@ -291,13 +289,12 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
 
     private void showAndRegister() {
         if (!floatingWindowManager.isWindowShowing()) {
-            handler.post(() -> floatingWindowManager.addView());
-        }
-
-        if (floatingWindowManager.isWindowShowing()) {
-            if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
-                floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
-            }
+            handler.post(() -> {
+                floatingWindowManager.addView();
+                if (!floatingWindowManager.getFloatingMenu().isRegistered(PTRService.this)) {
+                    floatingWindowManager.getFloatingMenu().addItemListener(PTRService.this);
+                }
+            });
         }
     }
 

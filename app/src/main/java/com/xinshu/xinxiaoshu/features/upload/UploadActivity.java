@@ -12,11 +12,8 @@ import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.core.Config;
 import com.xinshu.xinxiaoshu.databinding.ActivityUploadBinding;
-import com.xinshu.xinxiaoshu.events.HideFloatingEvent;
 import com.xinshu.xinxiaoshu.services.PTRService;
 import com.xinshu.xinxiaoshu.utils.PermissionHelper;
-
-import org.greenrobot.eventbus.EventBus;
 
 import io.reactivex.disposables.Disposable;
 
@@ -49,8 +46,6 @@ public class UploadActivity extends BaseActivity {
         uploadList.setUserVisibleHint(true);
 
         setupListeners(binding);
-
-        EventBus.getDefault().post(new HideFloatingEvent());
 
         RxPermissions rxPermissions = new RxPermissions(UploadActivity.this);
         Disposable d = rxPermissions
