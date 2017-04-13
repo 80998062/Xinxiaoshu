@@ -2,6 +2,7 @@ package com.xinshu.xinxiaoshu.features.upload;
 
 import android.support.v7.widget.RecyclerView;
 
+import com.xinshu.xinxiaoshu.databinding.ItemDataBinding;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.utils.rx.BindingViewHolder;
 import com.xinshu.xinxiaoshu.utils.rx.QuickAdapter;
@@ -36,13 +37,7 @@ public class FriendsAdapter extends QuickAdapter<SnsInfoModel> {
 
     @Override
     protected void bindExtras(BindingViewHolder helper, SnsInfoModel item) {
-//        binding.uploadButton.setOnDownLoadClickListener(new DownloadProgressButton.SimpleOnDownLoadClickListener() {
-//            @Override
-//            public void clickDownload() {
-//                super.clickDownload();
-//                binding.uploadButton.setProgress(100);
-//                presenter.upload(data.getData(), itemPositionInData);
-//            }
-//        });
+        ((ItemDataBinding) helper.getBinding()).uploadButton.setOnClickListener(v ->
+                ((UploadPresenter) presenter).upload(item.getData(), helper.getAdapterPosition()));
     }
 }

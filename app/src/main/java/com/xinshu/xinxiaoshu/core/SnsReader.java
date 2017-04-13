@@ -160,7 +160,7 @@ public class SnsReader {
      * @throws Exception
      */
 
-    private JSONArray convertToJSON(List<SnsInfo> snsList) throws Exception {
+    public JSONArray convertToJSON(final List<SnsInfo> snsList) throws Exception {
 
         final JSONArray snsListJSON = new JSONArray();
 

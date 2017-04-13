@@ -14,6 +14,7 @@ import com.xinshu.xinxiaoshu.injector.Names;
 import com.xinshu.xinxiaoshu.rest.Endpoint;
 import com.xinshu.xinxiaoshu.rest.OauthInterceptor;
 import com.xinshu.xinxiaoshu.rest.SchedulerTransformer;
+import com.xinshu.xinxiaoshu.rest.UploadService;
 import com.xinshu.xinxiaoshu.rest.XinshuService;
 
 import java.io.File;
@@ -40,15 +41,28 @@ import static android.content.Context.MODE_PRIVATE;
  */
 @Module
 public class AppModule {
+    /**
+     * The constant TAG.
+     */
     public static final String TAG = "AppModule";
     private static final long MAX_HTTP_CACHE = 1000 * 1000 * 100;
     private static final long TIMEOUT = 10;
     private final App app;
 
+    /**
+     * Instantiates a new App module.
+     *
+     * @param app the app
+     */
     public AppModule(App app) {
         this.app = app;
     }
 
+    /**
+     * App app.
+     *
+     * @return the app
+     */
     @Singleton
     @Provides
     App app() {
@@ -56,18 +70,35 @@ public class AppModule {
     }
 
 
+    /**
+     * Task task.
+     *
+     * @param app the app
+     * @return the task
+     */
     @Singleton
     @Provides
     Task task(App app) {
         return new Task(app);
     }
 
+    /**
+     * Toast utils toast utils.
+     *
+     * @param app the app
+     * @return the toast utils
+     */
     @Singleton
     @Provides
     ToastUtils toastUtils(App app) {
         return new ToastUtils(app);
     }
 
+    /**
+     * Provide gson gson.
+     *
+     * @return the gson
+     */
     @Singleton
     @Provides
     Gson provideGson() {
@@ -77,6 +108,11 @@ public class AppModule {
                 .create();
     }
 
+    /**
+     * Provide shared preferences shared preferences.
+     *
+     * @return the shared preferences
+     */
     @Provides
     @Singleton
     SharedPreferences provideSharedPreferences() {
@@ -95,6 +131,11 @@ public class AppModule {
         return RxSharedPreferences.create(prefs);
     }
 
+    /**
+     * Provide cache path file.
+     *
+     * @return the file
+     */
     @Provides
     @Singleton
     @Named(Names.HTTP_CACHE)
@@ -102,6 +143,12 @@ public class AppModule {
         return new File(app.getExternalCacheDir(), Names.HTTP_CACHE);
     }
 
+    /**
+     * Provide access token preference.
+     *
+     * @param prefs the prefs
+     * @return the preference
+     */
     @Singleton
     @Provides
     @Named(Names.ACCESS_TOKEN)
@@ -109,12 +156,24 @@ public class AppModule {
         return prefs.getString(Prefs.ACCESS_TOKEN);
     }
 
+    /**
+     * Provide endpoint endpoint.
+     *
+     * @return the endpoint
+     */
     @Singleton
     @Provides
     Endpoint provideEndpoint() {
         return new Endpoint("http://10.0.1.84:8009/");
     }
 
+    /**
+     * Provide ok http client ok http client.
+     *
+     * @param httpCache   the http cache
+     * @param interceptor the interceptor
+     * @return the ok http client
+     */
     @Singleton
     @Provides
     OkHttpClient provideOkHttpClient(
@@ -144,6 +203,14 @@ public class AppModule {
         return builder.build();
     }
 
+    /**
+     * Provide retrofit retrofit.
+     *
+     * @param gson         the gson
+     * @param okHttpClient the ok http client
+     * @param endpoint     the endpoint
+     * @return the retrofit
+     */
     @Singleton
     @Provides
     Retrofit provideRetrofit(
@@ -159,12 +226,39 @@ public class AppModule {
     }
 
 
+    /**
+     * Provide xinshu service xinshu service.
+     *
+     * @param retrofit the retrofit
+     * @return the xinshu service
+     */
     @Singleton
     @Provides
     XinshuService provideXinshuService(final Retrofit retrofit) {
         return retrofit.create(XinshuService.class);
     }
 
+    /**
+     * Provide upload service upload service.
+     *
+     * @param okHttpClient the ok http client
+     * @return the upload service
+     */
+    @Singleton
+    @Provides
+    UploadService provideUploadService(final OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl("http://parse.xinshu.me/")
+                .client(okHttpClient)
+                .build()
+                .create(UploadService.class);
+    }
+
+    /**
+     * Provide scheduler transformer scheduler transformer.
+     *
+     * @return the scheduler transformer
+     */
     @Singleton
     @Provides
     SchedulerTransformer provideSchedulerTransformer() {

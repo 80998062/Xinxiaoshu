@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.OrientationHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,4 +147,23 @@ public class UploadView extends LazyListView implements UploadContract.View {
     }
 
 
+    @Override
+    public void uploadCompleted() {
+        Log.d(getTag(), "uploadCompleted: ");
+    }
+
+    @Override
+    public void updateProgress(final float p) {
+        Log.d(getTag(), "updateProgress: " + p);
+    }
+
+    @Override
+    public void uploadFailed(Throwable e) {
+        Log.d(getTag(), "uploadFailed: " + e.getMessage());
+    }
+
+    @Override
+    public void showEmpty() {
+        Log.d(getTag(), "showEmpty: ");
+    }
 }

@@ -36,7 +36,7 @@ import java.util.List;
  * @param <T> the type parameter
  */
 public abstract class QuickAdapter<T> extends BaseQuickAdapter<T, BindingViewHolder> {
-    private final BasePresenter presenter;
+    protected final BasePresenter presenter;
 
     /**
      * Instantiates a new Quick adapter.

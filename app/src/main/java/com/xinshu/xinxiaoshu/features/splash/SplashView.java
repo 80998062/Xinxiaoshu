@@ -12,12 +12,15 @@ import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.core.Task;
 import com.xinshu.xinxiaoshu.features.login.LoginActivity;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
+import com.xinshu.xinxiaoshu.rest.BaseException;
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
+import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 import com.xinshu.xinxiaoshu.services.PollingService;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 public class SplashView extends BaseActivity {
 
@@ -130,7 +133,6 @@ public class SplashView extends BaseActivity {
                 checkCredit();
             } else {
                 LoginActivity.start(SplashView.this);
-                overridePendingTransition(0, 0);
             }
         } else {
             toastUtils.toastLong(throwable.getMessage());
@@ -141,21 +143,36 @@ public class SplashView extends BaseActivity {
 
     private void checkCredit() {
         Disposable d = mRepository.userInfo()
-                .doOnError(e -> LoginActivity.start(SplashView.this))
-                .subscribe(entity -> {
-                    if (entity != null) {
+
+                .subscribeWith(new DisposableObserver<UserEntity>() {
+                    @Override
+                    public void onNext(final UserEntity entity) {
                         ReceptionActivity.start(SplashView.this, entity);
-                        PollingService.start(this);
-                        overridePendingTransition(0, 0);
-                    } else {
-                        LoginActivity.start(SplashView.this);
-                        overridePendingTransition(0, 0);
+                        PollingService.start(SplashView.this);
+                    }
+
+                    @Override
+                    public void onError(final Throwable t) {
+                        if (t instanceof BaseException) {
+                            if (((BaseException) t).getCode() == 21104) {
+                                Log.d(TAG, "删除过期的token");
+                                mRepository.getToken().delete();
+                                LoginActivity.start(SplashView.this);
+                            } else {
+                                toastUtils.toastLong(t.getMessage());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
         addDisposable(d);
     }
 
-    private String println(Throwable throwable) {
+    private String println(final Throwable throwable) {
         String message = "";
         for (int i = 0; i < throwable.getStackTrace().length; i++) {
             message += throwable.getStackTrace()[i] + "\n";

@@ -63,7 +63,7 @@ public class PTRService extends IntentService implements FloatingMenu.ItemClickL
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
 
         floatingWindowManager = FloatingWindowManager.get(getApplicationContext());
 

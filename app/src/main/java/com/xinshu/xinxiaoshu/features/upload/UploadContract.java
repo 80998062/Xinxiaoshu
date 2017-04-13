@@ -21,5 +21,12 @@ public class UploadContract {
     }
 
     public interface View extends BaseView<Presenter>, ListViewContract<SnsInfoModel> {
+        void uploadCompleted();
+
+        void updateProgress(float p);
+
+        void uploadFailed(Throwable e);
+
+        void showEmpty();
     }
 }

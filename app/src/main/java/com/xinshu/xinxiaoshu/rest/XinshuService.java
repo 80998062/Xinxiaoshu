@@ -72,5 +72,4 @@ public interface XinshuService {
      */
     @POST("xiaobians/human/online")
     Observable<Response<BaseResponse>> online();
-
 }

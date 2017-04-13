@@ -8,6 +8,10 @@
         <variable
             name="data"
             type="com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel"/>
+
+        <variable
+            name="presenter"
+            type="com.xinshu.xinxiaoshu.features.upload.UploadPresenter"/>
     </data>
 
     <RelativeLayout
@@ -53,12 +57,13 @@
             tools:text="8:00"/>
         <!--android:onClick="@{(view) -> presenter.onUpload(view, data)}"-->
 
-        <com.xinshu.xinxiaoshu.widgets.DownloadProgressButton
+        <Button
             android:id="@+id/uploadButton"
             android:layout_width="75dp"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:text="上传"/>
     </RelativeLayout>
 </layout>

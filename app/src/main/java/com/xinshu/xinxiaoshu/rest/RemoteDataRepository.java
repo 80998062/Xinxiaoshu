@@ -17,6 +17,10 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 /**
  * Created by sinyuk on 2017/3/28.
@@ -24,11 +28,13 @@ import io.reactivex.annotations.NonNull;
 public class RemoteDataRepository implements RemoteDataStore {
 
     private final XinshuService xinshuService;
+    private final UploadService uploadService;
     private final SchedulerTransformer schedulerTransformer;
     private final RxSharedPreferences preferences;
     private final Gson mGson;
 
     private final Preference<String> token;
+
 
     /**
      * Instantiates a new Remote data repository.
@@ -42,10 +48,12 @@ public class RemoteDataRepository implements RemoteDataStore {
     public RemoteDataRepository(
             final Gson gson,
             final XinshuService xinshuService,
+            final UploadService uploadService,
             final SchedulerTransformer schedulerTransformer,
             final RxSharedPreferences preferences) {
         this.mGson = gson;
         this.xinshuService = xinshuService;
+        this.uploadService = uploadService;
         this.schedulerTransformer = schedulerTransformer;
         this.preferences = preferences;
 
@@ -114,5 +122,16 @@ public class RemoteDataRepository implements RemoteDataStore {
         return xinshuService.typeset_requests()
                 .compose(new DefaultTransformer<>(schedulerTransformer))
                 .flatMap(new ResponseFunc<>());
+    }
+
+
+    @Override
+    public Call<ResponseBody> upload(final String b) {
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                (b));
+
+        return uploadService.upload(body);
+
+
     }
 }
