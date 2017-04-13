@@ -118,6 +118,13 @@ public class RemoteDataRepository implements RemoteDataStore {
     }
 
     @Override
+    public Observable<OrderEntity> assignments() {
+        return xinshuService.assignments()
+                .compose(new DefaultTransformer<>(schedulerTransformer))
+                .flatMap(new ResponseFunc<>());
+    }
+
+    @Override
     public Observable<List<OrderEntity>> requestOrder() {
         return xinshuService.typeset_requests()
                 .compose(new DefaultTransformer<>(schedulerTransformer))

@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +18,7 @@ import com.xinshu.xinxiaoshu.events.OrderComingEvent;
 import com.xinshu.xinxiaoshu.events.StartPollingEvent;
 import com.xinshu.xinxiaoshu.events.StopPollingEvent;
 import com.xinshu.xinxiaoshu.features.extras.TutorialActivity;
-import com.xinshu.xinxiaoshu.features.history.HistoryActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
-import com.xinshu.xinxiaoshu.features.widthdraw.WithdrawActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
@@ -140,6 +137,11 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
     }
 
+    /**
+     * On upload.
+     *
+     * @param v the v
+     */
     public void onUpload(View v) {
         UploadActivity.start(v.getContext());
     }
@@ -149,11 +151,11 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
      */
 
     private void gotoWithdraw(View view) {
-        WithdrawActivity.start(view.getContext());
+//        WithdrawActivity.start(view.getContext());
     }
 
     private void gotoHistory(View view) {
-        HistoryActivity.start(view.getContext());
+//        HistoryActivity.start(view.getContext());
     }
 
     private void onClickTutorial(View view) {
@@ -296,6 +298,21 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
         binding.swipeRefreshLayout.setRefreshing(false);
     }
 
+    @Override
+    public void assignmentSucceed(OrderEntity entity) {
+        Log.d(getTag(), "assignmentSucceed: " + entity.toString());
+    }
+
+    @Override
+    public void assignmentFailed() {
+        Log.d(getTag(), "assignmentFailed: ");
+    }
+
+    @Override
+    public void assignmentError(Throwable e) {
+        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+    }
+
 
     /**
      * 切换视图
@@ -328,10 +345,17 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     }
 
 
+    /**
+     * On order coming.
+     * <p>
+     * 轮询的时候收到了新的订单
+     * </p>
+     *
+     * @param event the event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onOrderComing(final OrderComingEvent event) {
         if (!event.getOrderEntities().isEmpty()) {
-            Log.d(getTag(), "onOrderComing: " + event.getOrderEntities().toString());
             showGetReception(event.getOrderEntities());
         }
     }

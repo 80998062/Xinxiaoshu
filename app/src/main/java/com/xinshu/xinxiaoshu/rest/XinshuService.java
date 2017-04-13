@@ -72,4 +72,12 @@ public interface XinshuService {
      */
     @POST("xiaobians/human/online")
     Observable<Response<BaseResponse>> online();
+
+    /**
+     * Assignments observable.
+     *
+     * @return the observable
+     */
+    @POST("xiaobians/human/assignments")
+    Observable<Response<BaseResponse<OrderEntity>>> assignments();
 }

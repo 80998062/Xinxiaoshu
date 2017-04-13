@@ -4,6 +4,7 @@ import com.xinshu.xinxiaoshu.config.State;
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
 import com.xinshu.xinxiaoshu.rest.contract.OrderContract;
 import com.xinshu.xinxiaoshu.rest.contract.UserContract;
+import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 
 import javax.inject.Inject;
@@ -117,7 +118,27 @@ public class ReceptionPresenter implements ReceptionContract.Presenter {
     }
 
     @Override
-    public void ordering() {
+    public void assignments() {
+        mOrderContract.assignments().subscribeWith(new DisposableObserver<OrderEntity>() {
+            @Override
+            public void onNext(final OrderEntity entity) {
+                if (entity != null) {
+                    mView.assignmentSucceed(entity);
+                } else {
+                    mView.assignmentFailed();
+                }
+            }
 
+            @Override
+            public void onError(final Throwable e) {
+                e.printStackTrace();
+                mView.assignmentError(e);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 }

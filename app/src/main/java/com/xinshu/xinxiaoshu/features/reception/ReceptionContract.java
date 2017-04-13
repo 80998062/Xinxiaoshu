@@ -32,9 +32,9 @@ public class ReceptionContract {
         void online();
 
         /**
-         * Ordering.
+         * Assignments.
          */
-        void ordering();
+        void assignments();
 
     }
 
@@ -111,5 +111,11 @@ public class ReceptionContract {
         void refreshCompleted();
 
 
+        void assignmentSucceed(OrderEntity entity);
+
+
+        void assignmentFailed();
+
+        void assignmentError(Throwable t);
     }
 }
