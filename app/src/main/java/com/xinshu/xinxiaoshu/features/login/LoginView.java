@@ -19,7 +19,6 @@ import com.xinshu.xinxiaoshu.databinding.LoginViewBinding;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
-import com.xinshu.xinxiaoshu.services.PollingService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -197,7 +196,6 @@ public class LoginView extends BaseFragment implements LoginViewContract.View {
     @Override
     public void loginSucceed(UserEntity userEntity) {
         ReceptionActivity.start(getContext(), userEntity);
-        PollingService.start(getContext());
         getActivity().finish();
     }
 

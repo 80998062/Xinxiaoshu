@@ -149,6 +149,10 @@
                         <include
                             android:id="@+id/reception_coming"
                             layout="@layout/reception_coming"/>
+
+                        <include
+                            android:id="@+id/reception_succeed"
+                            layout="@layout/reception_succeed"/>
                     </com.xinshu.xinxiaoshu.widgets.BetterViewAnimator>
 
                     <TextView

@@ -15,7 +15,6 @@ import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.rest.BaseException;
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
-import com.xinshu.xinxiaoshu.services.PollingService;
 
 import javax.inject.Inject;
 
@@ -148,7 +147,6 @@ public class SplashView extends BaseActivity {
                     @Override
                     public void onNext(final UserEntity entity) {
                         ReceptionActivity.start(SplashView.this, entity);
-                        PollingService.start(SplashView.this);
                     }
 
                     @Override

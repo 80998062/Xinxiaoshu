@@ -1,5 +1,7 @@
 package com.xinshu.xinxiaoshu.features.reception;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +24,7 @@ import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
+import com.xinshu.xinxiaoshu.services.PollingService;
 import com.xinshu.xinxiaoshu.utils.rx.OrderDecoration;
 import com.xinshu.xinxiaoshu.utils.rx.QuickAdapter;
 import com.xinshu.xinxiaoshu.viewmodels.UserModel;
@@ -171,6 +174,7 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
     @Override
     public void offlineSucceed() {
+        Log.d(getTag(), "offlineSucceed: ");
         StopPollingEvent event = new StopPollingEvent();
         event.setExecutionScope(ReceptionView.class);
         EventBus.getDefault().post(event);
@@ -187,9 +191,14 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
     @Override
     public void onlineSucceed() {
         switchViewAnimator(STATE_ONLINE);
-        StartPollingEvent event = new StartPollingEvent();
-        event.setExecutionScope(ReceptionView.class);
-        EventBus.getDefault().post(event);
+        if (!isMyServiceRunning(PollingService.class)) {
+            PollingService.start(getContext());
+        } else {
+            StartPollingEvent event = new StartPollingEvent();
+            event.setExecutionScope(ReceptionView.class);
+            EventBus.getDefault().post(event);
+        }
+
     }
 
     @Override
@@ -213,30 +222,33 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
     @Override
     public void showGetReception(final List<OrderEntity> reception) {
-        switchViewAnimator(STATE_COME_IN);
-        final ReceptionComingBinding comingBinding = binding.receptionComing;
+        if (reception.isEmpty()) {
+            switchViewAnimator(STATE_ONLINE);
+        } else {
+            switchViewAnimator(STATE_COME_IN);
+            final ReceptionComingBinding comingBinding = binding.receptionComing;
 
-        if (comingBinding.orderStacks.getAdapter() == null) {
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            layoutManager.setAutoMeasureEnabled(true);
-            comingBinding.orderStacks.setLayoutManager(layoutManager);
-            comingBinding.orderStacks.addItemDecoration(new OrderDecoration(getContext()));
-            comingBinding.orderStacks.setHasFixedSize(true);
-            comingBinding.orderStacks.setAdapter(
-                    new OrderAdapter(R.layout.item_order, reception, null));
+            if (comingBinding.orderStacks.getAdapter() == null) {
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+                layoutManager.setAutoMeasureEnabled(true);
+                comingBinding.orderStacks.setLayoutManager(layoutManager);
+                comingBinding.orderStacks.addItemDecoration(new OrderDecoration(getContext()));
+                comingBinding.orderStacks.setHasFixedSize(true);
+                comingBinding.orderStacks.setAdapter(
+                        new OrderAdapter(R.layout.item_order, reception, null));
+            }
+
+            if (!reception.equals(mReceptions)) {
+                mReceptions = reception;
+                ((QuickAdapter) comingBinding.orderStacks.getAdapter()).setData(reception, true);
+                comingBinding.fab.setVisibility(View.VISIBLE);
+            }
+
+            comingBinding.fab.setOnClickListener(view -> {
+                // TODO: 发起抢单请求
+                presenter.assignments();
+            });
         }
-
-        if (!reception.equals(mReceptions)) {
-            mReceptions = reception;
-            ((QuickAdapter) comingBinding.orderStacks.getAdapter()).setData(reception, true);
-            comingBinding.fab.show();
-        }
-
-        comingBinding.fab.setOnClickListener(view -> {
-            // TODO: 发起抢单请求
-            presenter.assignments();
-        });
-
     }
 
     private void toggleDotsView(boolean enable) {
@@ -246,19 +258,6 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
             binding.receptionOnline.dotsView.hideAndStop();
         }
     }
-
-//
-//    public void showOrderingResult(boolean succeed) {
-//        final ReceptionComingBinding comingBinding = binding.receptionComing;
-//
-//        if (succeed) {
-//            switchViewAnimator(STATE_SUCCEED);
-//        } else {
-//            switchViewAnimator(STATE_FAILED);
-//        }
-//
-//        comingBinding.fab.setOnClickListener(view -> onlineSucceed());
-//    }
 
     @Override
     public void refreshFailed(Throwable e) {
@@ -273,17 +272,22 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
     @Override
     public void assignmentSucceed(OrderEntity entity) {
-        Log.d(getTag(), "assignmentSucceed: " + entity.toString());
+        binding.receptionSucceed.setData(entity);
+        binding.receptionSucceed.fab.setOnClickListener(v -> presenter.fetchPlayerInfo());
+        binding.receptionSucceed.fab.setVisibility(View.VISIBLE);
+        switchViewAnimator(STATE_SUCCEED);
     }
 
     @Override
     public void assignmentFailed() {
-        Log.d(getTag(), "assignmentFailed: ");
+        Toast.makeText(getContext(), R.string.hint_reception_failed, Toast.LENGTH_SHORT).show();
+        presenter.fetchPlayerInfo();
     }
 
     @Override
     public void assignmentError(Throwable e) {
         Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        presenter.fetchPlayerInfo();
     }
 
 
@@ -306,12 +310,12 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
                 binding.viewAnimator.setDisplayedChildId(R.id.reception_online);
                 break;
             }
-            case STATE_COME_IN:
             case STATE_SUCCEED:
+                binding.viewAnimator.setDisplayedChildId(R.id.reception_succeed);
+                break;
+            case STATE_COME_IN:
             case STATE_FAILED: {
                 binding.viewAnimator.setDisplayedChildId(R.id.reception_coming);
-                toggleFooter(true);
-                toggleDotsView(false);
                 break;
             }
         }
@@ -328,8 +332,23 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onOrderComing(final OrderComingEvent event) {
-        if (!event.getOrderEntities().isEmpty()) {
-            showGetReception(event.getOrderEntities());
+        showGetReception(event.getOrderEntities());
+    }
+
+
+    /**
+     * Is my service running boolean.
+     *
+     * @param serviceClass the service class
+     * @return the boolean
+     */
+    public boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
         }
+        return false;
     }
 }

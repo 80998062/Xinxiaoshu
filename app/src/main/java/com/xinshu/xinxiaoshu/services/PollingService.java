@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by sinyuk on 2017/4/6.
@@ -92,12 +93,16 @@ public class PollingService extends IntentService {
     public void onCreate() {
         super.onCreate();
         App.get(getApplicationContext()).getAppComponent().inject(this);
-        EventBus.getDefault().register(this);
+
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-
+        //
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
         builder.setAutoCancel(false);
         builder.setContentTitle(getString(R.string.notification_title));
@@ -125,6 +130,8 @@ public class PollingService extends IntentService {
 
         startForeground(ONGOING_NOTIFICATION_ID, notification);
 
+        // 开始轮询
+        startInterval();
 
         return START_STICKY_COMPATIBILITY;
     }
@@ -138,9 +145,8 @@ public class PollingService extends IntentService {
             EventBus.getDefault().unregister(this);
         }
 
-        if (!mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable.dispose();
-        }
+        stopInterval();
+
         stopForeground(true);
     }
 
@@ -160,9 +166,8 @@ public class PollingService extends IntentService {
      */
     public void stopInterval() {
         Log.d(TAG, "stopInterval: ");
-        if (!mCompositeDisposable.isDisposed()) {
-            mCompositeDisposable.dispose();
-            mIntervalDisposable = null;
+        if (mIntervalDisposable != null) {
+            mIntervalDisposable.dispose();
         }
     }
 
@@ -171,22 +176,34 @@ public class PollingService extends IntentService {
      */
     public void startInterval() {
         Log.d(TAG, "startInterval: ");
-        if (mIntervalDisposable == null || mIntervalDisposable.isDisposed()) {
-            mIntervalDisposable = mIntervalObservable.subscribe(this::request);
-            mCompositeDisposable.add(mIntervalDisposable);
-        }
+        mIntervalDisposable = mIntervalObservable.subscribeWith(
+                new DisposableObserver<Long>() {
+                    @Override
+                    public void onNext(final Long aLong) {
+                        Log.d(TAG, "request at: " + aLong);
+                        mCompositeDisposable.add(request());
+                    }
+
+                    @Override
+                    public void onError(final Throwable e) {
+                        e.printStackTrace();
+                        stopInterval();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        stopInterval();
+                    }
+                });
 
     }
 
 
     /**
      * Request.
-     *
-     * @param l the l
      */
-    private void request(Long l) {
-        Log.d(TAG, "request at: " + l);
-        Disposable d = mRepository
+    private Disposable request() {
+        return mRepository
                 .requestOrder()
                 .doOnError(Throwable::printStackTrace)
                 .onErrorReturnItem(new ArrayList<>())
@@ -196,7 +213,7 @@ public class PollingService extends IntentService {
                     EventBus.getDefault().post(event);
                 });
 
-        mCompositeDisposable.add(d);
+
     }
 
 
@@ -211,6 +228,11 @@ public class PollingService extends IntentService {
     }
 
 
+    /**
+     * On stop event.
+     *
+     * @param event the event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onStopEvent(final StopPollingEvent event) {
         stopInterval();
