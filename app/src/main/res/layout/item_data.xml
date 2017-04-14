@@ -64,6 +64,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="上传"/>
+            android:backgroundTint="@color/theme_cyan"
+            android:text="@string/action_upload"
+            android:textColor="@android:color/white"/>
     </RelativeLayout>
 </layout>

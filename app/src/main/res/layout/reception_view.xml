@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -24,6 +25,16 @@
                 android:contentDescription="@string/action_back"
                 app:toolbar_avatar="@{data.avatar}"/>
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxWidth="100dp"
+                android:text="@{data.data.name}"
+                android:textColor="@color/text_color_secondary"
+                android:textSize="@dimen/text_12"
+                tools:text="Sinyuk"/>
 
             <TextView
                 style="@style/my_toolbar_title"

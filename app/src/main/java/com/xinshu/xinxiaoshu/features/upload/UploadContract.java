@@ -28,5 +28,8 @@ public class UploadContract {
         void uploadFailed(Throwable e);
 
         void showEmpty();
+
+        void uploadStart();
+
     }
 }

@@ -19,14 +19,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.SingleSource;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,6 +108,7 @@ public class UploadPresenter implements UploadContract.Presenter {
     @Override
     public void upload(@NonNull SnsInfo data, int position) {
         Disposable d = snsReader.copyAndOpenDB()
+                .doOnSubscribe(d1 -> view.uploadStart())
                 .flatMap(new Function<SQLiteDatabase, SingleSource<List<SnsInfo>>>() {
                     @Override
                     public SingleSource<List<SnsInfo>> apply(@NonNull SQLiteDatabase db) throws Exception {
@@ -129,33 +127,19 @@ public class UploadPresenter implements UploadContract.Presenter {
     }
 
     private void startUploading(final List<SnsInfo> f) throws Exception {
-        Disposable d = Observable.fromCallable(() -> {
-            JSONArray array = snsReader.convertToJSON(f);
-            jsonArrayList = subpack(array);
-            Log.d(TAG, "JSONARRAY_LIST SIZE: " + jsonArrayList.size());
-            upload1By1();
-            return true;
-        })
-                .doOnSubscribe(disposable -> {
-                    jsonArrayList.clear();
-                    currentPart = 0;
-                })
-                .doOnTerminate(() -> {
-                    uploadDisposables.dispose();
-                    view.uploadCompleted();
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(b -> {
-
-                });
-
-        disposables.add(d);
+        jsonArrayList.clear();
+        currentPart = 0;
+        JSONArray array = snsReader.convertToJSON(f);
+        jsonArrayList = subpack(array);
+        Log.d(TAG, "JSONARRAY_LIST SIZE: " + jsonArrayList.size());
+        upload1By1();
     }
 
     private void upload1By1() {
 
         if (currentPart == jsonArrayList.size()) {
+            uploadDisposables.dispose();
+            view.uploadCompleted();
             return;
         }
 
@@ -184,7 +168,7 @@ public class UploadPresenter implements UploadContract.Presenter {
     }
 
 
-    private static final int PER_SIZE = 200;
+    private static final int PER_SIZE = 100;
     private int currentPart = 0;
 
 

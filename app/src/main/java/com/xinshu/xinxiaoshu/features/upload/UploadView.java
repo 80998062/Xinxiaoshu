@@ -1,5 +1,6 @@
 package com.xinshu.xinxiaoshu.features.upload;
 
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,8 @@ import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 /**
  * Created by sinyuk on 2017/3/2.
@@ -150,6 +153,15 @@ public class UploadView extends LazyListView implements UploadContract.View {
     @Override
     public void uploadCompleted() {
         Log.d(getTag(), "uploadCompleted: ");
+        alertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        alertDialog.setTitleText(getString(R.string.hint_upload_succeed));
+        alertDialog.setCancelable(true);
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.setConfirmText(getString(R.string.action_confirm));
+        alertDialog.setConfirmClickListener(DialogInterface::cancel);
+        if (!alertDialog.isShowing()) {
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -160,10 +172,41 @@ public class UploadView extends LazyListView implements UploadContract.View {
     @Override
     public void uploadFailed(Throwable e) {
         Log.d(getTag(), "uploadFailed: " + e.getMessage());
+        alertDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+        alertDialog.setTitleText(e.getLocalizedMessage());
+        alertDialog.setCancelable(true);
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.setConfirmText(getString(R.string.action_confirm));
+        alertDialog.setConfirmClickListener(DialogInterface::cancel);
+        if (!alertDialog.isShowing()) {
+            alertDialog.show();
+        }
     }
 
     @Override
     public void showEmpty() {
-        Log.d(getTag(), "showEmpty: ");
+        alertDialog.changeAlertType(SweetAlertDialog.WARNING_TYPE);
+        alertDialog.setTitleText(getString(R.string.hint_upload_empty));
+        alertDialog.setCancelable(true);
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.setConfirmText(getString(R.string.action_confirm));
+        alertDialog.setConfirmClickListener(DialogInterface::cancel);
+        if (!alertDialog.isShowing()) {
+            alertDialog.show();
+        }
+    }
+
+    private SweetAlertDialog alertDialog;
+
+    @Override
+    public void uploadStart() {
+        alertDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        alertDialog.setTitleText(getString(R.string.hint_upload_ing));
+        alertDialog.setContentText(getString(R.string.hint_upload_cost_time));
+        alertDialog.setCancelable(false);
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelText(getString(R.string.action_cancel));
+        alertDialog.setOnCancelListener(DialogInterface::cancel);
+        alertDialog.show();
     }
 }

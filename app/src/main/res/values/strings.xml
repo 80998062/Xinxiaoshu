@@ -63,5 +63,11 @@
     <string name="hint_phone_not_correct">手机号错误</string>
     <string name="fetch_data_title">正在拉取朋友圈…</string>
     <string name="fake_location">xx xx</string>
+    <string name="hint_upload_ing">正在努力上传中…</string>
+    <string name="hint_upload_cost_time">可能需要一点时间</string>
+    <string name="action_cancel">取消</string>
+    <string name="hint_upload_succeed">上传成功</string>
+    <string name="action_confirm">确定</string>
+    <string name="hint_upload_empty">没有新数据可以上传</string>
 
 </resources>
