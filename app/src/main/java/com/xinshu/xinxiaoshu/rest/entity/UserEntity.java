@@ -3,6 +3,8 @@ package com.xinshu.xinxiaoshu.rest.entity;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by sinyuk on 2017/3/30.
@@ -94,7 +96,12 @@ public class UserEntity implements Serializable {
      * @return the headimgurl
      */
     public String getHeadimgurl() {
-        return headimgurl;
+        try {
+            return "https://media.xinshu.me/fetch?url=" + URLEncoder.encode(headimgurl, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return headimgurl;
+        }
     }
 
     /**

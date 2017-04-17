@@ -153,7 +153,6 @@ public class SplashView extends BaseActivity {
                     public void onError(final Throwable t) {
                         if (t instanceof BaseException) {
                             if (((BaseException) t).getCode() == 21104) {
-                                Log.d(TAG, "删除过期的token");
                                 mRepository.getToken().delete();
                                 LoginActivity.start(SplashView.this);
                             } else {

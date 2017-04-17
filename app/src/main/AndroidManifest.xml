@@ -22,7 +22,6 @@
         <activity
             android:name=".features.splash.SplashView"
             android:configChanges="layoutDirection|screenLayout"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">
             <intent-filter>
@@ -35,7 +34,7 @@
         <activity
             android:name=".features.login.LoginActivity"
             android:configChanges="layoutDirection|screenLayout"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateAlwaysVisible">
         </activity>
@@ -49,7 +48,7 @@
         <activity
             android:name=".features.reception.ReceptionActivity"
             android:configChanges="layoutDirection|screenLayout"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
 
         <activity

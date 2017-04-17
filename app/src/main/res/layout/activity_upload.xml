@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+    >
 
     <data>
 
@@ -30,9 +30,8 @@
             <ImageView
                 android:id="@+id/uploadBtn"
                 style="@style/my_toolbar_button"
-                android:alpha="0.2"
                 android:contentDescription="@string/action_upload"
-                android:src="@drawable/btn_oval_grey"/>
+                android:src="@drawable/ic_wechat"/>
         </LinearLayout>
 
         <FrameLayout

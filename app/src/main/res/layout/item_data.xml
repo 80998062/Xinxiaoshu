@@ -57,6 +57,19 @@
             tools:text="8:00"/>
         <!--android:onClick="@{(view) -> presenter.onUpload(view, data)}"-->
 
+
+        <TextView
+            android:id="@+id/copyLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/gap_15"
+            android:layout_toLeftOf="@+id/uploadButton"
+            android:background="?selectableItemBackgroundBorderless"
+            android:text="@string/action_copylink"
+            android:textColor="@color/text_color"/>
+
+
         <Button
             android:id="@+id/uploadButton"
             android:layout_width="75dp"

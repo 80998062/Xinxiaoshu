@@ -155,8 +155,10 @@ public class UploadView extends LazyListView implements UploadContract.View {
         Log.d(getTag(), "uploadCompleted: ");
         alertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
         alertDialog.setTitleText(getString(R.string.hint_upload_succeed));
+        alertDialog.setContentText(null);
         alertDialog.setCancelable(true);
         alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.showCancelButton(false);
         alertDialog.setConfirmText(getString(R.string.action_confirm));
         alertDialog.setConfirmClickListener(DialogInterface::cancel);
         if (!alertDialog.isShowing()) {
@@ -171,11 +173,12 @@ public class UploadView extends LazyListView implements UploadContract.View {
 
     @Override
     public void uploadFailed(Throwable e) {
-        Log.d(getTag(), "uploadFailed: " + e.getMessage());
         alertDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
         alertDialog.setTitleText(e.getLocalizedMessage());
+        alertDialog.setContentText(null);
         alertDialog.setCancelable(true);
         alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.showCancelButton(false);
         alertDialog.setConfirmText(getString(R.string.action_confirm));
         alertDialog.setConfirmClickListener(DialogInterface::cancel);
         if (!alertDialog.isShowing()) {
@@ -187,8 +190,10 @@ public class UploadView extends LazyListView implements UploadContract.View {
     public void showEmpty() {
         alertDialog.changeAlertType(SweetAlertDialog.WARNING_TYPE);
         alertDialog.setTitleText(getString(R.string.hint_upload_empty));
+        alertDialog.setContentText(null);
         alertDialog.setCancelable(true);
         alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.showCancelButton(false);
         alertDialog.setConfirmText(getString(R.string.action_confirm));
         alertDialog.setConfirmClickListener(DialogInterface::cancel);
         if (!alertDialog.isShowing()) {

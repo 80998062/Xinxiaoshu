@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -20,7 +21,6 @@ import io.reactivex.disposables.Disposable;
 /**
  * Created by sinyuk on 2017/3/1.
  */
-
 public class UploadActivity extends BaseActivity {
 
     @Override
@@ -28,6 +28,11 @@ public class UploadActivity extends BaseActivity {
         return false;
     }
 
+    /**
+     * Start.
+     *
+     * @param context the context
+     */
     public static void start(Context context) {
         Intent starter = new Intent(context, UploadActivity.class);
         context.startActivity(starter);
@@ -47,31 +52,43 @@ public class UploadActivity extends BaseActivity {
 
         setupListeners(binding);
 
-        RxPermissions rxPermissions = new RxPermissions(UploadActivity.this);
-        Disposable d = rxPermissions
-                .request(Manifest.permission.SYSTEM_ALERT_WINDOW)
-                .subscribe(granted -> {
-                    if (granted) {
-                        // pass
-                    } else {
-                        PermissionHelper.showAlertWindowDialog(UploadActivity.this);
-                    }
-                });
 
-        addDisposable(d);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PTRService.start(this);
+        } else {
+            RxPermissions rxPermissions = new RxPermissions(UploadActivity.this);
+            Disposable d = rxPermissions
+                    .request(Manifest.permission.SYSTEM_ALERT_WINDOW)
+                    .subscribe(granted -> {
+                        if (granted) {
+                            // pass
+                            PTRService.start(this);
+                        } else {
+                            PermissionHelper.showAlertWindowDialog(UploadActivity.this);
+                        }
+                    });
+
+            addDisposable(d);
+        }
     }
 
 
+    /**
+     * Sets listeners.
+     *
+     * @param binding the binding
+     */
     public void setupListeners(final ActivityUploadBinding binding) {
-        binding.uploadBtn.setOnClickListener(view -> {
-            PTRService.start(view.getContext());
-            goToWechat();
-            finish();
-        });
+        binding.uploadBtn.setOnClickListener(view -> goToWechat());
     }
 
-    private void goToWechat() {
+    /**
+     * Go to wechat.
+     */
+    public void goToWechat() {
         Intent launchIntent = getPackageManager().getLaunchIntentForPackage(Config.WECHAT_PACKAGE);
         startActivity(launchIntent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 }

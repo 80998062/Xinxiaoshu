@@ -36,16 +36,25 @@
                 android:textSize="@dimen/text_12"
                 tools:text="Sinyuk"/>
 
+            <!--<TextView-->
+            <!--style="@style/my_toolbar_title"-->
+            <!--android:text="@string/activity_reception"/>-->
+            <android.support.v4.widget.Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
             <TextView
-                style="@style/my_toolbar_title"
-                android:text="@string/activity_reception"/>
+                android:id="@+id/wxBtn"
+                style="@style/my_toolbar_menu"
+                android:drawableStart="@drawable/ic_wechat"
+                android:text="微信"/>
 
-
-            <ImageView
+            <TextView
                 android:id="@+id/uploadBtn"
-                style="@style/my_toolbar_button"
-                android:contentDescription="@string/action_upload"
-                android:src="@drawable/ic_upload_dk"/>
+                style="@style/my_toolbar_menu"
+                android:drawableStart="@drawable/ic_upload"
+                android:text="上传"/>
         </LinearLayout>
 
 

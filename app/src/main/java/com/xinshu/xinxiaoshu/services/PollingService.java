@@ -2,17 +2,24 @@ package com.xinshu.xinxiaoshu.services;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.sinyuk.myutils.android.AppUtils;
 import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.events.OrderComingEvent;
@@ -20,12 +27,15 @@ import com.xinshu.xinxiaoshu.events.StartPollingEvent;
 import com.xinshu.xinxiaoshu.events.StopPollingEvent;
 import com.xinshu.xinxiaoshu.features.reception.ReceptionActivity;
 import com.xinshu.xinxiaoshu.rest.RemoteDataRepository;
+import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -56,13 +66,15 @@ public class PollingService extends IntentService {
     public static final String TAG = "PollingService";
     private static final long INTERVAL = 5;
     private static final int ONGOING_NOTIFICATION_ID = 0x12554;
-
+    private static final int RING_NOTIFICATION_ID = 0x12774;
     private Observable<Long> mIntervalObservable =
             Observable.interval(INTERVAL, TimeUnit.SECONDS)
                     .doOnError(Throwable::printStackTrace);
 
     private Disposable mIntervalDisposable;
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
+    private List<OrderEntity> oldOrders = new ArrayList<>();
 
     /**
      * Instantiates a new Push service.
@@ -120,7 +132,7 @@ public class PollingService extends IntentService {
         builder.setContentIntent(pendingIntent);
 
         builder.setWhen(SystemClock.currentThreadTimeMillis());
-        builder.setShowWhen(true);
+        builder.setShowWhen(false);
 
         builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.theme_red));
 
@@ -211,8 +223,49 @@ public class PollingService extends IntentService {
                     OrderComingEvent event = new OrderComingEvent(orders);
                     event.setExecutionScope(PollingService.class);
                     EventBus.getDefault().post(event);
+                    if (!Objects.equals(orders.toString(), oldOrders.toString())) {
+                        if (!AppUtils.isAppForeground(getApplicationContext())) {
+                            ring();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "您有新的微信书订单啦", Toast.LENGTH_SHORT).show();
+                        }
+                        oldOrders = orders;
+                    }
                 });
+    }
 
+    private void ring() {
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_stat_name)
+                        .setContentTitle("您有新的微信书订单啦")
+                        .setContentText("点击查看");
+        mBuilder.setAutoCancel(true);
+
+        Intent resultIntent = new Intent(this, ReceptionActivity.class);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        stackBuilder.addParentStack(ReceptionActivity.class);
+//        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(getApplicationContext(),
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+//        mBuilder.setOngoing(true);
+//        mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+        mBuilder.setLights(Color.RED, 3000, 3000);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        mBuilder.setSound(alarmSound);
+
+        Notification note = mBuilder.build();
+        note.defaults |= Notification.DEFAULT_VIBRATE;
+//        note.defaults |= Notification.DEFAULT_SOUND;
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(RING_NOTIFICATION_ID, note);
 
     }
 

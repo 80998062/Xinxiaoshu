@@ -2,6 +2,7 @@ package com.xinshu.xinxiaoshu.features.reception;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
+import com.xinshu.xinxiaoshu.core.Config;
 import com.xinshu.xinxiaoshu.databinding.ReceptionComingBinding;
 import com.xinshu.xinxiaoshu.databinding.ReceptionViewBinding;
 import com.xinshu.xinxiaoshu.events.OrderComingEvent;
@@ -126,6 +128,8 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
 
         binding.uploadBtn.setOnClickListener(this::onUpload);
 
+        binding.wxBtn.setOnClickListener(this::goToWechat);
+
         binding.swipeRefreshLayout.setEnabled(false);
 
     }
@@ -143,16 +147,24 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
      * Entries for other pages
      */
 
-    private void gotoWithdraw(View view) {
+    private void gotoWithdraw(final View view) {
 //        WithdrawActivity.start(view.getContext());
     }
 
-    private void gotoHistory(View view) {
+    private void gotoHistory(final View view) {
 //        HistoryActivity.start(view.getContext());
     }
 
-    private void onClickTutorial(View view) {
+    private void onClickTutorial(final View view) {
         TutorialActivity.start(view.getContext());
+    }
+
+    /**
+     * Go to wechat.
+     */
+    public void goToWechat(final View view) {
+        Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage(Config.WECHAT_PACKAGE);
+        startActivity(launchIntent);
     }
 
     /**
