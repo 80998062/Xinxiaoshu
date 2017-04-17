@@ -22,12 +22,7 @@ public class OrderEntity {
     public String headimgurl;
 
     public String getNickname() {
-        try {
-            return "https://media.xinshu.me/fetch?url=" + URLEncoder.encode(nickname, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return nickname;
-        }
+      return nickname;
     }
 
     public void setNickname(String nickname) {
@@ -35,7 +30,12 @@ public class OrderEntity {
     }
 
     public String getHeadimgurl() {
-        return headimgurl;
+        try {
+            return "https://media.xinshu.me/fetch?url=" + URLEncoder.encode(headimgurl, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return headimgurl;
+        }
     }
 
     public void setHeadimgurl(String headimgurl) {

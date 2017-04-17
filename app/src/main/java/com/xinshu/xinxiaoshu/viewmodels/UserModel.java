@@ -1,6 +1,7 @@
 package com.xinshu.xinxiaoshu.viewmodels;
 
 import android.databinding.BindingAdapter;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +13,7 @@ import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
  */
 public class UserModel implements ViewModel<UserEntity> {
     private UserEntity data;
+    public static final String TAG = "UserModel";
 
     /**
      * Instantiates a new User model.
@@ -38,6 +40,7 @@ public class UserModel implements ViewModel<UserEntity> {
 
     @BindingAdapter("toolbar_avatar")
     public static void setAvatar(final ImageView view, final String url) {
+        Log.d("setAvatar", "url: " + url);
         Glide.with(view.getContext())
                 .load(url)
                 .crossFade()
