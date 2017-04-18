@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:paddingTop="35dp">
 
-        <android.support.v7.widget.RecyclerView
+        <com.view.jameson.library.SpeedRecyclerView
             android:id="@+id/orderStacks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

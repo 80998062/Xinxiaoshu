@@ -1,1 +1,1 @@
-include ':app', ':floating', ':sweetalert'
+include ':app', ':floating', ':sweetalert', ':gallery'

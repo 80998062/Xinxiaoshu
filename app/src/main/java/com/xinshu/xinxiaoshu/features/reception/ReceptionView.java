@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.view.jameson.library.CardScaleHelper;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseFragment;
 import com.xinshu.xinxiaoshu.core.Config;
@@ -27,8 +28,6 @@ import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
 import com.xinshu.xinxiaoshu.services.PollingService;
-import com.xinshu.xinxiaoshu.utils.rx.OrderDecoration;
-import com.xinshu.xinxiaoshu.utils.rx.QuickAdapter;
 import com.xinshu.xinxiaoshu.viewmodels.UserModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -244,15 +243,23 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                 layoutManager.setAutoMeasureEnabled(true);
                 comingBinding.orderStacks.setLayoutManager(layoutManager);
-                comingBinding.orderStacks.addItemDecoration(new OrderDecoration(getContext()));
                 comingBinding.orderStacks.setHasFixedSize(true);
                 comingBinding.orderStacks.setAdapter(
-                        new OrderAdapter(R.layout.item_order, reception, null));
+                        new OrderCardAdapter(getContext(), reception));
+
+                // mRecyclerView绑定scale效果
+                CardScaleHelper mCardScaleHelper = new CardScaleHelper();
+                mCardScaleHelper.setCurrentItemPos(reception.size() / 2);
+                mCardScaleHelper.attachToRecyclerView(comingBinding.orderStacks);
+
             }
 
             if (!reception.equals(mReceptions)) {
+                ((OrderCardAdapter) comingBinding.orderStacks.getAdapter()).swap(reception);
                 mReceptions = reception;
-                ((QuickAdapter) comingBinding.orderStacks.getAdapter()).setData(reception, true);
+
+
+                // show fab
                 comingBinding.fab.setVisibility(View.VISIBLE);
             }
 
