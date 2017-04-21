@@ -23,6 +23,7 @@ import com.xinshu.xinxiaoshu.events.OrderComingEvent;
 import com.xinshu.xinxiaoshu.events.StartPollingEvent;
 import com.xinshu.xinxiaoshu.events.StopPollingEvent;
 import com.xinshu.xinxiaoshu.features.extras.TutorialActivity;
+import com.xinshu.xinxiaoshu.features.profile.ProfileActivity;
 import com.xinshu.xinxiaoshu.features.upload.UploadActivity;
 import com.xinshu.xinxiaoshu.mvp.BasePresenter;
 import com.xinshu.xinxiaoshu.rest.entity.OrderEntity;
@@ -123,6 +124,7 @@ public class ReceptionView extends BaseFragment implements ReceptionContract.Vie
         binding.receptionOffline.onlineBtn.setOnClickListener(view -> presenter.online());
 
         binding.avatar.setOnClickListener(view -> {
+            ProfileActivity.start(view.getContext());
         });
 
         binding.uploadBtn.setOnClickListener(this::onUpload);

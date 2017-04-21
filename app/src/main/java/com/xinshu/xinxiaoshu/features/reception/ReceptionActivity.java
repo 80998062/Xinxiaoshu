@@ -1,16 +1,21 @@
 package com.xinshu.xinxiaoshu.features.reception;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xinshu.xinxiaoshu.App;
 import com.xinshu.xinxiaoshu.R;
 import com.xinshu.xinxiaoshu.base.BaseActivity;
 import com.xinshu.xinxiaoshu.injector.modules.ReceptionModule;
 import com.xinshu.xinxiaoshu.rest.entity.UserEntity;
+import com.xinshu.xinxiaoshu.services.PTRService;
+import com.xinshu.xinxiaoshu.utils.PermissionHelper;
 
 import javax.inject.Inject;
 
@@ -85,6 +90,25 @@ public class ReceptionActivity extends BaseActivity {
                 });
 
         addDisposable(d);
+
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PTRService.start(this);
+        } else {
+            RxPermissions rxPermissions = new RxPermissions(ReceptionActivity.this);
+            Disposable d2 = rxPermissions
+                    .request(Manifest.permission.SYSTEM_ALERT_WINDOW)
+                    .subscribe(granted -> {
+                        if (granted) {
+                            // pass
+                            PTRService.start(this);
+                        } else {
+                            PermissionHelper.showAlertWindowDialog(ReceptionActivity.this);
+                        }
+                    });
+
+            addDisposable(d2);
+        }
 
     }
 

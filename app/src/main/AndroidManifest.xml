@@ -61,6 +61,12 @@
             android:configChanges="layoutDirection|screenLayout"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".features.profile.ProfileActivity"
+            android:configChanges="layoutDirection|screenLayout"
+            android:screenOrientation="portrait">
+        </activity>
+
         <service
             android:name=".services.PTRService"
             android:exported="false"/>
