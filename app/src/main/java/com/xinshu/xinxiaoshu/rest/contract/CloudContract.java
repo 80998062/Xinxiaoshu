@@ -14,4 +14,7 @@ public interface CloudContract {
      * @return
      */
     Call<ResponseBody> upload(String body);
+
+
+    String getHid();
 }

@@ -12,6 +12,8 @@ import com.xinshu.xinxiaoshu.rest.contract.CloudContract;
 import com.xinshu.xinxiaoshu.viewmodels.SnsInfoModel;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -143,7 +145,7 @@ public class UploadPresenter implements UploadContract.Presenter {
             return;
         }
 
-        mCloudContract.upload(jsonArrayList.get(currentPart).toString())
+        mCloudContract.upload(formatJSON(jsonArrayList.get(currentPart)))
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> c, Response<ResponseBody> r) {
@@ -165,6 +167,17 @@ public class UploadPresenter implements UploadContract.Presenter {
                     }
                 });
 
+    }
+
+    private String formatJSON(final JSONArray s) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("snsrecord", s);
+            jsonObject.put("xiaobian_hid", mCloudContract.getHid());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 
 

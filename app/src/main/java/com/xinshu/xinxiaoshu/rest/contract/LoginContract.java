@@ -35,4 +35,7 @@ public interface LoginContract {
     Observable<UserEntity> login(@NonNull String phone, @NonNull String captcha);
 
 
+    void logout();
+
+
 }
